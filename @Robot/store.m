@@ -4,5 +4,5 @@ function this = store(this, i)
 %  this = refer to this object
 %  i = iterator from cycle
 % OUTPUT: none
-    this.EKF_q_store(:,i) = this.EKF_q_est;
+this.EKF_q_store(:,i) = this.EKF_q_est;
 end

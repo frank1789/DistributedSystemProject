@@ -29,14 +29,14 @@ end
 if not(isempty(H))
     % Kalman gain
     K = this.P_p * H'* inv(H * this. P_p * H' + CovMatMeas);
-
+    
     % Update state estimate
     this.EKF_q_est = this.q_est_p + K * (Z - H * this.q_est_p);
-
+    
     % Update the covariance
     this.EKF_p = (eye(3) - K*H)*P_p;
 else
-    tis.EKF_q_est = this.q_est_p;
+    this.EKF_q_est = this.q_est_p;
     this.EKF_p = this.P_p;
 end
 

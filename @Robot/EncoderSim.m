@@ -1,4 +1,4 @@
-function this = EncoderSim(this, Vehicle)
+function this = EncoderSim(this)
 
 % Motors angular velocities
 OmegaR = (2*this.u(1,:) + this.interaxle*this.u(2,:))/(2*this.whellradius);
