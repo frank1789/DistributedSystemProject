@@ -1,9 +1,9 @@
-function this = UnicycleKinematicMatlab(this, Vehicle)
+function this = UnicycleKinematicMatlab(this)
 
 
 
 % Unicycle dynamic
-[this.t, this.q] = ode45(@(t,y) this.UnicycleModel(t, y), this.t, Vehicle);
+[this.t, this.q] = ode45(@(t,y) this.UnicycleModel(t, y), this.t, this.q);
 
 % Input sequence
 [v, omega] = this.UnicycleInputs(this.t);
