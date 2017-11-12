@@ -14,12 +14,12 @@ Sensor.Enc.NoisyLeft = this.quatizeffect_LeftEnc;
 DeltaEnc = [Sensor.Enc.NoisyRight(i) - Sensor.Enc.NoisyRight(i-1);
             Sensor.Enc.NoisyLeft(i) - Sensor.Enc.NoisyLeft(i-1)];
 
-A = [1 0 -sin(this.EKF_q_est(3))*this.whellradius/2*(DeltaEnc(1) + DeltaEnc(2));
-     0 1 cos(this.EKF_q_est(3))*this.whellradius/2*(DeltaEnc(1) + DeltaEnc(2));
+A = [1 0 -sin(this.EKF_q_est(3))*this.wheelradius/2*(DeltaEnc(1) + DeltaEnc(2));
+     0 1 cos(this.EKF_q_est(3))*this.wheelradius/2*(DeltaEnc(1) + DeltaEnc(2));
      0 0 1];
-B = [cos(this.EKF_q_est(3))*this.whellradius/2, cos(this.EKF_q_est(3))*this.whellradius/2;
-     sin(this.EKF_q_est(3))*this.whellradius/2, sin(this.EKF_q_est(3))*this.whellradius/2;
-     this.whellradius/this.interaxle, -this.whellradius/this.interaxle];
+B = [cos(this.EKF_q_est(3))*this.wheelradius/2, cos(this.EKF_q_est(3))*this.wheelradius/2;
+     sin(this.EKF_q_est(3))*this.wheelradius/2, sin(this.EKF_q_est(3))*this.wheelradius/2;
+     this.wheelradius/this.interaxle, -this.wheelradius/this.interaxle];
 
 this.q_est_p = this.EKF_q_est + B * DeltaEnc;
 this.P_p = A * this.EKF_p * A' + B * this.EKF_Q * B';

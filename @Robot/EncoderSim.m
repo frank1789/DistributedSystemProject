@@ -1,8 +1,8 @@
 function this = EncoderSim(this)
 
 % Motors angular velocities
-OmegaR = (2*this.u(1,:) + this.interaxle*this.u(2,:))/(2*this.whellradius);
-OmegaL = (2*this.u(1,:) - this.interaxle*this.u(2,:))/(2*this.whellradius);
+OmegaR = (2*this.u(1,:) + this.interaxle*this.u(2,:))/(2*this.wheelradius);
+OmegaL = (2*this.u(1,:) - this.interaxle*this.u(2,:))/(2*this.wheelradius);
 
 % Angular increments for 'Delta t'
 Right_Enc = [0, OmegaR(1:end-1).*diff(this.t')];
