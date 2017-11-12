@@ -52,7 +52,7 @@ for i=2:length(this.EKF_q_store)
     end
     
     % Vehicle trajectory
-    trajectory = plot(this.EKF_q_store(1,i), this.EKF_q_store(2,i));
+    trajectory = plot(this.q(i,1), this.q(i,2));
     
     % update the Vehicle and label plot
     newX = this.EKF_q_store(1,i) - this.width; % compute new position in x
@@ -68,5 +68,3 @@ end
 hold off
 axis equal
 end
-
-
