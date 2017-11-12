@@ -82,7 +82,8 @@ classdef Robot < handle
         this = store(this, i)
         
         % plot function
-        makerobot(this, vehicle)
+        [body, label, rf_x, rf_y, rf_z]= makerobot(this)
+        [body, label, rf_x, rf_y, rf_z] =animate(this, it)
         
         % getter method to access proprerty class
         numsteps = getEKFstep(this)
@@ -92,5 +93,7 @@ classdef Robot < handle
     methods (Static)
         % Kinematic simulation
         [v, omega] = UnicycleInputs(t)
+        
+        [R] = rotationMatrix(theta)
     end
 end
