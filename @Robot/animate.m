@@ -1,17 +1,18 @@
-function [body, label, rf_x, rf_y, rf_z] =makerobot(this, t)
-%MAKEROBOT produce the plot of the body in figure at initial position
+function [body, label, rf_x, rf_y, rf_z] = animate(this, it)
+%ANIMATE produce the plot of the body in figure at initial position
 % INPUT:
 %  this = refer to this object
+%  it = (int) iterator from cycle
 % OUTPUT: none
 
 % set the axis and off block layer
 hold on
 axis equal
 
-% set initial postion
-x = this.q(t,1);
-y = this.q(t,2);
-theta =  this.q(t,3);
+% initialize new poses
+x = this.q(it,1);
+y = this.q(it,2);
+theta =  this.q(it,3);
 
 % compute the center of body
 pos_x = x - this.length/2;
@@ -30,6 +31,4 @@ ver_y = ver_x * this.rotationMatrix(pi/2) ; % versor direction y
 rf_x = quiver3(x, y, 0, ver_x(1), ver_x(2), 0, 'g');
 rf_y = quiver3(x, y, 0, ver_y(1), ver_y(2), 0, 'r');
 rf_z = quiver3(x, y, 0, 0, 0, 1, 'b');
-
-hold off
 end

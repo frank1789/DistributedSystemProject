@@ -23,8 +23,8 @@ classdef Robot < handle
         % Name of the robot
         ID;
         % Physical quantities
-        t = []; % time 
-        q = []; % position
+        t = []; % time [s]
+        q = []; % position [m]
         u = []; % velocity vector [rectilinear[m/s] angular[rad/s]]
         
         % Encoder values
@@ -33,6 +33,9 @@ classdef Robot < handle
         % Quantization effect
         quatizeffect_LeftEnc;
         quatizeffect_RightEnc;
+    end
+    
+    properties
         
         % EKF quantities
         EKF_q_est;
@@ -41,7 +44,7 @@ classdef Robot < handle
         EKF_NumS;
         EKF_q_store;
         q_est_p;
-        P_p
+        P_p;
     end
     
     methods
@@ -65,6 +68,7 @@ classdef Robot < handle
             this.EKF_NumS = length(this.t);
             this.EKF_q_store = zeros(3, this.EKF_NumS);
             this.EKF_q_store(:,1) = this.EKF_q_est;
+            % build laser sensor
         end
         
         % function to compute the kinematics
@@ -82,7 +86,7 @@ classdef Robot < handle
         this = store(this, i)
         
         % plot function
-        [body, label, rf_x, rf_y, rf_z]= makerobot(this)
+        [body, label, rf_x, rf_y, rf_z] =makerobot(this, t)
         [body, label, rf_x, rf_y, rf_z] =animate(this, it)
         
         % getter method to access proprerty class
@@ -96,4 +100,33 @@ classdef Robot < handle
         
         [R] = rotationMatrix(theta)
     end
+    
+    properties
+        
+        % laser sensor
+        % parameters
+        laserAngularResolution = 0.36; %deg
+%         laserTheta          = pi/180*( -90 : laserAngularResolution : 90
+%         ); dainserire ne costruttore
+        laser_rho_sigma     = 0.1;
+        laser_theta_sigma   = 0.1*pi/180;
+%         C_l_rho_theta       = [ laser_rho_sigma^2, 0; 0,
+%         laser_theta_sigma^2 ]; dainserire nel costruttore
+        C_l_xy              = {};
+        
+    end
+    
+    methods
+        this = tempame(this, ppoints, plines);
+    end
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 end
