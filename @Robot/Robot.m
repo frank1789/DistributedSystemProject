@@ -119,6 +119,10 @@ classdef Robot < handle
     methods
         this = tempame(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this);
+        [limit] = plotlaserbeam(this, it);
+        [newy] = endY(this, it, angle);
+        [newX] = endX(this, it, angle);
+
     end
     
 end % end definition class
