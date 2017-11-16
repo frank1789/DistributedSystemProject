@@ -29,8 +29,8 @@ Vehicle.q{1} = [0; 1; pi/4];
 Vehicle.q{2} = [1; 1; pi];
 Vehicle.q{3} = [-7; 3; 0];
 
-
-a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{1});
+for p = 1:3
+a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p});
 a.UnicycleKinematicMatlab();
 a.EncoderSim();
 for i = 2:a.getEKFstep()
@@ -52,11 +52,17 @@ end
 %     robota{nrobot}.tempame(mapStuct.map.points, mapStuct.map.lines);
 %     pause(0.1)
 % end
-figure, clf , hold on
-subplot(2,1,1);
+
+laserScan_xy = a.laserScan_xy();
+
+
+% figure, clf 
+
+
+figure('position', [320, 150, 1440, 900]), clf , hold on
 t = linspace(1, MdlInit.T, 201);
-% figure('position', [320, 150, 1440, 900]), clf , hold on
-axis([-10, 10, -10, 10]);
+
+
 grid on
 plotMap(mapStuct.map);
 
@@ -65,25 +71,65 @@ label = cell.empty;
 rf_x  = cell.empty;
 rf_y  = cell.empty;
 rf_z  = cell.empty;
+limit= cell.empty;
+laserbeam = cell.empty;
+theta2 = linspace(-90 * pi/180, 90 * pi/180, round(180/0.36));
 
 
 for n= 1:length(t)
+    subplot(2,1,1);
+    axis([-10, 10, -10, 10]);
+    hold on
+    axis equal
+    grid on
+    plotMap(mapStuct.map);
     for j=1:1
         if n == 1
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.makerobot(n);
+%             limit{j} = a.plotlaserbeam(n);
         else
             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.animate(n);
+            %             limit{j} = a.plotlaserbeam(n);
+            %             while 1
+            %                 for i = 1:length(theta2)
+            %                     delete(laserbeam{i});
+            %                     laserbeam{i} = a.animatelaser(n)
+            %                     ray = line([0 R*cos(theta2(i))],[0 R*sin(theta2(i))],'color','r');
+            %                     endray = plot(R*cos(theta2(i)),R*sin(theta2(i)),'r*');
+            %                     b = toc(a); % check timer
+            %     disp(b);
+            %     if b > (1/10)
+            %                     drawnow % update screen every 1/30 seconds
+            %         a = tic; % reset timer after updating
+            %             disp(a);
+            %         drawnow;
         end
     end
+    hold off
+    
     
     drawnow limitrate;
+    subplot(2,1,2);
+    grid on
+    hold on
+    plot(laserScan_xy(1,n),laserScan_xy(2,n),'.b');
+    hold off
+    axis equal
+    grid on
+    
+    
+    
+    
+    
+    
+end % end animation
+% hold off
+%
+% subplot(2,1,2);
+% hold on
+% plot(laserScan_xy(1,:),laserScan_xy(2,:),'.b');
+% hold off
+% axis equal
+% grid on
 end
-hold off
-laserScan_xy = a.laserScan_xy();
-subplot(2,1,2);
-hold on
-plot(laserScan_xy(1,:),laserScan_xy(2,:),'.b');
-hold off
-axis equal
-grid on

@@ -28,14 +28,21 @@ neagtivelimit = line([startlimitx negative_endlimitx(1)],[startlimity negative_e
 % xunit = r * cos(th) + x;
 % yunit = r * sin(th) + y;
 
-rx =   this.lasermaxdistance * this.rotationMatrix(this.q(t,3));
-ry = - this.lasermaxdistance * this.rotationMatrix(this.q(t,3));
-xunit = rx(1) * cos(theta2 - this.q(t,3)) + this.q(t,1);
-yunit = ry(2) * sin(theta2- this.q(t,3)) + this.q(t,2);
-% arcg = plot(xunit, yunit);% arcg = plot(x, y);
+% rx =   this.lasermaxdistance * this.rotationMatrix(this.q(t,3));
+% ry = - this.lasermaxdistance * this.rotationMatrix(this.q(t,3));
+xunit = positive_endlimitx(1) * cos(theta2); %* this.rotationMatrix(this.q(t,3));
+yunit = negative_endlimitx(1) * sin(theta2); %* this.rotationMatrix(this.q(t,3));
+% x = [];
+% y = [];
+% for n = 1:length(xunit)
+%     x = xunit(n) * this.rotationMatrix(this.q(t,3));
+%     y = yunit(n) * this.rotationMatrix(this.q(t,3));
+% end
+arcg = plot(xunit, yunit);
+% arcg* this.rotationMatrix(this.q(t,3));
 
 % collecet FOV
-FOV = [positvelimit, neagtivelimit];
+FOV = [positvelimit, neagtivelimit, arcg];
 
 % compute marker ray position
 laserbeam_marker = plot(positive_endlimitx(1), positive_endlimity(2),'r*');

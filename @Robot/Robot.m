@@ -122,6 +122,7 @@ classdef Robot < handle
         [laserbeam] = plotlaserbeam(this, t)
         [newy] = endY(this, it, angle);
         [newX] = endX(this, it, angle);
+        [laserbeam] = animatelaser(this, t)
 
     end
     
