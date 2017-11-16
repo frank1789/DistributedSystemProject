@@ -101,32 +101,24 @@ classdef Robot < handle
         [R] = rotationMatrix(theta)
     end
     
-    properties
+    % definition properties and method for laser sensor
+    properties (Constant)
+        % laser sensor parameters
+        laserAngularResolution = 0.36;  % [deg]
+        lasermaxdistance = 4;           % [m]
         
-        % laser sensor
-        % parameters
-        laserAngularResolution = 0.36; %deg
-%         laserTheta          = pi/180*( -90 : laserAngularResolution : 90
-%         ); dainserire ne costruttore
+        % laser noise
         laser_rho_sigma     = 0.1;
         laser_theta_sigma   = 0.1*pi/180;
-%         C_l_rho_theta       = [ laser_rho_sigma^2, 0; 0,
-%         laser_theta_sigma^2 ]; dainserire nel costruttore
-        C_l_xy              = {};
-        
+    end
+    properties
+        C_l_xy = {};
+        laserScan_xy = [];
     end
     
     methods
-        this = tempame(this, ppoints, plines);
+        this = tempame(this, ppoints, plines, it);
+        [laserScan_xy] = getlaserscan(this);
     end
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-end
+end % end definition class
