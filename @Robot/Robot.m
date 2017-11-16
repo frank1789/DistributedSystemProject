@@ -119,7 +119,7 @@ classdef Robot < handle
     methods
         this = tempame(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this);
-        [limit] = plotlaserbeam(this, it);
+        [laserbeam] = plotlaserbeam(this, t)
         [newy] = endY(this, it, angle);
         [newX] = endX(this, it, angle);
 
