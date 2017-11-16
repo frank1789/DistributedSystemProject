@@ -1,8 +1,15 @@
-function [body, label, rf_x, rf_y, rf_z] =makerobot(this, t)
+function [body, label, rf_x, rf_y, rf_z] = makerobot(this, t)
 %MAKEROBOT produce the plot of the body in figure at initial position
 % INPUT:
 %  this = refer to this object
-% OUTPUT: none
+%  t (int) = initial step of animation
+% OUTPUT:
+%   body (object) = return object plot
+%   label(object) = return object plot
+%   rf_x (object) = return object plot
+%   rf_y (object) = return object plot
+%   rf_z (object) = return object plot
+
 
 % set the axis and off block layer
 hold on

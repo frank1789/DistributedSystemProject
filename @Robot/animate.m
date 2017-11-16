@@ -2,8 +2,13 @@ function [body, label, rf_x, rf_y, rf_z] = animate(this, it)
 %ANIMATE produce the plot of the body in figure at initial position
 % INPUT:
 %  this = refer to this object
-%  it = (int) iterator from cycle
-% OUTPUT: none
+%  it (int) = new step of animation 
+% OUTPUT:
+%   body (object) = return object plot
+%   label(object) = return object plot
+%   rf_x (object) = return object plot
+%   rf_y (object) = return object plot
+%   rf_z (object) = return object plot
 
 % set the axis and off block layer
 hold on
