@@ -29,12 +29,13 @@ Vehicle.q{1} = [0; 1; pi/4];
 Vehicle.q{2} = [1; 1; pi];
 Vehicle.q{3} = [-7; 3; 0];
 
-for p = 1:3
-a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p});
+a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{3});
 a.UnicycleKinematicMatlab();
 a.EncoderSim();
 for i = 2:a.getEKFstep()
+    disp(i)
     a.tempame(mapStuct.map.points, mapStuct.map.lines, i);
+%   laserScan_xy(i) = a.laserScan_xy(i);
     a.prediction(i);
     a.update(i);
     a.store(i);
@@ -52,17 +53,15 @@ end
 %     robota{nrobot}.tempame(mapStuct.map.points, mapStuct.map.lines);
 %     pause(0.1)
 % end
+laserScan_xy = {};
+for k = 1:201
+    laserScan_xy{k} = a.laserScan_xy(k);
+end
 
-laserScan_xy = a.laserScan_xy();
 
-
-% figure, clf 
-
-
-figure('position', [320, 150, 1440, 900]), clf , hold on
+figure, clf, hold on
+% figure('position', [320, 150, 1440, 900]), clf , hold on
 t = linspace(1, MdlInit.T, 201);
-
-
 grid on
 plotMap(mapStuct.map);
 
@@ -109,21 +108,21 @@ for n= 1:length(t)
     hold off
     
     
-    drawnow limitrate;
+    drawnow;
     subplot(2,1,2);
     grid on
     hold on
-    plot(laserScan_xy(1,n),laserScan_xy(2,n),'.b');
+    cloudpoint = cell2mat(laserScan_xy{n});
+    if ~isempty(cloudpoint)
+        plot(cloudpoint(1,:),cloudpoint(2,:),'.b');
+    end
     hold off
     axis equal
-    grid on
-    
-    
-    
-    
-    
-    
+    grid on 
 end % end animation
+
+
+
 % hold off
 %
 % subplot(2,1,2);
@@ -132,4 +131,4 @@ end % end animation
 % hold off
 % axis equal
 % grid on
-end
+
