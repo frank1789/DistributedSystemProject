@@ -113,12 +113,12 @@ classdef Robot < handle
     end
     properties
         C_l_xy = {};
-        laserScan_xy = [];
+        laserScan_xy = cell.empty;
     end
     
     methods
         this = tempame(this, ppoints, plines, it);
-        [laserScan_xy] = getlaserscan(this);
+        [laserScan_xy] = getlaserscan(this, it);
         [laserbeam] = plotlaserbeam(this, t)
         [newy] = endY(this, it, angle);
         [newX] = endX(this, it, angle);
