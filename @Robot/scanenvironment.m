@@ -1,4 +1,4 @@
-function this = tempame(this, ppoints, plines, it)
+function this = scanenvironment(this, ppoints, plines, it)
 % fprintf('time:%3.4f\n',this.t(it))
 % fprintf('@ 10z\n')
 update = mod(this.t(it), 0.1);

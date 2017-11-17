@@ -112,12 +112,12 @@ classdef Robot < handle
         laser_theta_sigma   = 0.1*pi/180;
     end
     properties
-        C_l_xy = {};
-        laserScan_xy = cell.empty;
+        C_l_xy = cell,empty;
+        laserScan_xy = cell.empty; % contains scans at a certain location
     end
     
     methods
-        this = tempame(this, ppoints, plines, it);
+        this = scanenvironment(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this, it);
         [laserbeam] = plotlaserbeam(this, t)
         [newy] = endY(this, it, angle);
