@@ -28,13 +28,13 @@ MdlInit.T = 10;
 Vehicle.q{1} = [0; 1; pi/4];
 Vehicle.q{2} = [1; 1; pi];
 Vehicle.q{3} = [-7; 3; 0];
-
-a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{3});
+for p=1:3
+a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p});
 a.UnicycleKinematicMatlab();
 a.EncoderSim();
 for i = 2:a.getEKFstep()
     disp(i)
-    a.tempame(mapStuct.map.points, mapStuct.map.lines, i);
+    a.scanenvironment(mapStuct.map.points, mapStuct.map.lines, i);
 %   laserScan_xy(i) = a.laserScan_xy(i);
     a.prediction(i);
     a.update(i);
@@ -53,14 +53,15 @@ end
 %     robota{nrobot}.tempame(mapStuct.map.points, mapStuct.map.lines);
 %     pause(0.1)
 % end
-laserScan_xy = {};
+laserScan_xy = cell.empty;
 for k = 1:201
     laserScan_xy{k} = a.laserScan_xy(k);
 end
 
 
-figure, clf, hold on
-% figure('position', [320, 150, 1440, 900]), clf , hold on
+% figure, clf, hold on
+filename = sprintf('testAnimated%s.gif', num2str(p))
+h = figure('position', [320, 150, 1440, 900]), clf , hold on
 t = linspace(1, MdlInit.T, 201);
 grid on
 plotMap(mapStuct.map);
@@ -112,23 +113,30 @@ for n= 1:length(t)
     subplot(2,1,2);
     grid on
     hold on
+    
+    % transform cell arry to vector and store in local variable cluodpoint
     cloudpoint = cell2mat(laserScan_xy{n});
+    % verify cloudpoint is nonvoid vector
     if ~isempty(cloudpoint)
-        plot(cloudpoint(1,:),cloudpoint(2,:),'.b');
+        cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.b'); % plot
     end
+%     delete(cl_point);
     hold off
     axis equal
-    grid on 
+    grid on
+    
+    % store gif
+    frame = getframe(h); 
+      im = frame2im(frame); 
+      [imind,cm] = rgb2ind(im,256); 
+      % Write to the GIF File 
+      if n == 1 
+          imwrite(imind,cm,filename,'gif', 'Loopcount',inf); 
+      else 
+          imwrite(imind,cm,filename,'gif','WriteMode','append'); 
+      end 
 end % end animation
 
 
-
-% hold off
-%
-% subplot(2,1,2);
-% hold on
-% plot(laserScan_xy(1,:),laserScan_xy(2,:),'.b');
-% hold off
-% axis equal
-% grid on
-
+end
+close all;
