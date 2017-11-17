@@ -112,7 +112,7 @@ classdef Robot < handle
         laser_theta_sigma   = 0.1*pi/180;
     end
     properties
-        C_l_xy = cell,empty;
+        C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
     end
     
