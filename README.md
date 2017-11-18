@@ -19,7 +19,7 @@ You now have to compile the **sens\_model\_.c** file for the specific architectu
 ```
 
 Now you can run the script.
-If you encounter problems in compiling using the mex command, update Matlab to the latest available release or refer to the [official site](https://mathworks.com/)
+If you encounter problems in compiling using the mex command, update Matlab to the latest available release or refer to the [official site](https://mathworks.com/).
 
 ## Run
 To launch the script, open the *Start.m* file
