@@ -11,7 +11,7 @@ Depending on the machine you are using:
 - Mac
 - Linux
 
-First delete files with extensions \*.mex_architecturename_, for example, for Mac the file will have extension: ***.mexmaci64**
+First delete files with extensions \*.mex*_architecturename_*, for example, for Mac the file will have extension: ***.mexmaci64**
 You now have to compile the **sens\_model\_.c** file for the specific architecture in the matlab terminal.
 
 ```matlab
