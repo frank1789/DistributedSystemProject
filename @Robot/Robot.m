@@ -86,8 +86,8 @@ classdef Robot < handle
         this = store(this, i)
         
         % plot function
-        [body, label, rf_x, rf_y, rf_z] =makerobot(this, t)
-        [body, label, rf_x, rf_y, rf_z] =animate(this, it)
+        [body, label, rf_x, rf_y, rf_z] = makerobot(this, t)
+        [body, label, rf_x, rf_y, rf_z] = animate(this, it)
         
         % getter method to access proprerty class
         numsteps = getEKFstep(this)
@@ -123,7 +123,6 @@ classdef Robot < handle
         [newy] = endY(this, it, angle);
         [newX] = endX(this, it, angle);
         [laserbeam] = animatelaser(this, t)
-
+     
     end
-    
 end % end definition class
