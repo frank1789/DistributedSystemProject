@@ -114,8 +114,7 @@ classdef Robot < handle
     end
     
     methods (Static)
-        % Kinematic simulation
-        [v, omega] = UnicycleInputs(t)
-        [R] = rotationMatrix(theta) % compute rotation matrix in plane 2D
+        [v, omega] = UnicycleInputs(t) % Kinematic simulation
+        [R] = rotationMatrix(theta)    % compute rotation matrix in plane 2D
     end
 end % definition class
