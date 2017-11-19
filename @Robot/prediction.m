@@ -22,7 +22,7 @@ B = [cos(this.EKF_q_est(3))*this.wheelradius/2, cos(this.EKF_q_est(3))*this.whee
      this.wheelradius/this.interaxle, -this.wheelradius/this.interaxle];
 
 this.q_est_p = this.EKF_q_est + B * DeltaEnc;
-this.P_p = A * this.EKF_p * A' + B * this.EKF_Q * B';
+this.P_p = A * this.EKF_P * A' + B * this.EKF_Q * B';
 
 % delete local variable
 clear Sensor

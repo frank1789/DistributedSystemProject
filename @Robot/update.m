@@ -37,7 +37,7 @@ if not(isempty(H))
     this.EKF_p = (eye(3) - K*H)*P_p;
 else
     this.EKF_q_est = this.q_est_p;
-    this.EKF_p = this.P_p;
+    this.EKF_P = this.P_p;
 end
 
 end
