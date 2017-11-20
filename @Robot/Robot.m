@@ -49,7 +49,6 @@ classdef Robot < handle
     properties (Constant)
         laserAngularResolution = 0.36;  % [deg] laser sensor parameters
         lasermaxdistance = 4;           % [m]   laser sensor parameters
-        
         % noise
         laser_rho_sigma     = 0.1;              % mean
         laser_theta_sigma   = 0.1 * (pi / 180); % variance
@@ -81,25 +80,25 @@ classdef Robot < handle
             this.EKF_NumS = length(this.t);
             this.EKF_q_store = zeros(3, this.EKF_NumS);
             this.EKF_q_store(:,1) = this.EKF_q_est;
-        end
+        end % definition constructor
         
         % function to compute the kinematics
         % Kinematic simulation
-        this = UnicycleKinematicMatlab(this, MdlInit, Vehicle)
-        dy = UnicycleModel(this, t, y)
+        this = UnicycleKinematicMatlab(this, MdlInit, Vehicle);
+        dy = UnicycleModel(this, t, y);
         
         % Encoder Simulation
-        this = EncoderSim(this, Vehicle)
-        this = EncoderNoise(this)
+        this = EncoderSim(this, Vehicle);
+        this = EncoderNoise(this);
         
         % function to compute Extend Kalman Filter
-        this = prediciton(this, i)
-        this = update(this, i)
-        this = store(this, i)
+        this = prediciton(this, i);
+        this = update(this, i);
+        this = store(this, i);
         
         % plot function
-        [body, label, rf_x, rf_y, rf_z] = makerobot(this, t)
-        [body, label, rf_x, rf_y, rf_z] = animate(this, it)
+        [body, label, rf_x, rf_y, rf_z] = makerobot(this, t);
+        [body, label, rf_x, rf_y, rf_z] = animate(this, it);
         
         % getter method to access proprerty class
         numsteps = getEKFstep(this)
@@ -111,6 +110,8 @@ classdef Robot < handle
         [newy] = endY(this, it, angle);
         [newX] = endX(this, it, angle);
         [laserbeam] = animatelaser(this, t) 
+        getplot(this);
+        [occupacygrid] = getoccupacygrid(this, it)
     end
     
     methods (Static)
