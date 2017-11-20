@@ -1,5 +1,8 @@
 function [R] = rotationMatrix(theta)
-%ROTATIONMATRIX compute the rotation matrix for a vector
+%ROTATIONMATRIX compute In two dimensions, to carry out a rotation using a
+% matrix, the point (x,y) to be rotated counterclockwise is written as a
+% column vector, then multiplied by a rotation matrix calculated from the 
+% angle theta.
 % INPUT:
 %  theta = input angle [rad]
 % OUTPUT:
