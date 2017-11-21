@@ -1,7 +1,7 @@
 function [occupacygrid] = getoccupacygrid(this, it)
-%GETOCCUPACYGRID the method generates a plot by scanning the laser sensor
+%GETOCCUPACYGRID method generates a plot by scanning the laser sensor
 % as scattered points in the plane, so this plot is converted into a frame
-% and analyzed as an image by returning the employment grid as a
+% and analyzed as an image by returning the occupacy grid as a 
 % matrix [m, n] (double)
 % INPUT:
 %  this (object) = refer to this object

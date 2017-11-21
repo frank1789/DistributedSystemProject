@@ -142,29 +142,14 @@ for n= 1:length(t)
 %       end 
 end % end animation
 
-a.getplot()
+
 end
 close all;
 %%
-dummy  = figure();
-clpoint = plot(cloudpoint(1,:), cloudpoint(2,:),'.b');
-
-F = getframe(dummy);
-[X, Map] = frame2im(F);
-
-imshow(X);
-
-imageNorm = double(X)/255;
-Occ_Grid = 1 - imageNorm;
-
-if Occ_Grid(:,:,1) == Occ_Grid(:,:,2)
-    disp('sono uguali');
+% compute Occupacygrid and stored in a cell array
+occupacygrid = cell.empty;
+for iterator = 1:201
+occupacygrid{iterator} = a.getoccupacygrid(iterator);
 end
-%%
-b32 = cell.empty;
-for z = 1:201
-b32{z} = a.getoccupacygrid(z);
-end
-
-% testmap = OccupacyGrid_from_Image(X);
+close all
 
