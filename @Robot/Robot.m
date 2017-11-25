@@ -112,6 +112,7 @@ classdef Robot < handle
         [laserbeam] = animatelaser(this, t) 
         getplot(this);
         [occupacygrid] = getoccupacygrid(this, it)
+        [occupacygrid] = setoccupacygrid(this, it)
     end
     
     methods (Static)

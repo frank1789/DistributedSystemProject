@@ -20,11 +20,15 @@ laser = [ initposition, pi, this.laserAngularResolution*pi/180,...
 
 % scan environment
 laserReadings = Sens_model_noise( ppoints, plines, laser(1,:));
-fprintf('poisition x:%3.3f; y:%3.3f; theta:%3.3f; laser:%3.3f, %3.3f, %3.3f\n', this.q(it,1),this.q(it,2),this.q(it,3),laserReadings(1:3))
-
+% fprintf('poisition x:%3.3f; y:%3.3f; theta:%3.3f; laser:%3.3f, %3.3f, %3.3f\n', this.q(it,1),this.q(it,2),this.q(it,3),laserReadings(1:3))
 
 % remove the data that are too far away
-rhosOver4m = laserReadings(2,:) > this.lasermaxdistance;
+rhosOver4m = laserReadings(2,:) < this.lasermaxdistance;
+
+laserReadings(2,:) = laserReadings(2,:).* rhosOver4m;
+
+
+
 
 this.laserScan_xy{it} =[ laserReadings(2,:).*cos(laserTheta);...
     laserReadings(2,:).*sin(laserTheta) ];
