@@ -20,7 +20,7 @@ grid on
 MdlInit.Ts = 0.05;
 
 % Length of simulation
-MdlInit.T = 10;
+MdlInit.T = 50;
 
 % Vehicle set-up initial conditions
 Vehicle.q{1} = [0; 1; pi/4];
@@ -73,6 +73,6 @@ for n= 1:length(t)
         end
     end
     
-    drawnow limitrate;
+    drawnow;
 end
 hold off

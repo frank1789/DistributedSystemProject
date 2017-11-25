@@ -1,4 +1,4 @@
-function dy = UnicycleModel(this, t,y)
+function dy = UnicycleModel(this, t, y)
 
 % Input parser
 xu = y(1);

@@ -1,38 +1,27 @@
 function [occupacygrid] = getoccupacygrid(this, it)
-%GETOCCUPACYGRID the method generates a plot by scanning the laser sensor
+%GETOCCUPACYGRID return the occupacy grid by calling before the
+% setoccupacygrid method generates a plot by scanning the laser sensor
 % as scattered points in the plane, so this plot is converted into a frame
-% and analyzed as an image by returning the employment grid as a
-% matrix [m, n] (double)
+% and analyzed as an image by returning the occupacy grid as a
+% matrix [m, n] (double), where m == n (square matrix)
 % INPUT:
 %  this (object) = refer to this object
 %  it (int) = iterator from the loop to locate the step
 % OUTPUT:
 %  occupacygrid (double) = matrix [m, n]
 
-persistent lastoccupacygrid; % store the last occupacy grid
+tempoccupacygrid = this.setoccupacygrid(it);
 
-if it <= 2
-    % from cell arry to vector and store in local variable cluodpoint
-    cloudpoint = this.laserScan_xy{it};
-    % initialize the occupacy grid with same probability for every cell
-    occupacygrid = zeros(420,540) + 0.5;
-    lastoccupacygrid = occupacygrid;
+% get dimension of occupacy grid
+[m, n] = size(tempoccupacygrid);
+
+if m == n % verify occupacy matrix is square
+    occupacygrid = tempoccupacygrid;
 else
-    cloudpoint = this.laserScan_xy{it};
-    if ~isempty(cloudpoint) % verify cloudpoint is nonvoid vector
-        prepareframe = figure();
-        plot(cloudpoint(1,:),cloudpoint(2,:),'.b'); % generate plot at specific position
-        F = getframe(prepareframe); % transform frame to image
-        [X, Map] = frame2im(F);
-        imshow(X);
-        imageNorm = double(X)/255;
-        % return the occupacy grid
-        occupacygrid = 1 - imageNorm(:,:,1);
-        % store occupacy grid in static variable
-        lastoccupacygrid = occupacygrid;
-    else
-        % recall the last occupacy grid when the scan is void
-        occupacygrid = lastoccupacygrid;
-    end
+    % make complementary matrix (must be square)
+    complement = zeros(n - m, n) + 0;
+    % overwrite input parameter
+    occupacygrid = cat(1, tempoccupacygrid, complement);
 end
-end % definition method
+clear tempoccupacygrid
+end % function

@@ -1,9 +1,16 @@
 %% Main file
 close all;
 clear class;
-clear
+clear;
 clc;
 
+addpath ('Cost Function', 'Occupacy grid from Image')
+
+
+
+% testmap = OccupacyGrid_from_Image('plant.jpg');
+
+%%
 % load map
 MapName = 'map_square.mat';
 mapStuct = load( MapName );
@@ -33,9 +40,7 @@ a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p});
 a.UnicycleKinematicMatlab();
 a.EncoderSim();
 for i = 2:a.getEKFstep()
-    disp(i)
     a.scanenvironment(mapStuct.map.points, mapStuct.map.lines, i);
-%   laserScan_xy(i) = a.laserScan_xy(i);
     a.prediction(i);
     a.update(i);
     a.store(i);
@@ -60,8 +65,8 @@ end
 
 
 % figure, clf, hold on
-filename = sprintf('testAnimated%s.gif', num2str(p))
-h = figure('position', [320, 150, 1440, 900]), clf , hold on
+filename = sprintf('testAnimated%s.gif', num2str(p));
+h = figure('position', [320, 150, 1440, 900]); clf, hold on
 t = linspace(1, MdlInit.T, 201);
 grid on
 plotMap(mapStuct.map);
@@ -125,18 +130,26 @@ for n= 1:length(t)
     axis equal
     grid on
     
-    % store gif
-    frame = getframe(h); 
-      im = frame2im(frame); 
-      [imind,cm] = rgb2ind(im,256); 
-      % Write to the GIF File 
-      if n == 1 
-          imwrite(imind,cm,filename,'gif', 'Loopcount',inf); 
-      else 
-          imwrite(imind,cm,filename,'gif','WriteMode','append'); 
-      end 
+%     % store gif
+%     frame = getframe(h); 
+%       im = frame2im(frame); 
+%       [imind,cm] = rgb2ind(im,256); 
+%       % Write to the GIF File 
+%       if n == 1 
+%           imwrite(imind,cm,filename,'gif', 'Loopcount',inf); 
+%       else 
+%           imwrite(imind,cm,filename,'gif','WriteMode','append'); 
+%       end 
 end % end animation
 
 
 end
 close all;
+%%
+% compute Occupacygrid and stored in a cell array
+occupacygrid = cell.empty;
+for iterator = 1:201
+occupacygrid{iterator} = a.getoccupacygrid(iterator);
+end
+close all
+

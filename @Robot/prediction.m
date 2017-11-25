@@ -25,6 +25,6 @@ this.q_est_p = this.EKF_q_est + B * DeltaEnc;
 this.P_p = A * this.EKF_P * A' + B * this.EKF_Q * B';
 
 % delete local variable
-clear Sensor
+clear Sensor A B
 
 end
