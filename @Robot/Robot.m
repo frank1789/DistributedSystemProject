@@ -67,8 +67,8 @@ classdef Robot < handle
             fprintf('Initialize robot n: %3i\n', this.ID);
             
             % initialize simulation time and sample
-            Dt = sampletime;     % Sampling time
-            this.t = 0:Dt:time;  % Length of simulation
+%             Dt = sampletime;     % Sampling time
+%             this.t = 0:Dt:time;  % Length of simulation
             
             % set initial position
             this.q = initialposition;
