@@ -27,7 +27,11 @@ rhosOver4m = laserReadings(2,:) < this.lasermaxdistance;
 
 laserReadings(2,:) = laserReadings(2,:).* rhosOver4m;
 
+F = laserReadings(2,:);
 
+   F(rhosOver4m==0)=nan;
+
+laserReadings(2,:)= F;
 
 
 this.laserScan_xy{it} =[ laserReadings(2,:).*cos(laserTheta);...
