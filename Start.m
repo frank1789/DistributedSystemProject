@@ -6,11 +6,6 @@ clc;
 
 addpath ('Cost Function', 'Occupacy grid from Image')
 
-
-
-% testmap = OccupacyGrid_from_Image('plant.jpg');
-
-%%
 % load map
 MapName = 'map_square.mat';
 mapStuct = load( MapName );
@@ -21,24 +16,31 @@ plotMap(mapStuct.map);
 hold off
 axis equal
 grid on
-
+p=1;
 % Sampling time
 MdlInit.Ts = 0.05;
 
 % Length of simulation
 MdlInit.T = 10;
 
-% j = Robot(324, MdlInit.T, MdlInit.Ts, [0; 1; pi/4])
+nit = MdlInit.T / MdlInit.Ts
 
-
-%% Vehicle set-up Vehicle initial conditions
-Vehicle.q{1} = [0; 1; pi/4];
+% Vehicle set-up Vehicle initial conditions
+Vehicle.q{1} = [0, 0, 0];
 Vehicle.q{2} = [1; 1; pi];
 Vehicle.q{3} = [-7; 3; 0];
-for p=1:3
+%
+
 a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p});
-a.UnicycleKinematicMatlab();
+for ii = 1:1:nit
+    a.UnicycleKinematicMatlab();
+end
+
+
 a.EncoderSim();
+
+%%
+
 for i = 2:a.getEKFstep()
     a.scanenvironment(mapStuct.map.points, mapStuct.map.lines, i);
     a.prediction(i);
@@ -143,7 +145,7 @@ for n= 1:length(t)
 end % end animation
 
 
-end
+
 close all;
 %%
 % compute Occupacygrid and stored in a cell array
