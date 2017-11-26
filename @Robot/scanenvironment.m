@@ -1,9 +1,12 @@
 function this = scanenvironment(this, ppoints, plines, it)
 % fprintf('time:%3.4f\n',this.t(it))
 % fprintf('@ 10z\n')
-update = mod(this.t(it), 0.1);
-if ~update
-    fprintf('inside laser time:%3.4f\n',this.t(it))
+% 
+% 
+% t_round = round(this.t, 8);
+% update = mod(t_round(it), 0.1);
+% if ~update
+%     fprintf('inside laser time:%3.4f\n',t_round(it))
 
 % initialize initial postion
 initposition = [this.q(it,1), this.q(it,2) this.q(it,3)]; % [position x, y, theta]
@@ -36,5 +39,5 @@ laserReadings(2,:)= F;
 
 this.laserScan_xy{it} =[ laserReadings(2,:).*cos(laserTheta);...
     laserReadings(2,:).*sin(laserTheta) ];
-end
+% end
 end
