@@ -72,6 +72,7 @@ classdef Robot < handle
             Dt = sampletime;     % Sampling time
             dimension = length(0:Dt:time);  % Length of simulation
             this.distance{1,dimension} = [];
+            this.laserScan_xy{1,dimension} = [];
             % set initial position
             this.q = initialposition;
             
