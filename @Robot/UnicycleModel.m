@@ -5,15 +5,13 @@ xu = y(1);
 yu = y(2);
 thetau = y(3);
 
+% mindistance = 0.85;
 if ~isempty(this.distance{piterator})
-    mindistance = min(this.distance{piterator});
-    fprintf('%f\n', mindistance);
+    this.mindistance = min(this.distance{piterator});
+    fprintf('check distance: %f\n', this.mindistance);
 end
 
-
-
-% c = find(this.q == this.q(end,:));
-[v, omega] = this.UnicycleInputs(t, 0);
+[v, omega] = this.UnicycleInputs(t, this.mindistance);
 
 % System kinematic
 xu_d = cos(thetau)*v;

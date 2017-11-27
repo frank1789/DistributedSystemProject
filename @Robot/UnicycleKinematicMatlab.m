@@ -16,6 +16,6 @@ this.q(end+1,:) = q(end,:);
 this.t(end+1) = t1(end);
 
 % Input sequence
-[v, omega] = this.UnicycleInputs(this.t);
+[v, omega] = this.UnicycleInputs(this.t, this.mindistance);
 this.u = [v'; omega'];
 end
