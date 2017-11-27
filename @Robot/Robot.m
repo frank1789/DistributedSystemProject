@@ -57,6 +57,7 @@ classdef Robot < handle
     properties
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
+        distance = cell.empty;
     end
     
     methods
