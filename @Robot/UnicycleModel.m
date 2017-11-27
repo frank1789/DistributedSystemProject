@@ -1,18 +1,15 @@
 function dy = UnicycleModel(this, t, y, piterator)
-% disp(piterator)
+
 % Input parser
 xu = y(1);
 yu = y(2);
 thetau = y(3);
-% a = cell2mat(this.distance{piterator});
-if ~isempty(this.distance)
-    if piterator > 1
-        disp(piterator)
-        if ~isempty(this.distance{piterator})
-        mindistance = min(this.distance{piterator})
-        end
-    end
+
+if ~isempty(this.distance{piterator})
+    mindistance = min(this.distance{piterator});
+    fprintf('%f\n', mindistance);
 end
+
 
 
 % c = find(this.q == this.q(end,:));
