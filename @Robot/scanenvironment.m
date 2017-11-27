@@ -25,7 +25,7 @@ laser = [ initposition, pi, this.laserAngularResolution*pi/180,...
 laserReadings = Sens_model_noise( ppoints, plines, laser(1,:));
 
 % remove the data that are too far away
-rhosOver4m = laserReadings(2,:) < this.lasermaxdistance;
+rhosOver4m = (laserReadings(2,:) < this.lasermaxdistance & laserReadings(2,:) > 0);
 laserReadings(2,:) = laserReadings(2,:).* rhosOver4m; % set zero value over max distance
 
 F = laserReadings(2,:); % instance a temporary F matrix 
