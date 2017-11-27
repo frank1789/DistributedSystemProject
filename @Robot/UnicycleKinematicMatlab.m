@@ -24,8 +24,8 @@ end
 
 % Unicycle dynamic
 [t1, q] = ode45(@(t,y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
-this.q(end+1:end+length(q(:,1)),:) = q;
-this.t(end+1:end+length(t1(:,1))) = t1;
+this.q(end+1,:) = q(end,:);
+this.t(end+1) = t1(end);
 
 % Input sequence
 [v, omega] = this.UnicycleInputs(this.t);
