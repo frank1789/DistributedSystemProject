@@ -58,6 +58,7 @@ classdef Robot < handle
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
         distance = cell.empty;
+        mindistance = 0.85;
     end
     
     methods
@@ -66,11 +67,11 @@ classdef Robot < handle
             % initialize identification number of robot
             this.ID = inputID;
             fprintf('Initialize robot n: %3i\n', this.ID);
-            
+
             % initialize simulation time and sample
-%             Dt = sampletime;     % Sampling time
-%             this.t = 0:Dt:time;  % Length of simulation
-            
+            Dt = sampletime;     % Sampling time
+            dimension = length(0:Dt:time);  % Length of simulation
+            this.distance{1,dimension} = [];
             % set initial position
             this.q = initialposition;
             
@@ -86,7 +87,7 @@ classdef Robot < handle
         % function to compute the kinematics
         % Kinematic simulation
         this = UnicycleKinematicMatlab(this, MdlInit, Vehicle);
-        dy = UnicycleModel(this, t, y);
+        dy = UnicycleModel(this, t, y, piterator)
         
         % Encoder Simulation
         this = EncoderSim(this, Vehicle);
@@ -117,7 +118,7 @@ classdef Robot < handle
     end
     
     methods (Static)
-        [v, omega] = UnicycleInputs(t) % Kinematic simulation
+        [v, omega] = UnicycleInputs(t, pdistance) % Kinematic simulation
         [R] = rotationMatrix(theta)    % compute rotation matrix in plane 2D
     end
 end % definition class

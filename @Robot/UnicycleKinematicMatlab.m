@@ -1,17 +1,5 @@
-function this = UnicycleKinematicMatlab(this, it)
+function this = UnicycleKinematicMatlab(this, piterator)
 
-% t = 0:MdlInit.Ts:MdlInit.T;
-% 
-% y1 = [0, 0, 0];
-% 
-% t1 = 0;
-% 
-% y=zeros(1,3);
-% 
-% for i = 1:1:nit
-%     [t1, y1] = ode45(@(t,y) UnicycleModel(t, y), [t1(end) t1(end)+MdlInit.Ts], y1(end,:));
-%     y(end+1:end+length(y1(:,1)),:)= y1;
-% end
 persistent t1 q;
 
 if isempty(t1)
@@ -23,11 +11,11 @@ end
 
 
 % Unicycle dynamic
-[t1, q] = ode45(@(t,y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
+[t1, q] = ode45(@(t,y, it) this.UnicycleModel(t, y, piterator), [t1(end) t1(end)+0.05], q(end,:), piterator);
 this.q(end+1,:) = q(end,:);
 this.t(end+1) = t1(end);
 
 % Input sequence
-[v, omega] = this.UnicycleInputs(this.t);
+[v, omega] = this.UnicycleInputs(this.t, this.mindistance);
 this.u = [v'; omega'];
 end
