@@ -15,7 +15,7 @@ First delete files with extensions \*.mex*architecturename*, for example, for Ma
 You now have to compile the **sens\_model\_.c** file for the specific architecture in the matlab terminal.
 
 ```matlab
->> mex -v sens_model_noise sens_model_noise.c
+>> mex -v -output sens_model_noise sens_model_noise.c
 ```
 
 Now you can run the script.
