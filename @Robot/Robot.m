@@ -11,7 +11,7 @@ classdef Robot < handle
     end
     
     % Physical quantities
-    properties% (Access = private)
+    properties (SetAccess = private, Hidden = false)
         ID;     % Name of the robot
         t = []; % time [s]
         q = []; % position [m]
@@ -26,7 +26,7 @@ classdef Robot < handle
         enc_sigma = 2 * (2 * pi / 2600) / 3;  % variance
     end
     
-    properties
+    properties (SetAccess = private, Hidden = false)
         RightEnc = []; % right encoder values
         LeftEnc = [];  % left encoder values
         % Quantization effect
@@ -35,7 +35,7 @@ classdef Robot < handle
     end
     
     % EKF quantities
-    properties
+    properties (SetAccess = private, Hidden = false)
         EKF_q_est;      % position estimation
         EKF_P;
         EKF_Q;
@@ -48,18 +48,18 @@ classdef Robot < handle
     % definition laser sensor
     properties (Constant, Access = private)
         laserAngularResolution = 0.36;  % [deg] laser sensor parameters
-        lasermaxdistance = 4; % [m]   laser sensor parameters
-        lasermindistance = 0; % [m]   laser sensor parameters
+        lasermaxdistance = 4; % [m] laser sensor parameters Max FOV
+        lasermindistance = 0; % [m] laser sensor parameters min FOV
         % noise
         laser_rho_sigma     = 0.1;              % mean
         laser_theta_sigma   = 0.1 * (pi / 180); % variance
     end
     
-    properties
+    properties (SetAccess = private, Hidden = false)
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
-        distance = cell.empty;
-        mindistance = 0.85;
+        distance = cell.empty;  % contains distance at a certain location
+        mindistance = 0.85; % [m] min distance to start move
     end
     
     methods
@@ -68,14 +68,16 @@ classdef Robot < handle
             % initialize identification number of robot
             this.ID = inputID;
             fprintf('Initialize robot n: %3i\n', this.ID);
-
+            
             % initialize simulation time and sample
             Dt = sampletime;     % Sampling time
             dimension = length(0:Dt:time);  % Length of simulation
             this.distance{1,dimension} = [];
             this.laserScan_xy{1,dimension} = [];
+            
             % set initial position
             this.q = initialposition;
+            this.t = 0;
             
             % initialize Extend Kalman Filter aka EKF
             this.EKF_q_est = zeros(3,1);
@@ -86,14 +88,13 @@ classdef Robot < handle
             this.EKF_q_store(:,1) = this.EKF_q_est;
         end % definition constructor
         
-        % function to compute the kinematics
-        % Kinematic simulation
+        % function to compute the kinematics simulation
         this = UnicycleKinematicMatlab(this, MdlInit, Vehicle);
-        dy = UnicycleModel(this, t, y, piterator)
-        
-        % Encoder Simulation
-        this = EncoderSim(this, Vehicle);
-        this = EncoderNoise(this);
+        %         dy = UnicycleModel(this, t, y, piterator)
+        %
+        %         % Encoder Simulation
+        %         this = EncoderSim(this, Vehicle);
+        %         this = EncoderNoise(this);
         
         % function to compute Extend Kalman Filter
         this = prediciton(this, i);
@@ -110,17 +111,30 @@ classdef Robot < handle
         % method to comupte laser scansion of the environment
         this = scanenvironment(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this, it);
-        [laserbeam] = plotlaserbeam(this, t)
-        [newy] = endY(this, it, angle);
-        [newX] = endX(this, it, angle);
-        [laserbeam] = animatelaser(this, t) 
-        getplot(this);
-        [occupacygrid] = getoccupacygrid(this, it)
-        [occupacygrid] = setoccupacygrid(this, it)
+        %         [laserbeam] = plotlaserbeam(this, t)
+        %         [newy] = endY(this, it, angle);
+        %         [newX] = endX(this, it, angle);
+        %         [laserbeam] = animatelaser(this, t)
+        %         getplot(this);
+        %         [occupacygrid] = getoccupacygrid(this, it)
+        %         [occupacygrid] = setoccupacygrid(this, it)
+        %         this = getmeasure(this, it)
     end
     
-    methods (Static)
+    methods (Access = private)
+        % function to compute the kinematics simulation
+        dy = UnicycleModel(this, t, y, piterator)
+        
+        % Encoder Simulation
+        this = EncoderSim(this, Vehicle);
+        this = EncoderNoise(this);
+        
+        % method to comupte laser scansion of the environment
+        this = getmeasure(this, it)
+    end
+    
+    methods (Static, Access = private)
         [v, omega] = UnicycleInputs(t, pdistance) % Kinematic simulation
-        [R] = rotationMatrix(theta)    % compute rotation matrix in plane 2D
+        [R] = rotationMatrix(theta) % compute rotation matrix in plane 2D
     end
 end % definition class
