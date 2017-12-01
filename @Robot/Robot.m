@@ -5,7 +5,7 @@ classdef Robot < handle
     % Vehicle property
     properties (Constant, Access = private)
         wheelradius = 0.15; % dimension of whell [m]
-        interaxle = 0.56;   % dimension of interaxle[m] |---|
+        interaxle = 0.56;   % dimension of interaxle [m] 
         length  = 1;    % data for drawing
         width   = 1;    % data for drawing
     end
