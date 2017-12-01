@@ -20,4 +20,4 @@ else % ACTUALLY STOP
 end
 fprintf('actual speed:\t%.5f m/s\n', v);
 
-end
+end % method
