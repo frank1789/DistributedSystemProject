@@ -3,6 +3,6 @@ function numsteps = getEKFstep(this)
 % INPUT:
 %  this = refer to this object
 % OUTPUT:
-%     numstes (int) = number of tseps computed by Kalman filter
+%     numsteps (int) = number of tseps computed by Kalman filter
 numsteps = this.EKF_NumS;
 end
