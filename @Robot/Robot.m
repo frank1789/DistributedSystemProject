@@ -69,7 +69,7 @@ classdef Robot < handle
             validateattributes(inputID,{'double'},{'nonnegative'})
             validateattributes(time,{'double'},{'nonnegative'})
             validateattributes(sampletime,{'double'},{'nonnegative'})
-            validateattributes(initialposition,{'double'},{'3d'},3)
+            validateattributes(initialposition,{'double'},{'ncols', 3})
 
             % initialize identification number of robot
             this.ID = inputID;
