@@ -17,6 +17,7 @@ function this = UnicycleKinematicMatlab(this, piterator)
 %  this(object) = refer to this object
 %  t(double) = last row of time computed by ode45 [n, m]
 %  q(double) = last row of time computed by ode45 [n, m]
+
 persistent t1 q; % allocate static varible to perform ode45
 if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution ode45
     t1 = this.t;
