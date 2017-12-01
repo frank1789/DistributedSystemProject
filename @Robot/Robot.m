@@ -96,11 +96,6 @@ classdef Robot < handle
 
         % function to compute the kinematics simulation
         this = UnicycleKinematicMatlab(this, MdlInit, Vehicle);
-        %         dy = UnicycleModel(this, t, y, piterator)
-        %
-        %         % Encoder Simulation
-        %         this = EncoderSim(this, Vehicle);
-        %         this = EncoderNoise(this);
 
         % function to compute Extend Kalman Filter
         this = prediciton(this, i);
@@ -117,14 +112,6 @@ classdef Robot < handle
         % method to comupte laser scansion of the environment
         this = scanenvironment(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this, it);
-        %         [laserbeam] = plotlaserbeam(this, t)
-        %         [newy] = endY(this, it, angle);
-        %         [newX] = endX(this, it, angle);
-        %         [laserbeam] = animatelaser(this, t)
-        %         getplot(this);
-        %         [occupacygrid] = getoccupacygrid(this, it)
-        %         [occupacygrid] = setoccupacygrid(this, it)
-        %         this = getmeasure(this, it)
     end
 
     methods (Access = private)
