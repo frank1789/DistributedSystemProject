@@ -3,7 +3,7 @@ function this = scanenvironment(this, ppoints, plines, it)
 % of LIDAR.
 % Calculates distance from the robot center, then from the position
 % coordinates currently occupied by the robot, position X, Y and Theta
-% orientation. 
+% orientation.
 % The scan is performed at 180 degrees with a preset angular resolution.
 % In addition, the visual field is between 0 and 4 [m] outside this range
 % and returns a NaN value.
@@ -17,7 +17,7 @@ function this = scanenvironment(this, ppoints, plines, it)
 %  laserScan_xy{it} [double, double] = cell-array of x-y scan
 
 % set postion [x, y, theta]
-initposition = [this.q(it,1), this.q(it,2) this.q(it,3)]; 
+initposition = [this.q(it,1), this.q(it,2) this.q(it,3)];
 
 % initialize sector of angle laser theta
 laserTheta = pi/180*(-90:this.laserAngularResolution:90);
@@ -26,21 +26,21 @@ laserTheta = pi/180*(-90:this.laserAngularResolution:90);
 C_l_rho_theta = diag([this.laser_rho_sigma^2, this.laser_theta_sigma^2]);
 
 % initialize laser beam
-laser = [ initposition, pi, this.laserAngularResolution*pi/180,...
-    this.laser_theta_sigma, this.laser_rho_sigma ] ;
+laser = [initposition, pi, this.laserAngularResolution*pi/180,...
+    this.laser_theta_sigma, this.laser_rho_sigma] ;
 
 % scan environment
-laserReadings = Sens_model_noise( ppoints, plines, laser(1,:));
+laserReadings = Sens_model_noise(ppoints, plines, laser(1,:));
 
 % remove the data that are too far away
 rhosOver4m = (laserReadings(2,:) < this.lasermaxdistance & laserReadings(2,:) > this.lasermindistance);
 laserReadings(2,:) = laserReadings(2,:).* rhosOver4m; % set zero value over max distance
 
-F = laserReadings(2,:); % instance a temporary F matrix 
+F = laserReadings(2,:); % instance a temporary F matrix
 F(rhosOver4m==0)=nan;   % substitute 0 with nan
 laserReadings(2,:)= F;  % update original matrix of scan
 
 % compute the laserscan and return cell
 this.laserScan_xy{it} =[laserReadings(2,:).*cos(laserTheta);...
-    laserReadings(2,:).*sin(laserTheta) ];
+    laserReadings(2,:).*sin(laserTheta)];
 end % method
