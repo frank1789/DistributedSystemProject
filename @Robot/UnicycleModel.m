@@ -20,4 +20,4 @@ thetau_d = omega;
 
 % Output
 dy = [xu_d; yu_d; thetau_d];
-end
+end % method

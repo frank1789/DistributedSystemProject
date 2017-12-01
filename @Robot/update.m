@@ -40,4 +40,4 @@ else
     this.EKF_P = this.P_p;
 end
 
-end
+end % method
