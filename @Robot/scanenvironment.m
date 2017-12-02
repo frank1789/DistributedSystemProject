@@ -20,7 +20,7 @@ function this = scanenvironment(this, ppoints, plines, it)
 initposition = [this.q(it,1), this.q(it,2) this.q(it,3)];
 
 % initialize sector of angle laser theta
-laserTheta = pi/180*(-90:this.laserAngularResolution:90);
+this.laserTheta = pi/180*(-90:this.laserAngularResolution:90);
 
 % inititialize matrix uncertainty
 C_l_rho_theta = diag([this.laser_rho_sigma^2, this.laser_theta_sigma^2]);
@@ -41,7 +41,7 @@ F(rhosOver4m==0)=nan;   % substitute 0 with nan
 laserReadings(2,:)= F;  % update original matrix of scan
 
 % compute the laserscan and return cell
-this.laserScan_xy{it} =[laserReadings(2,:).*cos(laserTheta);...
-    laserReadings(2,:).*sin(laserTheta)];
+this.laserScan_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);...
+    laserReadings(2,:).*sin(this.laserTheta)];
 this.getmeasure(it); % compute the measure from xy
 end % method

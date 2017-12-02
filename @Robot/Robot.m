@@ -60,6 +60,7 @@ classdef Robot < handle
         laserScan_xy = cell.empty; % contains scans at a certain location
         distance = cell.empty;  % contains distance at a certain location
         mindistance = 0.85; % [m] min distance to start move
+        laserTheta = [];
     end
 
     methods
