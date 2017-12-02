@@ -16,6 +16,7 @@ classdef Robot < handle
         t = []; % time [s]
         q = []; % position [m]
         u = []; % velocity vector [rectilinear[m/s] angular[rad/s]]
+        theta_t =[];
     end
 
     % Virtual incremental encoder
@@ -59,8 +60,9 @@ classdef Robot < handle
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
         distance = cell.empty;  % contains distance at a certain location
-        mindistance = 0.85; % [m] min distance to start move
+        mindistance = 4; % [m] min distance to start move
         laserTheta = [];
+        test = []; 
     end
 
     methods
@@ -85,6 +87,7 @@ classdef Robot < handle
             % set initial position
             this.q = initialposition;
             this.t = 0;
+            this.theta_t=0;
 
             % initialize Extend Kalman Filter aka EKF
             this.EKF_q_est = zeros(3,1);
@@ -93,6 +96,9 @@ classdef Robot < handle
             this.EKF_NumS = length(this.t);
             this.EKF_q_store = zeros(3, this.EKF_NumS);
             this.EKF_q_store(:,1) = this.EKF_q_est;
+            
+            % initialize sector of angle laser theta
+            this.laserTheta = pi/180*(-90:this.laserAngularResolution:90); 
         end % definition constructor
 
         % function to compute the kinematics simulation
@@ -128,7 +134,7 @@ classdef Robot < handle
     end
 
     methods (Static, Access = private)
-        [v, omega] = UnicycleInputs(t, pdistance) % Kinematic simulation
+        [v, omega] = UnicycleInputs(t, pdistance, ptheta) % Kinematic simulation
         [R] = rotationMatrix(theta) % compute rotation matrix in plane 2D
     end
 end % definition class
