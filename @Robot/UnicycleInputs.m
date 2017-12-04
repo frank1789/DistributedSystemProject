@@ -14,7 +14,7 @@ if ptheta == 0
     omega = zeros(length(t),1);% [rad/s]
 else % ACTUALLY STOP
     
-    v =  0.1 *ones(length(t),1); % [m/s]
+    v =   ones(length(t),1); % [m/s]
     omega = ((ptheta * 10 * ones(length(t),1))./t);% [rad/s]
 end
 % fprintf('actual speed:\t%.5f m/s; omega = \t%.5f\n', v, omega);

@@ -62,6 +62,7 @@ classdef Robot < handle
         distance = cell.empty;  % contains distance at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
+        test =[];
     end
 
     methods
