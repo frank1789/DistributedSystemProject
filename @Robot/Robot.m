@@ -6,8 +6,8 @@ classdef Robot < handle
     properties (Constant, Access = private)
         wheelradius = 0.07; % dimension of whell [m]
         interaxle = 0.30;   % dimension of interaxle [m] 
-        length  = 1;    % data for drawing
-        width   = 1;    % data for drawing
+        length  = 1/3;    % data for drawing
+        width   = 1/3;    % data for drawing
     end
 
     % Physical quantities
@@ -16,6 +16,7 @@ classdef Robot < handle
         t = []; % time [s]
         q = []; % position [m]
         u = []; % velocity vector [rectilinear[m/s] angular[rad/s]]
+        steerangle =[];
     end
 
     % Virtual incremental encoder
@@ -59,8 +60,9 @@ classdef Robot < handle
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
         distance = cell.empty;  % contains distance at a certain location
-        mindistance = 0.85; % [m] min distance to start move
-        laserTheta = [];
+        mindistance = 4; % min distance to start move [m]
+        laserTheta = []; % theta's angle sector [rad]
+        test =[];
     end
 
     methods
@@ -85,6 +87,7 @@ classdef Robot < handle
             % set initial position
             this.q = initialposition;
             this.t = 0;
+            this.steerangle = 0;
 
             % initialize Extend Kalman Filter aka EKF
             this.EKF_q_est = zeros(3,1);
@@ -93,6 +96,9 @@ classdef Robot < handle
             this.EKF_NumS = length(this.t);
             this.EKF_q_store = zeros(3, this.EKF_NumS);
             this.EKF_q_store(:,1) = this.EKF_q_est;
+            
+            % initialize sector of angle laser theta
+            this.laserTheta = pi/180*(-90:this.laserAngularResolution:90); 
         end % definition constructor
 
         % function to compute the kinematics simulation
@@ -125,10 +131,12 @@ classdef Robot < handle
 
         % method to comupte laser scansion of the environment
         this = getmeasure(this, it)
+        this = detectangle(this, piterator)
+
     end
 
     methods (Static, Access = private)
-        [v, omega] = UnicycleInputs(t, pdistance) % Kinematic simulation
+        [v, omega] = UnicycleInputs(t, pdistance, ptheta) % Kinematic simulation
         [R] = rotationMatrix(theta) % compute rotation matrix in plane 2D
     end
 end % definition class
