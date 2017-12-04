@@ -1,11 +1,11 @@
-function dy = UnicycleModel(this, t, y, piterator)
+function dy = UnicycleModel(this, t, y)
 
 % Input parser
 xu = y(1);
 yu = y(2);
 thetau = y(3);
 
-[v, omega] = this.UnicycleInputs(t, this.mindistance, this.theta_t);
+[v, omega] = this.UnicycleInputs(t, this.steerangle);
 
 % System kinematic
 xu_d = cos(thetau) * v;
