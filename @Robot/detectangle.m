@@ -36,7 +36,7 @@ if ~isempty(this.distance{piterator}) || this.steerangle ~= 0 % check vector of 
         if mindistance < 1.5  && ~isnan(matrixdistance(1,n))
             index = find(isnan(this.test(1,:)),n);
             i_lower  = index(index < (n - 1)); 
-            i_higher = index(index < (n + 1)); 
+            i_higher = index(index > (n + 1)); 
             % select indicies where is nan
             if indexmindistance > n % turn in opposite of minimum distance
                 i_lower =i_lower(i_lower < n);
