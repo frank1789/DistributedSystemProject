@@ -6,8 +6,8 @@ classdef Robot < handle
     properties (Constant, Access = private)
         wheelradius = 0.07; % dimension of whell [m]
         interaxle = 0.30;   % dimension of interaxle [m] 
-        length  = 1;    % data for drawing
-        width   = 1;    % data for drawing
+        length  = 1/3;    % data for drawing
+        width   = 1/3;    % data for drawing
     end
 
     % Physical quantities
@@ -16,7 +16,7 @@ classdef Robot < handle
         t = []; % time [s]
         q = []; % position [m]
         u = []; % velocity vector [rectilinear[m/s] angular[rad/s]]
-        theta_t =[];
+        steerangle =[];
     end
 
     % Virtual incremental encoder
@@ -60,9 +60,8 @@ classdef Robot < handle
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
         distance = cell.empty;  % contains distance at a certain location
-        mindistance = 4; % [m] min distance to start move
-        laserTheta = [];
-        test = []; 
+        mindistance = 4; % min distance to start move [m]
+        laserTheta = []; % theta's angle sector [rad]
     end
 
     methods
@@ -87,7 +86,7 @@ classdef Robot < handle
             % set initial position
             this.q = initialposition;
             this.t = 0;
-            this.theta_t = 0;
+            this.steerangle = 0;
 
             % initialize Extend Kalman Filter aka EKF
             this.EKF_q_est = zeros(3,1);
@@ -131,6 +130,8 @@ classdef Robot < handle
 
         % method to comupte laser scansion of the environment
         this = getmeasure(this, it)
+        this = detectangle(this, piterator)
+
     end
 
     methods (Static, Access = private)
