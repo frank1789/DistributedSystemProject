@@ -13,20 +13,25 @@ function [v, omega] = UnicycleInputs(t, pdistance, ptheta)
 
 % persistent angle
 % 
-% if ptheta ~= 0
+% 
+% if ptheta ~= 0 
 %     angle = ptheta;
+% else 
+%     angle = 0;
 % end
 
 %     persistent theta_u
 %    theta_u = [4 -6]; % target[x y]
-if pdistance > 1 || isnan(pdistance)
+% if (pdistance > 1.5 || isnan(pdistance))
+if ptheta == 0
     v = 2 * ones(length(t),1);    % [m/s]
-    omega = zeros(length(t),1); % [rad/s]
+    omega = zeros(length(t),1);% [rad/s]
 else % ACTUALLY STOP
     
-    v =  0 * ones(length(t),1); % [m/s]
-    omega = ((ptheta * ones(length(t),1))./t);% [rad/s]
+    v =  0.1 *ones(length(t),1); % [m/s]
+    omega = ((ptheta * 10 * ones(length(t),1))./t);% [rad/s]
 end
 % fprintf('actual speed:\t%.5f m/s; omega = \t%.5f\n', v, omega);
+
 
 end % method

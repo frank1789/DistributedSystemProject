@@ -87,7 +87,7 @@ classdef Robot < handle
             % set initial position
             this.q = initialposition;
             this.t = 0;
-            this.theta_t=0;
+            this.theta_t = 0;
 
             % initialize Extend Kalman Filter aka EKF
             this.EKF_q_est = zeros(3,1);

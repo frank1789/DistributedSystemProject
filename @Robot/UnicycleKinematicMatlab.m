@@ -1,11 +1,11 @@
 function this = UnicycleKinematicMatlab(this, piterator)
-% UNICYCLEKINEMATICMATLAB a method that calculates the kinematics and 
+% UNICYCLEKINEMATICMATLAB a method that calculates the kinematics and
 % dynamics of the Robot model.
-% In detail: two static variables are declared, which are the position and 
-% the time, and if they are checked if they are empty, they assume the last 
+% In detail: two static variables are declared, which are the position and
+% the time, and if they are checked if they are empty, they assume the last
 % configuration calculated in ode45.
 % The ode45 function calculates the dynamics of the model by having the input
-% position and time and reference to the step to be calculated in order to 
+% position and time and reference to the step to be calculated in order to
 % obtain obstacles.
 % Then save the last position and time in their respective class properties.
 % Call up the method to calculate the unicode model inputs by retrieving the velocity vector.
@@ -23,6 +23,36 @@ if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution o
     t1 = this.t;
     q = this.q;
 end
+
+if ~isempty(this.distance{piterator})
+    this.mindistance = min(this.distance{piterator});
+    fprintf('check distance: %f\n', this.mindistance);
+end
+
+% check minimun distance from obstacle
+if ~isempty(this.distance{piterator}) || this.theta_t ~= 0
+    % compute center vector'measure
+    n = (ceil(length(this.test)/2));
+    %    indexmin = find(this.distance{piterator}(:) <= this.distance(:),1);
+    %     if this.distance{piterator}(n) < 1.5 %
+    this.mindistance = min(this.distance{piterator});
+    if this.mindistance < 1.5
+        if this.theta_t == 0
+            % select indicies where is nan
+            i_lower  = find(find(isnan(this.test(1,:)),n,'first') < n);
+            i_higher = find(isnan(this.test(1,:)),n,'last');
+            % exclude too close angle sum 20 to center
+            b = min(i_higher);
+            c= min(i_lower);
+            this.theta_t = this.laserTheta(1,c);
+        end
+        
+    else
+        this.theta_t = 0;
+    end
+end % check minimum distance
+
+disp(this.theta_t)
 
 % Unicycle dynamic
 [t1, q] = ode45(@(t,y, it) this.UnicycleModel(t, y, piterator), [t1(end) t1(end)+0.05], q(end,:), piterator);
