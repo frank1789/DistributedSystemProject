@@ -24,43 +24,17 @@ if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution o
     q = this.q;
 end
 
-if ~isempty(this.distance{piterator})
-    this.mindistance = min(this.distance{piterator});
-    fprintf('check distance: %f\n', this.mindistance);
-end
-
 % check minimun distance from obstacle
-if ~isempty(this.distance{piterator}) || this.theta_t ~= 0
-    % compute center vector'measure
-    n = (ceil(length(this.test)/2));
-    %    indexmin = find(this.distance{piterator}(:) <= this.distance(:),1);
-    %     if this.distance{piterator}(n) < 1.5 %
-    this.mindistance = min(this.distance{piterator});
-    if this.mindistance < 1.5
-        if this.theta_t == 0
-            % select indicies where is nan
-            i_lower  = find(find(isnan(this.test(1,:)),n,'first') < n);
-            i_higher = find(isnan(this.test(1,:)),n,'last');
-            % exclude too close angle sum 20 to center
-            b = min(i_higher);
-            c= min(i_lower);
-            this.theta_t = this.laserTheta(1,c);
-        end
-        
-    else
-        this.theta_t = 0;
-    end
-end % check minimum distance
+this.detectangle(piterator);
 
-disp(this.theta_t)
 
 % Unicycle dynamic
-[t1, q] = ode45(@(t,y, it) this.UnicycleModel(t, y, piterator), [t1(end) t1(end)+0.05], q(end,:), piterator);
+[t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
 this.q(end+1,:) = q(end,:); % store last row of solution - postion
 this.t(end+1) = t1(end);    % store last row of solution - time
 
 % Input sequence
-[v, omega] = this.UnicycleInputs(this.t, this.mindistance, this.theta_t);
+[v, omega] = this.UnicycleInputs(this.t, this.steerangle);
 this.u = [v'; omega']; % store vector of velocity
 this.EncoderSim(); % perform encoder simulation
 end % method
