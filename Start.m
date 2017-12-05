@@ -9,15 +9,16 @@ addpath ('Cost Function', 'Occupacy grid from Image')
 % load map
 MapName = 'map_square.mat';
 mapStuct = load( MapName );
-% mapStuct.map.points = [ mapStuct.map.points, [4 4; -1 5]];  
-% mapStuct.map.lines = [mapStuct.map.lines,[5;6]];  
+mapStuct.map.points = [ mapStuct.map.points, [4 4; -1 5]];  
+mapStuct.map.lines = [mapStuct.map.lines,[5;6]];  
 
-% figure(800)
-% hold on
-% plotMap(mapStuct.map);
-% hold off
-% axis equal
-% grid on
+figure(800)
+hold on
+plotMap(mapStuct.map);
+hold off
+axis equal
+grid on
+pause(1); close(figure(800));
 p=1;
 % Sampling time
 MdlInit.Ts = 0.05;
@@ -55,19 +56,16 @@ lid_mat = zeros(max_x,2*max_y,n_mis);
 
 laserScan_xy = cell.empty;
 j=1;
-steering = true;
+
+
 for ii = 1:1:nit
     
     if mod(ii,2) == 0
         a.scanenvironment(mapStuct.map.points, mapStuct.map.lines, ii);
-        %         a.getmeasure(ii);
     end
-    if mod(ii,12) == 0
-        steering = true;
-    end
+
     a.UnicycleKinematicMatlab(ii);
-    %     a.EncoderSim();
-    
+
     laserScan_xy{ii} = a.laserScan_xy(ii);
     
     if(isempty(laserScan_xy{1,ii}{1,1}) || all((all(isnan(laserScan_xy{1,ii}{1,1})))==1))
@@ -77,39 +75,19 @@ for ii = 1:1:nit
         [ occ_mat(:,:,j)] = Occ_Grid( occ_mat(:,:,j),lid_mat(:,:,j),out);
         j=j+1;
     end
-    
-    steering = false;
 end
 
 
-% a.EncoderSim();
 
 %%
 
 for i = 2:a.getEKFstep()
-    %     if(mod(i,8)==0)
-    %     a.scanenvironment(mapStuct.map.points, mapStuct.map.lines, i);
     a.prediction(i);
     a.update(i);
     a.store(i);
 end
 
-% a.tempame(mapStuct.map.points, mapStuct.map.lines, 1);
-% t = timer('TimerFcn', 'stat=false; disp(''Timer!'')',...
-%                  'StartDelay',0.10);
-
-
-%     start(t)
-%     stat=true;
-%     while(stat==true)
-%     disp('.')
-%     robota{nrobot}.tempame(mapStuct.map.points, mapStuct.map.lines);
-%     pause(0.1)
-% end
-
-
-%
-%
+%% Animation
 figure, clf, hold on
 filename = sprintf('testAnimated%s.gif', num2str(p));
 h = figure('position', [320, 150, 1440, 900]); clf, hold on
@@ -123,14 +101,11 @@ rf_x  = cell.empty;
 rf_y  = cell.empty;
 rf_z  = cell.empty;
 limit= cell.empty;
-laserbeam = cell.empty;
-theta2 = linspace(-90 * pi/180, 90 * pi/180, round(180/0.36));
-%
-%
+
 for n= 1:1:length(a.t)
     subplot(2,1,1);
-    time = sprintf('Time:\t%3.2f', a.t(n));
-    title(time);
+
+    title(['Time: ', num2str(a.t(n),5)])
     axis([-10, 10, -10, 10]);
     hold on
     axis equal
@@ -139,7 +114,6 @@ for n= 1:1:length(a.t)
     for j=1:1
         if n == 1
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.makerobot(n);
-            %             limit{j} = a.plotlaserbeam(n);
         else
             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.animate(n);
@@ -173,8 +147,6 @@ for n= 1:1:length(a.t)
     if ~isempty(cloudpoint)
         cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.b'); % plot
     end
-    %     delete(cl_point);
-
     axis equal
     grid on
     
