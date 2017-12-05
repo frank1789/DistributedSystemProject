@@ -9,8 +9,8 @@ addpath ('Cost Function', 'Occupacy grid from Image')
 % load map
 MapName = 'map_square.mat';
 mapStuct = load( MapName );
-mapStuct.map.points = [ mapStuct.map.points, [4 4; -1 5]];  
-mapStuct.map.lines = [mapStuct.map.lines,[5;6]];  
+% mapStuct.map.points = [ mapStuct.map.points, [4 4; -1 5]];  
+% mapStuct.map.lines = [mapStuct.map.lines,[5;6]];  
 
 % figure(800)
 % hold on
@@ -129,6 +129,8 @@ theta2 = linspace(-90 * pi/180, 90 * pi/180, round(180/0.36));
 %
 for n= 1:1:length(a.t)
     subplot(2,1,1);
+    time = sprintf('Time:\t%3.2f', a.t(n));
+    title(time);
     axis([-10, 10, -10, 10]);
     hold on
     axis equal
@@ -156,14 +158,14 @@ for n= 1:1:length(a.t)
             %             disp(a);
             %         drawnow;
         end
+        drawnow;
     end
     hold off
     
     
-    drawnow;
+    
     subplot(2,1,2);
     grid on
-    hold on
     
     % transform cell arry to vector and store in local variable cluodpoint
     cloudpoint = (a.getlaserscan(n));
@@ -172,7 +174,7 @@ for n= 1:1:length(a.t)
         cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.b'); % plot
     end
     %     delete(cl_point);
-    hold off
+
     axis equal
     grid on
     
