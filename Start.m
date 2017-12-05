@@ -25,7 +25,7 @@ MdlInit.Ts = 0.05;
 % Length of simulation
 MdlInit.T = 20;
 
-nit = MdlInit.T / MdlInit.Ts
+nit = MdlInit.T / MdlInit.Ts;
 
 % Vehicle set-up Vehicle initial conditions
 Vehicle.q{1} = [0, 0, 0];

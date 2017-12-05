@@ -17,13 +17,12 @@ function this = detectangle(this, piterator)
 %  piterator (int) = step of simulation
 % OUTPUT:
 %  this(object) = refer to this object
-%  (double) = last row of time computed by ode45 [n, m]
-%  q(double) = last row of time computed by ode45 [n, m]
+%  steerangle (double) = angle
 
-if ~isempty(this.distance{piterator})
-    this.mindistance = min(this.distance{piterator});
-    fprintf('check distance: %f\n', this.mindistance);
-end
+% if ~isempty(this.distance{piterator})
+%     this.mindistance = min(this.distance{piterator});
+%     fprintf('check distance: %f\n', this.mindistance);
+% end
 
 % check minimun distance from obstacle
 if ~isempty(this.distance{piterator}) || this.steerangle ~= 0 % check vector of measure is non void
