@@ -27,7 +27,6 @@ end
 
 % check minimun distance from obstacle
 if ~isempty(this.distance{piterator}) || this.steerangle ~= 0 % check vector of measure is non void
-    localscan = this.getlaserscan(piterator);
     % local variable
     matrixdistance = [this.distance{piterator}; this.laserTheta]; % [distance angle]
     indexmindistance = find(matrixdistance(1,:) == min(matrixdistance(1,:))); %index of minimum distance
@@ -35,6 +34,9 @@ if ~isempty(this.distance{piterator}) || this.steerangle ~= 0 % check vector of 
     mindistance = min(matrixdistance(1,:)); % store minimum distance
     if ~isempty(mindistance) % check mindistance is empty
         if mindistance < 1.5  && ~isnan(matrixdistance(1,n))
+            index = find(isnan(this.test(1,:)),n);
+            i_lower  = index(index < (n - 1)); 
+            i_higher = index(index > (n + 1)); 
             % select indicies where is nan
             if indexmindistance > n % turn in opposite of minimum distance
                 i_lower =i_lower(i_lower < n);
