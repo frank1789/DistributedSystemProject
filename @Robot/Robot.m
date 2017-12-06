@@ -52,7 +52,7 @@ classdef Robot < handle
         lasermaxdistance = 4; % [m] laser sensor parameters Max FOV
         lasermindistance = 0; % [m] laser sensor parameters min FOV
         % noise
-        laser_rho_sigma     = 0.1;              % mean
+        laser_rho_sigma     = 0.02;             % variance
         laser_theta_sigma   = 0.1 * (pi / 180); % variance
     end
 
