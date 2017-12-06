@@ -1,7 +1,7 @@
 %% Main file
+close all;
 clear all;
 clear class;
-close all;
 clc;
 
 addpath ('Cost Function', 'Occupacy grid from Image')
@@ -32,7 +32,7 @@ MdlInit.T = 20;
 nit = MdlInit.T / MdlInit.Ts;
 
 % Vehicle set-up Vehicle initial conditions
-Vehicle.q{1} = [4, 4, 0];
+Vehicle.q{1} = [4, 4, pi/2];
 Vehicle.q{2} = [1; 1; pi];
 Vehicle.q{3} = [-7; 3; 0];
 %
@@ -111,7 +111,7 @@ for n= 1:1:length(a.t)
     subplot(2,1,1);
 
     title(['Time: ', num2str(a.t(n),5)])
-    axis([-18, 18, -18, 18]);
+    axis([0, 18, 0, 18]);
     hold on
     axis equal
     grid on
