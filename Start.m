@@ -9,8 +9,10 @@ addpath ('Cost Function', 'Occupacy grid from Image')
 % load map
 MapName = 'map_square.mat';
 mapStuct = load( MapName );
-mapStuct.map.points = [ mapStuct.map.points, [4 4; -1 5]];  
-mapStuct.map.lines = [mapStuct.map.lines,[5;6]];  
+% mapStuct.map.points = [ mapStuct.map.points, [4 4; -1 5]];  
+% mapStuct.map.lines = [mapStuct.map.lines,[5;6]]; 
+
+mapStuct.map.points = [[0 16 16 0]; [0 0 16 16]];
 
 figure(800)
 hold on
@@ -18,8 +20,9 @@ plotMap(mapStuct.map);
 hold off
 axis equal
 grid on
-pause(1); close(figure(800));
+% pause(1); close(figure(800));
 p=1;
+%%
 % Sampling time
 MdlInit.Ts = 0.05;
 
@@ -29,7 +32,7 @@ MdlInit.T = 20;
 nit = MdlInit.T / MdlInit.Ts;
 
 % Vehicle set-up Vehicle initial conditions
-Vehicle.q{1} = [0, 0, 0];
+Vehicle.q{1} = [4, 4, 0];
 Vehicle.q{2} = [1; 1; pi];
 Vehicle.q{3} = [-7; 3; 0];
 %
@@ -108,7 +111,7 @@ for n= 1:1:length(a.t)
     subplot(2,1,1);
 
     title(['Time: ', num2str(a.t(n),5)])
-    axis([-10, 10, -10, 10]);
+    axis([-18, 18, -18, 18]);
     hold on
     axis equal
     grid on
