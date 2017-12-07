@@ -25,7 +25,7 @@ function this = detectangle(this, piterator)
 % end
 
 % check minimun distance from obstacle
-if ~isempty(this.distance{piterator}) || this.steerangle ~= 0 % check vector of measure is non void
+if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of measure is non void
     % local variable
     matrixdistance = [this.distance{piterator}; this.laserTheta]; % [distance angle]
     indexmindistance = find(matrixdistance(1,:) == min(matrixdistance(1,:))); %index of minimum distance
@@ -44,6 +44,9 @@ if ~isempty(this.distance{piterator}) || this.steerangle ~= 0 % check vector of 
                 i_higher=   i_higher(i_higher > n);
                 this.steerangle = this.laserTheta(1,max(i_higher));
             end
+        elseif ~isnan(all(mindistance)) && this.q(1,3) && ~isnan(matrixdistance(1,n))
+%             disp('tutti diversi da NaN')
+            this.steerangle = pi/2;
         else
             this.steerangle = 0;
         end
