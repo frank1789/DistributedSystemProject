@@ -31,11 +31,15 @@ if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of
     indexmindistance = find(matrixdistance(1,:) == min(matrixdistance(1,:))); %index of minimum distance
     n = (ceil(length(matrixdistance)/2)); % compute center vector'measure
     mindistance = min(matrixdistance(1,:)); % store minimum distance
+    index = find(isnan(this.test(1,:)),n);
+    i_lower  = index(index < (n - 1));
+    i_higher = index(index > (n + 1));
+    
     if ~isempty(mindistance) % check mindistance is empty
-        if mindistance < 1.5  && ~isnan(matrixdistance(1,n))
-            index = find(isnan(this.test(1,:)),n);
-            i_lower  = index(index < (n - 1)); 
-            i_higher = index(index > (n + 1)); 
+        
+        if mindistance < 1.5  && ~isnan(matrixdistance(1,n)) ...
+                && this.q(end,3) < (pi/4 - 0.1) && this.q(end,3) > (pi/4 + 0.1)
+            
             % select indicies where is nan
             if indexmindistance > n % turn in opposite of minimum distance
                 i_lower =i_lower(i_lower < n);
@@ -44,9 +48,21 @@ if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of
                 i_higher=   i_higher(i_higher > n);
                 this.steerangle = this.laserTheta(1,max(i_higher));
             end
-        elseif ~isnan(all(mindistance)) && this.q(1,3) && ~isnan(matrixdistance(1,n))
-%             disp('tutti diversi da NaN')
+        elseif ~isnan(all(mindistance)) && ~isnan(matrixdistance(1,n)) ...
+                && this.q(end,3) >= (pi/4 - 0.1) && this.q(end,3) <= (pi/4 + 0.1)
+            %             disp('tutti diversi da NaN')
             this.steerangle = pi/2;
+        elseif mindistance < 1.5  && ~isnan(matrixdistance(1,n)) ...
+                && this.q(end,3) > 1.85520
+                % select indicies where is nan
+            if indexmindistance < n % turn in opposite of minimum distance
+                i_lower = i_lower(i_lower < n);
+                this.steerangle = this.laserTheta(1,min(i_lower));
+            else
+                i_higher=   i_higher(i_higher > n);
+                this.steerangle = this.laserTheta(1,max(i_higher));
+            end
+
         else
             this.steerangle = 0;
         end
