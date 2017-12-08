@@ -5,7 +5,7 @@ classdef Robot < handle
     % Vehicle property
     properties (Constant, Access = private)
         wheelradius = 0.07; % dimension of whell [m]
-        interaxle = 0.30;   % dimension of interaxle [m] 
+        interaxle = 0.30;   % dimension of interaxle [m]
         length  = 1/3;    % data for drawing
         width   = 1/3;    % data for drawing
     end
@@ -68,7 +68,7 @@ classdef Robot < handle
     methods
         % class constructor
         function this = Robot(inputID, time, sampletime, initialposition)
-            % check input constructor for passed arguments 
+            % check input constructor for passed arguments
             validateattributes(inputID,{'double'},{'nonnegative'})
             validateattributes(time,{'double'},{'nonnegative'})
             validateattributes(sampletime,{'double'},{'nonnegative'})
@@ -86,6 +86,7 @@ classdef Robot < handle
 
             % set initial position
             this.q = initialposition;
+            this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [−pi pi].
             this.t = 0;
             this.steerangle = 0;
 
@@ -96,9 +97,9 @@ classdef Robot < handle
             this.EKF_NumS = length(this.t);
             this.EKF_q_store = zeros(3, this.EKF_NumS);
             this.EKF_q_store(:,1) = this.EKF_q_est;
-            
+
             % initialize sector of angle laser theta
-            this.laserTheta = pi/180*(-90:this.laserAngularResolution:90); 
+            this.laserTheta = pi/180*(-90:this.laserAngularResolution:90);
         end % definition constructor
 
         % function to compute the kinematics simulation
