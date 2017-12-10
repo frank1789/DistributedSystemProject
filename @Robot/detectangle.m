@@ -31,6 +31,7 @@ if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of
     indexmindistance = find(matrixdistance(1,:) == min(matrixdistance(1,:))); %index of minimum distance
     n = (ceil(length(matrixdistance)/2)); % compute center vector'measure
     mindistance = min(matrixdistance(1,:)); % store minimum distance
+    matrixdistance = matrixdistance(1,1:n-1) * -1;
     index = find(isnan(this.test(1,:)));
     i_lower  = index(index < (n - 1));
     i_higher = index(index > (n + 1));
@@ -43,10 +44,10 @@ if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of
             % select indicies where is nan
             if indexmindistance > n % turn in opposite of minimum distance
                 i_lower =i_lower(i_lower < n);
-                this.steerangle = this.laserTheta(1,min(i_lower));
+                this.steerangle = this.laserTheta(1,max(i_lower));
             else
                 i_higher=   i_higher(i_higher > n);
-                this.steerangle = this.laserTheta(1,max(i_higher));
+                this.steerangle = this.laserTheta(1,min(i_higher));
             end
         elseif ~isnan(all(mindistance)) && ~isnan(matrixdistance(1,n)) ...
                 && (wrapToPi(this.q(1,3)) >= (pi/4 - 0.1) && wrapToPi(this.q(1,3)) <= (pi/4 + 0.1))
