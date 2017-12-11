@@ -31,7 +31,6 @@ if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of
     indexmindistance = find(matrixdistance(1,:) == min(matrixdistance(1,:))); %index of minimum distance
     n = (ceil(length(matrixdistance)/2)); % compute center vector'measure
     mindistance = min(matrixdistance(1,:)); % store minimum distance
-    matrixdistance = matrixdistance(1,1:n-1) * -1;
     index = find(isnan(this.test(1,:)));
     i_lower  = index(index < (n - 1));
     i_higher = index(index > (n + 1));
