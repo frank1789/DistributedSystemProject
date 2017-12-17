@@ -24,14 +24,26 @@ if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution o
     q = this.q;
 end
 
-% check minimun distance from obstacle
 this.detectangle(piterator);
 
+switch round(q(end,3),5) == round(this.steerangle,5)
+    case false
+        % Unicycle dynamic
+        [t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
+        q(end,3) = wrapToPi(q(end,3));
+        q(end,3) = round(q(end,3),7);
+        this.q(end+1,:) = q(end,:); % store last row of solution - postion
+        this.t(end+1) = t1(end);    % store last row of solution - time
+    case true
+        % check minimun distance from obstacle
+        
+        % Unicycle dynamic
+        [t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
+        q(end,3) = wrapToPi(q(end,3));
+        this.q(end+1,:) = q(end,:); % store last row of solution - postion
+        this.t(end+1) = t1(end);    % store last row of solution - time
+end
 
-% Unicycle dynamic
-[t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
-this.q(end+1,:) = q(end,:); % store last row of solution - postion
-this.t(end+1) = t1(end);    % store last row of solution - time
 
 % Input sequence
 [v, omega] = this.UnicycleInputs(this.t, this.steerangle);
