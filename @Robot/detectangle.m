@@ -23,9 +23,6 @@ function this = detectangle(this, piterator)
 %     this.mindistance = min(this.distance{piterator});
 %     fprintf('check distance: %f\n', this.mindistance);
 % end
-
-persistent lastindex
-
 if ~isempty(this.distance{piterator})   % check vector of measure is non void
     % local variable
     %     matrixdistance = [this.distance{piterator}; this.laserTheta]; % [distance angle]
