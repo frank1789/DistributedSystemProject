@@ -19,53 +19,29 @@ function this = detectangle(this, piterator)
 %  this(object) = refer to this object
 %  steerangle (double) = angle
 
-% if ~isempty(this.distance{piterator})
-%     this.mindistance = min(this.distance{piterator});
-%     fprintf('check distance: %f\n', this.mindistance);
-% end
-
-% check minimun distance from obstacle
-if ~isempty(this.distance{piterator}) %|| this.steerangle ~= 0 % check vector of measure is non void
+if ~isempty(this.distance{piterator})   % check vector of measure is non void
     % local variable
-    matrixdistance = [this.distance{piterator}; this.laserTheta]; % [distance angle]
-    indexmindistance = find(matrixdistance(1,:) == min(matrixdistance(1,:))); %index of minimum distance
-    n = (ceil(length(matrixdistance)/2)); % compute center vector'measure
-    mindistance = min(matrixdistance(1,:)); % store minimum distance
+    indexmindistance = find(this.distance{piterator}(1,:) == min(this.distance{piterator}(1,:))); %index of minimum distance
+    n = (ceil(length(this.distance{piterator})/2)); % compute center vector'measure
+    % not use yet
     index = find(isnan(this.test(1,:)));
-    i_lower  = index(index < (n - 1));
-    i_higher = index(index > (n + 1));
-    
-    if ~isempty(mindistance) % check mindistance is empty
-        
-        if mindistance < 1.5  && ~isnan(matrixdistance(1,n)) ...
-                && (this.q(1,3) < (pi/4 - 0.1) || this.q(1,3) > (pi/4 + 0.1))
-            
-            % select indicies where is nan
-            if indexmindistance > n % turn in opposite of minimum distance
-                i_lower =i_lower(i_lower < n);
-                this.steerangle = this.laserTheta(1,min(i_lower));
-            else
-                i_higher=   i_higher(i_higher > n);
-                this.steerangle = this.laserTheta(1,max(i_higher));
-            end
-        elseif ~isnan(all(mindistance)) && ~isnan(matrixdistance(1,n)) ...
-                && (wrapToPi(this.q(1,3)) >= (pi/4 - 0.1) && wrapToPi(this.q(1,3)) <= (pi/4 + 0.1))
-            %             disp('tutti diversi da NaN')
-            this.steerangle = pi/2;
-        elseif mindistance < 1.5  || ~isnan(matrixdistance(1,n)) ...
-                && this.q(1,3) > pi/2
-                % select indicies where is nan
-            if max(index) < n % turn in opposite of minimum distance
-                i_lower = i_lower(i_lower < n);
-                this.steerangle = this.laserTheta(1,min(i_lower));
-            else
-                i_higher=   i_higher(i_higher > n);
-                this.steerangle = this.laserTheta(1,max(i_higher));
-            end
-
-        else
-            this.steerangle = 0;
-        end
+    i_lower  = index(index < (n - 1)); % min index contain angle steering
+    i_higher = index(index > (n + 1)); % max index contain angle steering
+    if min(this.distance{piterator}(1,:)) < 0.45 ...
+            || min(this.distance{piterator}(1,:)) > -0.45 ...
+            && this.distance{piterator}(1,n) <= 1.5
+        switch find(min(this.distance{piterator}(1,:))) > n
+            case 0
+                this.steerangle = pi/2; %round(this.laserTheta(1,min(i_higher)),7);
+            case 1
+                this.steerangle = pi/2; %round(this.laserTheta(1,max(i_lower)),7);
+            otherwise
+                this.steerangle = pi;
+        end % end switch
+    else
+        this.steerangle = 0; % reset angle steering
     end % check mindistance
-end % if vector of measure
+else
+    return % exit from funtctio if vector is empty
+end % if measure vector is empty
 end % function
