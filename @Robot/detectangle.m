@@ -27,7 +27,9 @@ if ~isempty(this.distance{piterator})   % check vector of measure is non void
     index = find(isnan(this.test(1,:)));
     i_lower  = index(index < (n - 1)); % min index contain angle steering
     i_higher = index(index > (n + 1)); % max index contain angle steering
-    if min(this.distance{piterator}(1,:)) < 0.45 || min(this.distance{piterator}(1,:)) > -0.45 && ~isnan(this.distance{piterator}(1,n))
+    if min(this.distance{piterator}(1,:)) < 0.45 ...
+            || min(this.distance{piterator}(1,:)) > -0.45 ...
+            && this.distance{piterator}(1,n) <= 1.5
         switch find(min(this.distance{piterator}(1,:))) > n
             case 0
                 this.steerangle = pi/2; %round(this.laserTheta(1,min(i_higher)),7);
