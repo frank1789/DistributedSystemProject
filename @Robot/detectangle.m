@@ -24,7 +24,7 @@ if ~isempty(this.distance{piterator})   % check vector of measure is non void
     indexmindistance = find(this.distance{piterator}(1,:) == min(this.distance{piterator}(1,:))); %index of minimum distance
     n = (ceil(length(this.distance{piterator})/2)); % compute center vector'measure
     % not use yet
-    index = find(isnan(this.test(1,:)));
+    index = find(isnan(this.distance{piterator}(1,:)));
     i_lower  = index(index < (n - 1)); % min index contain angle steering
     i_higher = index(index > (n + 1)); % max index contain angle steering
     if min(this.distance{piterator}(1,:)) < 0.45 ...
