@@ -44,9 +44,4 @@ laserReadings(2,:)= F;  % update original matrix of scan
 this.laserScan_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);...
     laserReadings(2,:).*sin(this.laserTheta)];
 this.getmeasure(it); % compute the measure from xy
-
-
-this.test = [laserReadings(2,:).*cos(this.laserTheta);...
-             laserReadings(2,:).*sin(this.laserTheta);
-             this.laserTheta];
 end % method
