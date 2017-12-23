@@ -56,12 +56,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
     PFM::PathPlanner *pfm = new PFM::PathPlanner(b, target);
 
     /* retrive laser measure */
-    std::vector<double> *measure = new std::vector<double>;
+    std::vector<double> *Xmeasure = new std::vector<double>;
+    std::vector<double> *Ymeasure = new std::vector<double>;
     laserScan = mxGetPr(prhs[2]);
     {
       int M = mxGetM(prhs[2]);
       int N = mxGetN(prhs[2]);
-      setvector(laserScan, measure, N, M);
+      setvector(laserScan, Xmeasure, Ymeasure, N, M);
     }
 
     /* retrive angular laser resoultion */
@@ -72,29 +73,26 @@ void mexFunction( int nlhs, mxArray *plhs[],
       int N = mxGetN(prhs[3]);
       setvector(laserRes, laser, N, M);
     }
-    // {
-    //   int M = mxGetM(prhs[2]);
-    //   int N = mxGetN(prhs[2]);
-    //   std::cout<< "M: "<<M<<" N:"<<N<<std::endl;
-    //   for (int n = 0; n < N; n++) {
-    //     for(int m = 0; m < M; m++) {
-    //       std::cout<< laserTheta[m + M*n] << " idx: "<<n + M*n<<std::endl;
-    //     }
-    //   }
-    // }
 
-  //  std::cout << pfm->distance() << std::endl;
+    /* compute Potetianl Field Method */
+    std::cout << pfm->getTotalPotential(Xmeasure, Ymeasure, laser)<<std::endl;
 
-    //std::cout << pfm->getTotalPotential()<<std::endl;
-    // delete b, pfm, laserScan, laserRes;
+
+    //output
+    B_OUT = mxCreateDoubleScalar(PI);
+
+    /* garbage collector */
+    {
+      delete pfm;
+    }
+    // delete  pfm, laserScan, laserRes;
     // delete fromrobot;
     // delete point;
-    
+
     /* garbage collector */
     {
       delete laser;
-      delete measure;
+      delete Xmeasure;
+      delete Ymeasure;
     }
-    //output
-    B_OUT = mxCreateDoubleScalar(PI);
   }
