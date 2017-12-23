@@ -45,16 +45,28 @@ struct LaserScan {
   double Ymeasure;
 };
 
-void setdistance(double *laserScan, int &N, int &M);
-
+/**
+ * Copy matlab array [1 x n] in STL C++ std::vector
+ * @param[in]  vectorin {matlab array pointer}
+ * @param[in]  vectorout {std::vector<> pointer}
+ * @param[in]  N {row dimension matlab array}
+ * @param[in]  M {colunm dimension matlab array}
+ * @return none
+ */
 void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M);
 
+/**
+* Copy matlab array [2 x n] in STL C++ std::vector
+ * @param[in]  vectorin {matlab array pointer}
+ * @param[in]  vectorout1 {std::vector<> pointer}
+ * @param[in]  vectorout2 {std::vector<> pointer}
+ * @param[in]  N {row dimension matlab array}
+ * @param[in]  M {colunm dimension matlab array}
+ * @return none
+ */
 void setvector(double *vectorin,
                 std::vector<double> *vectorout1,
                 std::vector<double> *vectorout2,
                 int &N, int &M);
-
-
-
 
 #endif /* robotinterface_hpp */
