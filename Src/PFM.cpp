@@ -15,7 +15,7 @@
 
 using namespace PFM;
 
-PFM::PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
+PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
 {
     _XnewPostion = 12;
     _XcurrentPostion = position->XcurrentPostion;
@@ -25,7 +25,7 @@ PFM::PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
     
 }
 
-const double & PFM::PathPlanner::distance() const
+const double & PathPlanner::distance() const
 {
     static double distance = sqrt(pow((_XnewPostion - _XcurrentPostion), 2) + pow((_YnewPostion - _YcurrentPostion), 2));
     return distance;
@@ -44,9 +44,9 @@ const double & PathPlanner::distanceObstacle(int i, std::vector<double> *measure
 }
 
 // compute repulsive force
-inline void PFM::PathPlanner::repulsiveForce(std::vector<double> *Xdistance,
-                                             std::vector<double> *Ydistance,
-                                             std::vector<double> *laserRes)
+inline void PathPlanner::repulsiveForce(std::vector<double> *Xdistance,
+                                        std::vector<double> *Ydistance,
+                                        std::vector<double> *laserRes)
 {
     for(int i = 0; i < Xdistance->size(); i++)
     {
@@ -56,32 +56,32 @@ inline void PFM::PathPlanner::repulsiveForce(std::vector<double> *Xdistance,
 }
 
 // compute attractive force
-inline void PFM::PathPlanner::attractiveForce()
+inline void PathPlanner::attractiveForce()
 {
     _YattractiveForce = std::max(pow((1.0 / distance()), _k), _minAttPot) * sin(_currentOrientation) * _attPotScaling;
     _XattractiveForce = std::max(pow((1.0 / distance()), _k), _minAttPot) * cos(_currentOrientation) * _attPotScaling;
 }
 
 // total potential field
-inline void PFM::PathPlanner::totalPotential()
+inline void PathPlanner::totalPotential()
 {
     _XtotalPotential = _XattractiveForce - (_repPotScaling * _XrepulsiveForce);
     _YtotalPotential = _YattractiveForce - (_repPotScaling * _YrepulsiveForce);
 }
 
-inline void PFM::PathPlanner::setTotalPotential(std::vector<double> *Xdistance,
-                                                std::vector<double> *Ydistance,
-                                                std::vector<double> *laserRes)
+void PFM::PathPlanner::setTotalPotential(std::vector<double> *Xdistance,
+                                         std::vector<double> *Ydistance,
+                                         std::vector<double> *laserRes)
 {
-    std::thread repulsive(&PFM::PathPlanner::repulsiveForce, this, Xdistance, Ydistance, laserRes);
-    std::thread attractive(&PFM::PathPlanner::attractiveForce, this);
+    std::thread repulsive(&PathPlanner::repulsiveForce, this, Xdistance, Ydistance, laserRes);
+    std::thread attractive(&PathPlanner::attractiveForce, this);
     repulsive.join();
     attractive.join();
-    PFM::PathPlanner::totalPotential();
+    PathPlanner::totalPotential();
 }
 
 // compute steerangle for ode45
-double PFM::PathPlanner::getSteerangle(double* robotSpeed)
+double PathPlanner::getSteerangle(double* robotSpeed)
 {
     double potentilavectorX = *robotSpeed * cos(_currentOrientation) + _XtotalPotential;
     double potentilavectorY = *robotSpeed * sin(_currentOrientation) + _YtotalPotential;
