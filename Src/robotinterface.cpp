@@ -57,3 +57,18 @@ void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M)
     }
   }
 }
+
+
+void setvector(double *vectorin,
+  std::vector<double> *vectorout1,
+  std::vector<double> *vectorout2,
+  int &N, int &M) {
+    for (int n = 0; n < N; n++)
+    {
+      for(int m = 0; m < M; m++)
+      {
+        ((m + M * n) % 2 == 0) ? (vectorout1->push_back(vectorin[m + M * n])) :
+        (vectorout2->push_back(vectorin[m + M * n]));
+      }
+    }
+  }

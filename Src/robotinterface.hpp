@@ -49,6 +49,11 @@ void setdistance(double *laserScan, int &N, int &M);
 
 void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M);
 
+void setvector(double *vectorin,
+                std::vector<double> *vectorout1,
+                std::vector<double> *vectorout2,
+                int &N, int &M);
+
 
 
 
