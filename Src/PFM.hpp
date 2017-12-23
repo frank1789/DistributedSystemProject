@@ -30,10 +30,10 @@ namespace PFM {
         void attractiveForce();
         // total potential field
         void totalPotential();
-        double getTotalPotential(std::vector<double> *Xdistance,
+        void setTotalPotential(std::vector<double> *Xdistance,
                                  std::vector<double> *Ydistance,
                                  std::vector<double> *laserRes);
-        double computeSteerangle(double a, double b);
+        double getSteerangle(double* robotSpeed);
     private:
         // Obstacle beyond this limit are omitted in calcolus
         double _distThreshold;
@@ -50,6 +50,7 @@ namespace PFM {
         double XattractiveForce, YattractiveForce;
         double XtotalPotential, YtotalPotential;
         double _currentOrientation;
+        double _steer;
     };
 }
 

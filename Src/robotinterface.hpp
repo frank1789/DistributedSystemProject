@@ -28,21 +28,21 @@ struct Robot<double> {
 
 template <typename T>
 struct Point {
-  T XPostion;
-  T YPostion;
-  T Orientation;
+    T XPostion;
+    T YPostion;
+    T Orientation;
 };
 
 template <>
 struct Point<double> {
-  double XPostion;
-  double YPostion;
-  double Orientation;
+    double XPostion;
+    double YPostion;
+    double Orientation;
 };
 
 struct LaserScan {
-  double Xmeasure;
-  double Ymeasure;
+    double Xmeasure;
+    double Ymeasure;
 };
 
 /**
@@ -56,7 +56,7 @@ struct LaserScan {
 void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M);
 
 /**
-* Copy matlab array [2 x n] in STL C++ std::vector
+ * Copy matlab array [2 x n] in STL C++ std::vector
  * @param[in]  vectorin {matlab array pointer}
  * @param[in]  vectorout1 {std::vector<> pointer}
  * @param[in]  vectorout2 {std::vector<> pointer}
@@ -65,8 +65,8 @@ void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M)
  * @return none
  */
 void setvector(double *vectorin,
-                std::vector<double> *vectorout1,
-                std::vector<double> *vectorout2,
-                int &N, int &M);
+               std::vector<double> *vectorout1,
+               std::vector<double> *vectorout2,
+               int &N, int &M);
 
 #endif /* robotinterface_hpp */
