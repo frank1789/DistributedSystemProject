@@ -12,15 +12,16 @@
 #include <stdio.h>
 #include "robotinterface.hpp"
 
+// define costant PI
 const double PI = 3.141592653589793238463;
 
 namespace PFM {
-    
-    
     class PathPlanner {
     public:
         PathPlanner(Robot<double> *postion, Point<double> *target);
+        // compute distance target
         const double &distance() const;
+        // return distance obstacle
         const double &distanceObstacle(int i, std::vector<double> *measure) const;
         // compute repulisve force
         void repulsiveForce(std::vector<double> *Xdistance,
@@ -28,11 +29,12 @@ namespace PFM {
                             std::vector<double> *laserRes);
         // compute attractive force
         void attractiveForce();
-        // total potential field
+        // compute total potential field
         void totalPotential();
         void setTotalPotential(std::vector<double> *Xdistance,
-                                 std::vector<double> *Ydistance,
-                                 std::vector<double> *laserRes);
+                               std::vector<double> *Ydistance,
+                               std::vector<double> *laserRes);
+        // compute and return steering angle
         double getSteerangle(double* robotSpeed);
     private:
         // Obstacle beyond this limit are omitted in calcolus
@@ -45,11 +47,13 @@ namespace PFM {
         const double _repPotScaling = 30000;
         // Minimum attractive potential at any point.
         const double _minAttPot = 0.5;
-        double _XnewPostion,_XcurrentPostion,_YnewPostion, _YcurrentPostion;
-        double XrepulsiveForce, YrepulsiveForce;
-        double XattractiveForce, YattractiveForce;
-        double XtotalPotential, YtotalPotential;
+        // Postion robot and target point coordinate in plane (x, y) and current angle orientation
+        double _XcurrentPostion, _XnewPostion, _YnewPostion, _YcurrentPostion;
         double _currentOrientation;
+        // Component force value and total value
+        double _XrepulsiveForce, _YrepulsiveForce, _XattractiveForce, _YattractiveForce;
+        double _XtotalPotential, _YtotalPotential;
+        // steering angle
         double _steer;
     };
 }
