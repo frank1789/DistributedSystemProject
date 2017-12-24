@@ -24,7 +24,7 @@ namespace PFM {
         // compute angle target
         const double &angle() const;
         // return distance obstacle
-        const double &distanceObstacle(int i, std::vector<double> *measure) const;
+        //const double &distanceObstacle(int i, std::vector<double> *measure) const;
         // compute repulisve force
         void repulsiveForce(std::vector<double> *Xdistance,
                             std::vector<double> *Ydistance,
@@ -61,4 +61,3 @@ namespace PFM {
 }
 
 #endif /* PFM_hpp */
-
