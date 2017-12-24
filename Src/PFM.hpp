@@ -21,6 +21,8 @@ namespace PFM {
         PathPlanner(Robot<double> *postion, Point<double> *target);
         // compute distance target
         const double &distance() const;
+        // compute angle target
+        const double &angle() const;
         // return distance obstacle
         const double &distanceObstacle(int i, std::vector<double> *measure) const;
         // compute repulisve force
@@ -59,3 +61,4 @@ namespace PFM {
 }
 
 #endif /* PFM_hpp */
+
