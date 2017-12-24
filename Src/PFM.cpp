@@ -18,7 +18,7 @@ using namespace PFM;
 
 PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
 {
-    
+
     _k = 3;               // initialize deegre of calculating potential
     _distThreshold = 4;   //initialize distance treshold
     // set robot position
@@ -49,17 +49,17 @@ const double & PathPlanner::angle() const
     return angle;
 }
 
-const double & PathPlanner::distanceObstacle(int i, std::vector<double> *measure) const
-{
-    if (std::isnan(measure->at(i)))
-    {
-        return 1.0;
-    }
-    else
-    {
-        return measure->at(i);
-    }
-}
+// const double & PathPlanner::distanceObstacle(int i, std::vector<double> *measure) const
+// {
+//     if (std::isnan(measure->at(i)))
+//     {
+//         return 1.0;
+//     }
+//     else
+//     {
+//         return measure->at(i);
+//     }
+// }
 
 // compute repulsive force
 inline void PathPlanner::repulsiveForce(std::vector<double> *Xdistance,
@@ -68,10 +68,10 @@ inline void PathPlanner::repulsiveForce(std::vector<double> *Xdistance,
 {
     for(int i = 0; i < Xdistance->size(); i++)
     {
-        if (distanceObstacle(i, Xdistance) <= 0.40 || !std::isnan(distanceObstacle(i, Ydistance)))
+        if (Xdistance->at(i) <= 0.40 || !std::isnan(Xdistance->at(i)))
         {
-            _YrepulsiveForce +=  1.0 / pow(distanceObstacle(i, Ydistance), _k) * sin(_currentOrientation - laserRes->at(i));
-            _XrepulsiveForce +=  1.0 / pow(distanceObstacle(i, Xdistance), _k) * cos(_currentOrientation - laserRes->at(i));
+            _YrepulsiveForce +=  1.0 / pow(Ydistance->at(i), _k) * sin(_currentOrientation - laserRes->at(i));
+            _XrepulsiveForce +=  1.0 / pow(Xdistance->at(i), _k) * cos(_currentOrientation - laserRes->at(i));
         }
     }
 }
@@ -109,4 +109,3 @@ double PathPlanner::getSteerangle(double* robotSpeed)
     _steer = atan2(potentialvectorY, potentialvectorX) - _currentOrientation;
     return _steer;
 }
-
