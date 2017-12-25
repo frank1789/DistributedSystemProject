@@ -40,33 +40,38 @@ struct Point<double> {
     double Orientation;
 };
 
+template <typename T>
 struct LaserScan {
-    double Xmeasure;
-    double Ymeasure;
+    T Xmeasure;
+    T Ymeasure;
 };
 
-/**
- * Copy matlab array [1 x n] in STL C++ std::vector
- * @param[in]  vectorin {matlab array pointer}
- * @param[in]  vectorout {std::vector<> pointer}
- * @param[in]  N {row dimension matlab array}
- * @param[in]  M {colunm dimension matlab array}
- * @return none
- */
+template <>
+struct LaserScan<double>;
+
+template <typename T1, typename T2, typename T3>
+void setvector(T1 *vectorin, T2 *vectorout, T3 &N, T3 &M);
+
+template <>
 void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M);
 
-/**
- * Copy matlab array [2 x n] in STL C++ std::vector
- * @param[in]  vectorin {matlab array pointer}
- * @param[in]  vectorout1 {std::vector<> pointer}
- * @param[in]  vectorout2 {std::vector<> pointer}
- * @param[in]  N {row dimension matlab array}
- * @param[in]  M {colunm dimension matlab array}
- * @return none
- */
+template <>
+void setvector(double *vectorin, std::vector<double> *vectorout, long &N, long &M);
+
+template <typename T1, typename T2, typename T3>
+void setvector(T1 *vectorin, T2 *vectorout1, T2 *vectorout2, T3 &N, T3 &M);
+
+template<>
 void setvector(double *vectorin,
                std::vector<double> *vectorout1,
                std::vector<double> *vectorout2,
                int &N, int &M);
+
+template<>
+void setvector(double *vectorin,
+               std::vector<double> *vectorout1,
+               std::vector<double> *vectorout2,
+               long &N, long &M);
+
 
 #endif /* robotinterface_hpp */

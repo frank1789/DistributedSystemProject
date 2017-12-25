@@ -9,7 +9,9 @@
 #include "robotinterface.hpp"
 #include <iostream>
 
-void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M) {
+template <typename T1, typename T2, typename T3>
+void setvector(T1 *vectorin, T2 *vectorout, T3 &N, T3 &M)
+{
     if (N == 1)
     {
         for(int m = 0; m < M; m++)
@@ -29,13 +31,11 @@ void setvector(double *vectorin, std::vector<double> *vectorout, int &N, int &M)
             }
         }
     }
-}
+};
 
-
-void setvector(double *vectorin,
-               std::vector<double> *vectorout1,
-               std::vector<double> *vectorout2,
-               int &N, int &M) {
+template <typename T1, typename T2, typename T3>
+void setvector(T1 *vectorin, T2 *vectorout1, T2 *vectorout2, T3 &N, T3 &M)
+{
     for (int n = 0; n < N; n++)
     {
         for(int m = 0; m < M; m++)
@@ -44,4 +44,4 @@ void setvector(double *vectorin,
             (vectorout2->push_back(vectorin[m + M * n]));
         }
     }
-}
+};
