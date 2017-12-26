@@ -16,6 +16,8 @@ classdef Robot < handle
         t = []; % time [s]
         q = []; % position [m]
         u = []; % velocity vector [rectilinear[m/s] angular[rad/s]]
+        Dt =[]; 
+        target = [];
         steerangle =[];
     end
 
@@ -78,8 +80,8 @@ classdef Robot < handle
             fprintf('Initialize robot n: %3i\n', this.ID);
 
             % initialize simulation time and sample
-            Dt = sampletime;     % Sampling time
-            dimension = length(0:Dt:time);  % Length of simulation
+            this.Dt = sampletime;     % Sampling time
+            dimension = length(0:sampletime:time);  % Length of simulation
             this.distance{1,dimension} = [];
             this.laserScan_xy{1,dimension} = [];
 
@@ -103,7 +105,8 @@ classdef Robot < handle
 
         % function to compute the kinematics simulation
         this = UnicycleKinematicMatlab(this, MdlInit, Vehicle);
-
+        this = setpointtarget(this, point);
+        test(this);
         % function to compute Extend Kalman Filter
         this = prediciton(this, i);
         this = update(this, i);
