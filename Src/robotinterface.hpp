@@ -63,15 +63,15 @@ void setvector2x2(T1 *vectorin, T2 *vectorout1, T2 *vectorout2, T3 &N, T3 &M);
 
 template<>
 void setvector2x2(double *vectorin,
-               std::vector<double> *vectorout1,
-               std::vector<double> *vectorout2,
-               int &N, int &M);
+                  std::vector<double> *vectorout1,
+                  std::vector<double> *vectorout2,
+                  int &N, int &M);
 
 template<>
 void setvector2x2(double *vectorin,
-               std::vector<double> *vectorout1,
-               std::vector<double> *vectorout2,
-               long &N, long &M);
+                  std::vector<double> *vectorout1,
+                  std::vector<double> *vectorout2,
+                  long &N, long &M);
 
 
 #endif /* robotinterface_hpp */
