@@ -1,4 +1,5 @@
 #include "mex.h"
+#include "matrix.h"
 #include <iostream>
 #include <vector>
 #include "PFM.hpp"
@@ -13,7 +14,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     double *point = new double;
     double *laserScan = new double;
     double *laserRes = new double;
-    
     fromrobot = mxGetPr(prhs[0]);
     
     /* initilize variable from robot
@@ -21,15 +21,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
      * - X coordinate position
      * - theta orientation
      */
-    
     b->XcurrentPostion = fromrobot[0];
     b->YcurrentPostion = fromrobot[1];
     b->currentOrientation = fromrobot[2];
-    
-    //std::cout<< "x "<<b->XcurrentPostion <<std::endl;
-    //std::cout<< "y "<<b->YcurrentPostion <<std::endl;
-    //std::cout<< "o "<<b->currentOrientation  <<std::endl;
-    
     
 #define B_OUT plhs[0]
     
@@ -38,15 +32,11 @@ void mexFunction( int nlhs, mxArray *plhs[],
      - X coordinate position
      - theta orientation
      */
-    
     point = mxGetPr(prhs[1]);
     Point<double> *target = new Point<double>;
     target->XPostion = point[0];
     target->YPostion = point[1];
     target->Orientation = point[2];
-    //std::cout<< target->XPostion <<std::endl;
-    //std::cout<< target->YPostion <<std::endl;
-    //std::cout<< target->Orientation  <<std::endl;
     
     /* instance Potetianl Field Method */
     PFM::PathPlanner *pfm = new PFM::PathPlanner(b, target);
@@ -55,42 +45,63 @@ void mexFunction( int nlhs, mxArray *plhs[],
     std::vector<double> *Xmeasure = new std::vector<double>;
     std::vector<double> *Ymeasure = new std::vector<double>;
     laserScan = mxGetPr(prhs[2]);
+    //bool *flagemptyvector = new bool;
+    //flagemptyvector = mxIsEmpty(laserScan)
     {
-        int M = mxGetM(prhs[2]);
-        int N = mxGetN(prhs[2]);
-        setvector(laserScan, Xmeasure, Ymeasure, N, M);
+        long M = mxGetM(prhs[2]);
+        long N = mxGetN(prhs[2]);
+        //std::cout<<"dimension measure:" << N <<", "<<M <<"\n";
+        if (N != 0)
+        {
+            setvector2x2(laserScan, Xmeasure, Ymeasure, N, M);
+            //   {
+            //     for (std::vector<double>::iterator it = Xmeasure->begin() ; it != Xmeasure->end(); ++it)
+            //       std::cout << ' ' << *it;
+            //     std::cout << '\n';
+            //   }
+            //   {
+            //     for (std::vector<double>::iterator it = Ymeasure->begin() ; it != Ymeasure->end(); ++it)
+            //       std::cout << ' ' << *it;
+            //     std::cout << '\n';
+            //   }
+        }
+        else
+        {
+            std::fill(Ymeasure->begin(), Ymeasure->end(), 0);
+            std::fill(Xmeasure->begin(), Xmeasure->end(), 0);
+        }
     }
     
     /* retrive angular laser resoultion */
     std::vector<double> *laser = new std::vector<double>;
     laserRes = mxGetPr(prhs[3]);
     {
-        int M = mxGetM(prhs[3]);
-        int N = mxGetN(prhs[3]);
+        long M = mxGetM(prhs[3]);
+        long N = mxGetN(prhs[3]);
+        //std::cout<<"laser: " << N <<", "<<M <<"\n";
         setvector(laserRes, laser, N, M);
+        // {
+        //   std::cout<<"laserRes:\n";
+        //   for (std::vector<double>::iterator it = laser->begin() ; it != laser->end(); ++it)
+        //     std::cout << ' ' << *it;
+        //   std::cout << '\n';
+        // }
     }
+    
+    /* retrive velocity */
+    double *velocity = new double;
+    velocity = mxGetPr(prhs[4]);
     
     /* compute Potetianl Field Method */
     pfm->setTotalPotential(Xmeasure, Ymeasure, laser);
-    
-    double *velocity = new double;
-    velocity = mxGetPr(prhs[4]);
-    pfm->getSteerangle(velocity);
-    
     /* return mex function output */
     B_OUT = mxCreateDoubleScalar(pfm->getSteerangle(velocity));
     
     /* garbage collector */
     {
         delete pfm;
-    }
-    // delete  pfm, laserScan, laserRes;
-    // delete fromrobot;
-    // delete point;
-    
-    /* garbage collector */
-    {
-        delete laser;
+        delete b;
+        delete target;
         delete Xmeasure;
         delete Ymeasure;
     }
