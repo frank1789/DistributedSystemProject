@@ -38,6 +38,7 @@ namespace PFM {
                                std::vector<double> *laserRes);
         // compute and return steering angle
         double getSteerangle(double* robotSpeed);
+        double getSpeed(double *robotSpeed);
     private:
         // Obstacle beyond this limit are omitted in calcolus
         double _distThreshold;
