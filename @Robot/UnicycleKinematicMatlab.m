@@ -18,22 +18,38 @@ function this = UnicycleKinematicMatlab(this, piterator)
 %  t(double) = last row of time computed by ode45 [n, m]
 %  q(double) = last row of time computed by ode45 [n, m]
 
-persistent t1 q; % allocate static varible to perform ode45
+persistent t1 q laststeer; % allocate static varible to perform ode45
 if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution ode45
     t1 = this.t;
     q = this.q;
 end
 
-this.detectangle(piterator);
 
-switch round(q(end,3),5) == round(this.steerangle,5)
+[laststeer] = passadati(this.q(end,:),this.target,this.getlaserscan(piterator),this.laserTheta, 2); 
+
+fprintf('iter: %i; angolo di sterzo nuovo: %5.5f\n', piterator,laststeer);
+if laststeer > this.steerangle || laststeer < this.steerangle
+    this.steerangle = laststeer;
+elseif ~isempty(find((q(:,3) - this.steerangle) < 1e-6 == true))
+     this.steerangle = 0;
+end
+for i = 1:length(q)
+j = find((q(:,3) - this.steerangle)< 1e-6);
+end
+fprintf('iter: %i; angolo di sterzo: %5.5f\n', piterator,this.steerangle);
+
+%this.detectangle(piterator);
+flag = find((q(:,3) - this.steerangle) < 1e-6 == true);
+switch ~isempty(flag)
     case false
         % Unicycle dynamic
-        [t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
+        opts = odeset('Refine',5);
+        [t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+this.Dt], q(end,:), opts);
         q(end,3) = wrapToPi(q(end,3));
-        q(end,3) = round(q(end,3),7);
         this.q(end+1,:) = q(end,:); % store last row of solution - postion
         this.t(end+1) = t1(end);    % store last row of solution - time
+        
+         
     case true
         % check minimun distance from obstacle
         
