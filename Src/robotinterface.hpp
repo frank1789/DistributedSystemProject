@@ -59,16 +59,16 @@ template <>
 void setvector(double *vectorin, std::vector<double> *vectorout, long &N, long &M);
 
 template <typename T1, typename T2, typename T3>
-void setvector(T1 *vectorin, T2 *vectorout1, T2 *vectorout2, T3 &N, T3 &M);
+void setvector2x2(T1 *vectorin, T2 *vectorout1, T2 *vectorout2, T3 &N, T3 &M);
 
 template<>
-void setvector(double *vectorin,
+void setvector2x2(double *vectorin,
                std::vector<double> *vectorout1,
                std::vector<double> *vectorout2,
                int &N, int &M);
 
 template<>
-void setvector(double *vectorin,
+void setvector2x2(double *vectorin,
                std::vector<double> *vectorout1,
                std::vector<double> *vectorout2,
                long &N, long &M);
