@@ -116,6 +116,7 @@ void PFM::PathPlanner::setTotalPotential(std::vector<double> *Xdistance,
     PathPlanner::repulsiveForce(Xdistance, Ydistance, laserRes);
     PathPlanner::attractiveForce();
     //std::cout<<"check repuls force: "<<_XrepulsiveForce<<std::endl;
+    std::cout<<"check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
     //std::cout<<"check attr force: "<<_XattractiveForce<<std::endl;
     PathPlanner::totalPotential();
 }
