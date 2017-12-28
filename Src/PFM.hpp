@@ -26,15 +26,13 @@ namespace PFM {
         // return distance obstacle
         //const double &distanceObstacle(int i, std::vector<double> *measure) const;
         // compute repulisve force
-        void repulsiveForce(std::vector<double> *Xdistance,
-                            std::vector<double> *Ydistance,
+        void repulsiveForce(std::vector<double> *distanceOstacle,
                             std::vector<double> *laserRes);
         // compute attractive force
         void attractiveForce();
         // compute total potential field
         void totalPotential();
-        void setTotalPotential(std::vector<double> *Xdistance,
-                               std::vector<double> *Ydistance,
+        void setTotalPotential(std::vector<double> *distanceOstacle,
                                std::vector<double> *laserRes);
         // compute and return steering angle
         double getSteerangle(double* robotSpeed);
