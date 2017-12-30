@@ -26,108 +26,140 @@ PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
     _XcurrentPostion = position->XcurrentPostion;
     _YcurrentPostion = position->YcurrentPostion;
     _currentOrientation = position->currentOrientation;
-//     std::cout << "robot positon x: " << position->XcurrentPostion;
-//     std::cout << "\ty: " << position->YcurrentPostion;
-//     std::cout << "\torientatin: " <<position->currentOrientation <<std::endl;
+//         std::cout << "robot positon x: " << position->XcurrentPostion;
+//         std::cout << "\ty: " << position->YcurrentPostion;
+//         std::cout << "\torientatin: " <<position->currentOrientation <<std::endl;
     // set target point
     _XnewPostion = target->XPostion;
     _YnewPostion = target->YPostion;
-//     std::cout<< "target positon x: "<< target->XPostion;
-//     std::cout<< "\ty: "<< target->YPostion;
-//     std::cout<< "\torientatin: "<< target->Orientation<<std::endl;
+//         std::cout<< "target positon x: "<< target->XPostion;
+//         std::cout<< "\ty: "<< target->YPostion;
+//         std::cout<< "\torientatin: "<< target->Orientation<<std::endl;
     //init potetianl force
     _XrepulsiveForce = 0; _XattractiveForce = 0; _XtotalPotential = 0;
     _YrepulsiveForce = 0; _YattractiveForce = 0; _YtotalPotential = 0;
 }
 
-const double & PathPlanner::distance() const
+double PathPlanner::distance()
 {
-    static double distance = sqrt(pow((_XnewPostion - _XcurrentPostion), 2) + pow((_YnewPostion - _YcurrentPostion), 2));
+    double distance = sqrt(pow((_XnewPostion - _XcurrentPostion), 2) + pow((_YnewPostion - _YcurrentPostion), 2));
     return distance;
 }
 
-const double & PathPlanner::angle() const
+double PathPlanner::angle()
 {
-    static double angle = atan2((_YnewPostion - _YcurrentPostion),(_XnewPostion - _XcurrentPostion));
-    // std::cout<<angle<<std::endl;
+    double angle = atan2((_YnewPostion - _YcurrentPostion),(_XnewPostion - _XcurrentPostion));
+    std::cout<<"target angle:"<<angle<<std::endl;
     return angle;
 }
 
-// compute repulsive force
-inline void PathPlanner::repulsiveForce(std::vector<double> *distanceOstacle,
-                                        std::vector<double> *laserRes)
+
+
+
+double PathPlanner::repulsivex(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes)
 {
+    static double repulsivex = 0;
+    
     if (distanceOstacle->size() != 0)
     {
-        for(int i = 0; i < distanceOstacle->size(); i++)
+        if (laserRes->at(i) >= 0)
         {
-            // compute x coordinate
-            if (laserRes->at(i) >= 0)
+            if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
             {
-                if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
-                {
-//                    std::cout<<"x angle pos: "<<laserRes->at(i)<<" xmeasure: "<<distanceOstacle->at(i)<<"\n";
-                    _XrepulsiveForce +=  1.0 / pow(distanceOstacle->at(i), _k) * cos(_currentOrientation + laserRes->at(i));
-//                     std::cout<<"repforce X: "<<_XrepulsiveForce<<std::endl;
-                }
+//                                std::cout<<"x angle pos: "<<laserRes->at(i)<<" xmeasure: "<<distanceOstacle->at(i)<<"\n";
+                return repulsivex =  1.0 / pow(distanceOstacle->at(i), _k) * cos(_currentOrientation + laserRes->at(i));
             }
-            else
-            {
-                if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
-                {
-//                    std::cout<<"angle neg: "<<laserRes->at(i)<<" xmeasure: "<<distanceOstacle->at(i)<<"\n";
-                    _XrepulsiveForce +=  1.0 / pow(distanceOstacle->at(i), _k) * cos(_currentOrientation - laserRes->at(i));
-//                     std::cout<<"repforce x: "<<_XrepulsiveForce<<std::endl;
-                }
-            }
-            // compute y coordinate
-            if (laserRes->at(i) >= 0)
-            {
-                if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
-                {
-//                    std::cout<<"positive measure y: "<<distanceOstacle->at(i)<<", angle neg: "<<laserRes->at(i)<<std::endl;
-                    _YrepulsiveForce +=  1.0 / pow(abs(distanceOstacle->at(i)), _k) * sin(_currentOrientation + laserRes->at(i));
-//                    std::cout<<"repforce y: "<<_YrepulsiveForce<<std::endl;
-                }
-            }
-            else
-            {
-                if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
-                {
-//                    std::cout<<"negative measure y: "<<distanceOstacle->at(i)<<", angle neg: "<<laserRes->at(i)<<std::endl;
-                    _YrepulsiveForce +=  1.0 / pow(abs(distanceOstacle->at(i)), _k) * sin(_currentOrientation - laserRes->at(i));
-//                    std::cout<<"repforce y: "<<_YrepulsiveForce<<std::endl;
-                }
-            }
+            else return repulsivex = 0;
         }
+        else
+        {
+            if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
+            {
+//                              std::cout<<"x angle neg: "<<laserRes->at(i)<<" xmeasure: "<<distanceOstacle->at(i)<<"\n";
+                return repulsivex =  1.0 / pow(distanceOstacle->at(i), _k) * cos(_currentOrientation - laserRes->at(i));
+            }
+            else return repulsivex = 0;
+        }
+    }
+    return repulsivex;
+}
+    
+    
+    
+    
+    
+    
+double PathPlanner::repulsivey(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes)
+{
+    static double repulsivey = 0;
+    
+    if (distanceOstacle->size() != 0)
+    {
+        if (laserRes->at(i) >= 0)
+        {
+            if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
+            {
+//                std::cout<<"y angle pos: "<<laserRes->at(i)<<" measure: "<<distanceOstacle->at(i)<<"\n";
+                return repulsivey =  1.0 / pow(distanceOstacle->at(i), _k) * sin(_currentOrientation + laserRes->at(i));
+            }
+            else return repulsivey = 0;
+        }
+        else
+        {
+            if ((distanceOstacle->at(i) <= securdistance) && !std::isnan(distanceOstacle->at(i)))
+            {
+//                std::cout<<"y angle neg: "<<laserRes->at(i)<<" measure: "<<distanceOstacle->at(i)<<"\n";
+                return repulsivey =  1.0 / pow(distanceOstacle->at(i), _k) * sin(_currentOrientation - laserRes->at(i));
+            }
+            else return repulsivey = 0;
+        }
+    }
+    return repulsivey;
+}
+
+
+// compute repulsive force
+inline void PathPlanner::repulsiveForce(std::vector<double> *distanceOstacle, std::vector<double> *laserRes)
+{
+    // compute x coordinate
+    for(int i = 0; i < distanceOstacle->size(); i++)
+    {
+        _XrepulsiveForce +=  PathPlanner::repulsivex(i, distanceOstacle, laserRes);
+    }
+    
+    // compute y coordinate
+    for(int i = 0; i < distanceOstacle->size(); i++)
+    {
+        _YrepulsiveForce +=  PathPlanner::repulsivey(i, distanceOstacle, laserRes);
     }
 }
 
 // compute attractive force
 inline void PathPlanner::attractiveForce()
 {
-    _YattractiveForce = std::max(pow((1.0 / distance()), _k), _minAttPot) * sin(angle()) * _attPotScaling;
-    _XattractiveForce = std::max(pow((1.0 / distance()), _k), _minAttPot) * cos(angle()) * _attPotScaling;
+    _YattractiveForce = std::max(pow((1.0 / PathPlanner::distance()), _k), _minAttPot) * sin(PathPlanner::angle()) * _attPotScaling;
+    _XattractiveForce = std::max(pow((1.0 / PathPlanner::distance()), _k), _minAttPot) * cos(PathPlanner::angle()) * _attPotScaling;
 }
 
 // total potential field
 inline void PathPlanner::totalPotential()
 {
     //std::cout<<"repforce: "<<_XrepulsiveForce<<std::endl;
+    std::cout<<"total BEFORE check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
+    std::cout<<"total BEFORE check attr   force: x="<<_XattractiveForce<<" y= "<<_YattractiveForce<<std::endl;
     _XtotalPotential = _XattractiveForce - (_repPotScaling * _XrepulsiveForce);
     _YtotalPotential = _YattractiveForce - (_repPotScaling * _YrepulsiveForce);
-    std::cout<<"check TOTAL repuls force: "<<_XtotalPotential<<std::endl;
-    std::cout<<"check TOTAL attr   force: "<<_YtotalPotential<<std::endl;
+    std::cout<<"check TOTAL x force: "<<_XtotalPotential<<std::endl;
+    std::cout<<"check TOTAL y force: "<<_YtotalPotential<<std::endl;
 }
 
-void PFM::PathPlanner::setTotalPotential(std::vector<double> *distanceOstacle,
-                                         std::vector<double> *laserRes)
+void PathPlanner::setTotalPotential(std::vector<double> *distanceOstacle, std::vector<double> *laserRes)
 {
     //    PathPlanner::repulsiveForce(Xdistance, Ydistance, laserRes);
     repulsiveForce(distanceOstacle, laserRes);
     PathPlanner::attractiveForce();
-    std::cout<<"check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
-    std::cout<<"check attr force: x="<<_XattractiveForce<<" y= "<<_YattractiveForce<<std::endl;
+//    std::cout<<"check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
+//    std::cout<<"check attr   force: x="<<_XattractiveForce<<" y= "<<_YattractiveForce<<std::endl;
     PathPlanner::totalPotential();
 }
 
@@ -142,7 +174,8 @@ double PathPlanner::getSteerangle(double* robotSpeed)
 
 double PathPlanner::getSpeed(double *robotSpeed)
 {
-    double speedY = pow((*robotSpeed * sin(_currentOrientation) + _YtotalPotential), 2);
-    double speedX = pow((*robotSpeed * cos(_currentOrientation) + _YtotalPotential), 2);
-    return sqrt(speedX +speedY);
+            double speedY = pow((*robotSpeed * sin(_currentOrientation) + _YtotalPotential), 2);
+            double speedX = pow((*robotSpeed * cos(_currentOrientation) + _YtotalPotential), 2);
+            return sqrt(speedX +speedY);
 }
+

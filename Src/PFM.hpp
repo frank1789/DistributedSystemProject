@@ -20,19 +20,27 @@ namespace PFM {
     public:
         PathPlanner(Robot<double> *postion, Point<double> *target);
         // compute distance target
-        const double &distance() const;
+        double distance();
         // compute angle target
-        const double &angle() const;
+        double angle();
         // return distance obstacle
         //const double &distanceObstacle(int i, std::vector<double> *measure) const;
         // compute repulisve force
-        void repulsiveForce(std::vector<double> *distanceOstacle,
+        void repulsiveForce(std::vector<double> *Xdistance,
+                            std::vector<double> *Ydistance,
                             std::vector<double> *laserRes);
         // compute attractive force
         void attractiveForce();
         // compute total potential field
         void totalPotential();
+        void repulsiveForce(std::vector<double> *distanceOstacle,
+                            std::vector<double> *laserRes);
+        double repulsivex(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
+        double repulsivey(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
         void setTotalPotential(std::vector<double> *distanceOstacle,
+                               std::vector<double> *laserRes);
+        void setTotalPotential(std::vector<double> *Xdistance,
+                               std::vector<double> *Ydistance,
                                std::vector<double> *laserRes);
         // compute and return steering angle
         double getSteerangle(double* robotSpeed);
