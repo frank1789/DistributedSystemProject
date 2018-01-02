@@ -13,7 +13,7 @@ if ptheta == 0
     v = 2 * ones(length(t),1);    % [m/s]
     omega = zeros(length(t),1);% [rad/s]
 else
-    v =   zeros(length(t),1); % [m/s]
+    v =   0.3 * ones(length(t),1); % [m/s]
     omega = ptheta * ones(length(t),1);% [rad/s]
 end
 % fprintf('actual speed:\t%.5f m/s; omega = \t%.5f\n', v, omega);
