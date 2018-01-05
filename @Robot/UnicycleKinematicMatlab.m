@@ -28,7 +28,7 @@ if ~isempty(this.laserScan_xy{piterator})
 if sqrt((this.target(1) - q(end,1))^2 + (this.target(2) - q(end,2))^2) > 0.05
 %     if this.steerangle >= q(end,3) / 1.05 &&  this.steerangle <= q(end,3) * 1.05 %|| isnan(this.laserScan_xy{piterator}(1,251))
 disp(piterator);    
-[this.steerangle] = passadati(q(end,:),this.target,this.laserScan_xy{piterator},this.laserTheta, 0.5);
+[this.steerangle] = potentialfield(q(end,:),this.target,this.laserScan_xy{piterator},this.laserTheta, 0.5);
      this.steerangle = wrapToPi(this.steerangle);
 %     end
 else
