@@ -19,7 +19,7 @@ classdef Robot < handle
         Dt =[]; 
         target = [];
         steerangle =[];
-        speed = 1;
+        speed = 2;
     end
 
     % Virtual incremental encoder
