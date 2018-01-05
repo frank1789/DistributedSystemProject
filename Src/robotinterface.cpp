@@ -119,7 +119,7 @@ void setvector(double *vectorin, std::vector<double> *vectorout, long &N, long &
 
 /**
  * @brief Setvector2x2
- * @details has in input the pointer to the date array matlab format and copies 2xM the values in two outputs vector (1xM).
+ * @details has in input the pointer to the date array matlab format and copies (2xM) the values in two outputs vector (1xM).
  * The actual dimensions and data of the array vectorin are obtained by M and N.
  * Array elements are stored in column-major format, for example, A [m + M * n] (where 0 ≤ m ≤ M - 1 and 0 ≤ n ≤ N - 1)
  * corresponding to matrix element A (m + 1, n +1).
