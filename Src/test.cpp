@@ -26,6 +26,8 @@ void mexFunction( int nlhs, mxArray *plhs[],
     b->currentOrientation = fromrobot[2];
 
     #define B_OUT plhs[0]
+    #define B_OUT1 plhs[1]
+    
 
     /* retrive variable target point
      - X coordinate position
@@ -42,11 +44,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
     PFM::PathPlanner *pfm = new PFM::PathPlanner(b, target);
 
     /* retrive laser measure */
-    std::vector<double> *measure = new std::vector<double>;
+    std::vector<double> *Xmeasure = new std::vector<double>;
     std::vector<double> *Ymeasure = new std::vector<double>;
     laserScan = mxGetPr(prhs[2]);
-    //bool *flagemptyvector = new bool;
-    //flagemptyvector = mxIsEmpty(laserScan)
     {
         long M = mxGetM(prhs[2]);
         long N = mxGetN(prhs[2]);
@@ -54,7 +54,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         if (N != 0)
         {
           static long length = N;
-          setvector(laserScan, measure, N, M);
+          setvector2x2(laserScan, Xmeasure, Ymeasure, N, M);
         //   {
         //     for (std::vector<double>::iterator it = Xmeasure->begin() ; it != Xmeasure->end(); ++it)
         //       std::cout << ' ' << *it;
@@ -96,16 +96,17 @@ void mexFunction( int nlhs, mxArray *plhs[],
     velocity = mxGetPr(prhs[4]);
 
       /* compute Potetianl Field Method */
-      pfm->setTotalPotential(measure, laser);
+      pfm->setTotalPotential(Xmeasure, Ymeasure, laser);
       /* return mex function output */
       B_OUT = mxCreateDoubleScalar(pfm->getSteerangle(velocity));
+      B_OUT1 = mxCreateDoubleScalar(pfm->getSpeed(velocity));
 
     /* garbage collector */
     {
         delete pfm;
         delete b;
         delete target;
-        delete measure;
+        delete Xmeasure;
         delete Ymeasure;
     }
 }
