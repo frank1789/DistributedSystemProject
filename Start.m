@@ -15,8 +15,8 @@ mapStuct.map.points = [[0 16 16 0]; [0 0 16 16]];
 % mapStuct.map.points = [ mapStuct.map.points, [12 12; 10 16]];
 % mapStuct.map.lines = [mapStuct.map.lines,[5;6]];
 % 
-mapStuct.map.points = [ mapStuct.map.points, [12 12; 10 16],[12 6; 10 10],[4 4; 4 0],[4 8; 4 4]];
-mapStuct.map.lines = [mapStuct.map.lines,[5;6], [7;8], [9;10], [11;12]];
+mapStuct.map.points = [ mapStuct.map.points, [12 12; 12 10],[12 12; 14 16],[13 6; 10 10],[4 4; 4 0],[4 8; 4 4]];
+mapStuct.map.lines = [mapStuct.map.lines,[5;6], [7;8], [9;10], [11;12], [13;14]];
 
 figure(800)
 hold on
@@ -25,7 +25,7 @@ hold off
 
 axis equal
 grid on
-pause(1); close(figure(800));
+% pause(1); close(figure(800));
 p=1;
 
 %% simulation
@@ -33,11 +33,11 @@ p=1;
 MdlInit.Ts = 0.05;
 
 % Length of simulation
-MdlInit.T = 20;
+MdlInit.T = 97;
 nit = 0:MdlInit.Ts:MdlInit.T; 
 
 % Vehicle set-up Vehicle initial conditions
-Vehicle.q{1} = [1, 1, 0];
+Vehicle.q{1} = [1, 1, -pi];
 % Vehicle.q{2} = [1 1; pi];
 % Vehicle.q{3} = [-7; 3; 0];
 a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p}); % istance robot
@@ -64,7 +64,7 @@ laserScan_xy = cell.empty;
 jj=1;
 
 
-a.setpointtarget([15 15 0]);
+a.setpointtarget([9 15 0]);
 
 w = waitbar(0,'Please wait simulation in progress...');
 
