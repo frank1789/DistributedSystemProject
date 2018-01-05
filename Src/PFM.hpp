@@ -12,19 +12,19 @@
 #include <stdio.h>
 #include "robotinterface.hpp"
 
-// define costant PI
+/// define mathematical constant PI
 const double PI = 3.141592653589793238463;
 
 namespace PFM {
     /**
-     * PathPlanner Class.
+     * \class PathPlanner
      *
      *
      */
     class PathPlanner {
     public:
         /**
-         * a constructor.
+         * @brief Constructor
          * @param position  robot position coordinate (x, y, orientatation)
          * @param target    target coordinate (x, y, angle)
          * @return none

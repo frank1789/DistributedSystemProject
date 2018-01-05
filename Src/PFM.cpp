@@ -18,7 +18,7 @@
 using namespace PFM;
 
 /**
- * @brief constructor object pathplanner
+ * @brief Constructor object pathplanner
  *
  * @param[in] position   robot position coordinate (x, y, orientatation)
  * @param[in] target    target coordinate (x, y, angle)

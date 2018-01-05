@@ -25,7 +25,7 @@ hold off
 
 axis equal
 grid on
-% pause(1); close(figure(800));
+pause(1); close(figure(800));
 p=1;
 
 %% simulation
@@ -37,7 +37,7 @@ MdlInit.T = 97;
 nit = 0:MdlInit.Ts:MdlInit.T; 
 
 % Vehicle set-up Vehicle initial conditions
-Vehicle.q{1} = [1, 1, -pi];
+Vehicle.q{1} = [0.5, 0.5, 0];
 % Vehicle.q{2} = [1 1; pi];
 % Vehicle.q{3} = [-7; 3; 0];
 a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p}); % istance robot
@@ -64,7 +64,7 @@ laserScan_xy = cell.empty;
 jj=1;
 
 
-a.setpointtarget([9 15 0]);
+a.setpointtarget([15 15 0]);
 
 w = waitbar(0,'Please wait simulation in progress...');
 
@@ -172,6 +172,6 @@ end % end animation
 %     mesh(occ_mat(:,:,i));
 % end
 %%
-%  mex -output passadati Src/test.cpp Src/PFM.cpp Src/robotinterface.cpp
+%  mex -output potentialfield Src/potentialfield.cpp Src/PFM.cpp Src/robotinterface.cpp
 
 
