@@ -41,7 +41,17 @@ F(rhosOver4m==0)=nan;   % substitute 0 with nan
 laserReadings(2,:)= F;  % update original matrix of scan
 
 % compute the laserscan and return cell
-this.laserScan_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);...
-    laserReadings(2,:).*sin(this.laserTheta)];
+alpha = this.q(it,3);
+R = this.rotationMatrix(alpha);
+rotatescan = [laserReadings(2,:).*cos(this.laserTheta);...
+    laserReadings(2,:).*sin(this.laserTheta)]' / R + [this.q(it,1); this.q(it,2)]';
+
+
+
+this.laserScan_xy{it} = rotatescan';
+
+
+
+
 this.getmeasure(it); % compute the measure from xy
 end % method
