@@ -18,53 +18,34 @@ function this = UnicycleKinematicMatlab(this, piterator)
 %  t(double) = last row of time computed by ode45 [n, m]
 %  q(double) = last row of time computed by ode45 [n, m]
 
-persistent t1 q laststeer; % allocate static varible to perform ode45
+persistent t1 q; % allocate static varible to perform ode45
 if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution ode45
     t1 = this.t;
     q = this.q;
-%     laststeer =this.steerangle;
 end
 
-% if ~isempty(this.distance{piterator})
-% [laststeer] = passadati(this.q(end,:),this.target,this.distance{piterator},this.laserTheta, 2); 
-% end
-% fprintf('iter: %i; angolo di sterzo nuovo: %5.5f\n', piterator,laststeer);
-% if laststeer > this.steerangle || laststeer < this.steerangle
-%     this.steerangle = laststeer;
-% elseif ~isempty(find((q(:,3) - this.steerangle) < 1e-6 == true))
-%      this.steerangle = 0;
-% end
-% for i = 1:length(q)
-% j = find((q(:,3) - this.steerangle)< 1e-6);
-% end
-% fprintf('iter: %i; angolo di sterzo: %5.5f\n', piterator,this.steerangle);
+if ~isempty(this.laserScan_xy{piterator})
+if sqrt((this.target(1) - q(end,1))^2 + (this.target(2) - q(end,2))^2) > 0.05
+%     if this.steerangle >= q(end,3) / 1.05 &&  this.steerangle <= q(end,3) * 1.05 %|| isnan(this.laserScan_xy{piterator}(1,251))
+disp(piterator);    
+[this.steerangle] = passadati(q(end,:),this.target,this.laserScan_xy{piterator},this.laserTheta, 0.5);
+     this.steerangle = wrapToPi(this.steerangle);
+%     end
+else
+    this.speed = 0;
+    this.steerangle = 0.0;
+end
+end
 
-%this.detectangle(piterator);
-% flag = find((q(:,3) - this.steerangle) < 1e-6 == true);
-% switch ~isempty(flag)
-%     case false
-        % Unicycle dynamic
-        opts = odeset('Refine',5);
-        [t1, q] = ode45(@(t, y,it) this.UnicycleModel(t, y,piterator), [t1(end) t1(end)+this.Dt], q(end,:), opts);
-        q(end,3) = wrapToPi(q(end,3));
-        this.q(end+1,:) = q(end,:); % store last row of solution - postion
-        this.t(end+1) = t1(end);    % store last row of solution - time
-        
-         
-%     case true
-%         % check minimun distance from obstacle
-%         
-%         % Unicycle dynamic
-%         [t1, q] = ode45(@(t, y,it) this.UnicycleModel(t, y, piterator), [t1(end) t1(end)+0.05], q(end,:));
-%         q(end,3) = wrapToPi(q(end,3));
-%         this.q(end+1,:) = q(end,:); % store last row of solution - postion
-%         this.t(end+1) = t1(end);    % store last row of solution - time
-%         this.steerangle = 0;
+% Unicycle dynamic
+[t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
+q(end,3) = wrapToPi(q(end,3));
+this.q(end+1,:) = q(end,:); % store last row of solution - postion
+this.t(end+1) = t1(end);    % store last row of solution - time
 % end
-
 
 % Input sequence
-[v, omega] = this.UnicycleInputs(this.t, this.steerangle);
+[v, omega] = this.UnicycleInputs(this.t, this.speed, this.steerangle);
 this.u = [v'; omega']; % store vector of velocity
 this.EncoderSim(); % perform encoder simulation
 end % method
