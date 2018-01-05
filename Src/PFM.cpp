@@ -26,7 +26,6 @@ using namespace PFM;
  */
 PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
 {
-    
     _k = 3;               // initialize deegre of calculating potential
     _distThreshold = 4;   //initialize distance treshold
     // set robot position
@@ -68,7 +67,7 @@ double PathPlanner::distance()
 double PathPlanner::angle()
 {
     double angle = atan2((_YnewPostion - _YcurrentPostion),(_XnewPostion - _XcurrentPostion));
-//    std::cout<<"target angle:"<<angle<<std::endl;
+    //    std::cout<<"target angle:"<<angle<<std::endl;
     return angle;
 }
 
@@ -125,13 +124,10 @@ inline void PathPlanner::attractiveForce()
  */
 inline void PathPlanner::totalPotential()
 {
-    //std::cout<<"repforce: "<<_XrepulsiveForce<<std::endl;
-    //    std::cout<<"total BEFORE check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
-    //    std::cout<<"total BEFORE check attr   force: x="<<_XattractiveForce<<" y= "<<_YattractiveForce<<std::endl;
     _XtotalPotential = _XattractiveForce - (_repPotScaling * _XrepulsiveForce);
     _YtotalPotential = _YattractiveForce - (_repPotScaling * _YrepulsiveForce);
-        std::cout<<"check TOTAL x force: "<<_XtotalPotential<<std::endl;
-        std::cout<<"check TOTAL y force: "<<_YtotalPotential<<std::endl;
+    std::cout<<"check TOTAL x force: "<<_XtotalPotential<<std::endl;
+    std::cout<<"check TOTAL y force: "<<_YtotalPotential<<std::endl;
 }
 
 /**
