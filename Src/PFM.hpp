@@ -16,35 +16,85 @@
 const double PI = 3.141592653589793238463;
 
 namespace PFM {
+    /**
+     * PathPlanner Class.
+     *
+     *
+     */
     class PathPlanner {
     public:
+        /**
+         * a constructor.
+         * @param position  robot position coordinate (x, y, orientatation)
+         * @param target    target coordinate (x, y, angle)
+         * @return none
+         */
         PathPlanner(Robot<double> *postion, Point<double> *target);
-        // compute distance target
+        /**
+         * @brief calculates the distance between the current point and the target
+         *
+         * @param none
+         * @return distance
+         */
         double distance();
-        // compute angle target
+        /**
+         * @brief calculates the angle between the current point and the target
+         *
+         * @param none
+         * @return angle
+         */
         double angle();
-        // return distance obstacle
-        //const double &distanceObstacle(int i, std::vector<double> *measure) const;
-        // compute repulisve force
-        void repulsiveForce(std::vector<double> *Xdistance,
-                            std::vector<double> *Ydistance,
-                            std::vector<double> *laserRes);
-        // compute attractive force
+        /**
+         * @brief calculate the repulise force from obstacle
+         *
+         * @param[in] distance from obstacle in x diection
+         * @param[in] distance from obstacle in y diection
+         * @param[in] laser scan resolution
+         * @return none
+         */
+        void repulsiveForce(std::vector<double> *Xdistance, std::vector<double> *Ydistance, std::vector<double> *laserRes);
+        /**
+         * @brief calculate the attractive force from target
+         *
+         * @param none
+         * @return none
+         */
         void attractiveForce();
-        // compute total potential field
+        /**
+         * @brief calculate the potential
+         *
+         * @param none
+         * @return none
+         */
         void totalPotential();
-        void repulsiveForce(std::vector<double> *distanceOstacle,
-                            std::vector<double> *laserRes);
+        /**
+         * @brief calculate the total potential
+         *
+         * @param[in] distance from obstacle in x diection
+         * @param[in] distance from obstacle in y diection
+         * @param[in] laser scan resolution
+         * @return none
+         */
+        void setTotalPotential(std::vector<double> *Xdistance, std::vector<double> *Ydistance, std::vector<double> *laserRes);
+        /**
+         * @brief calculates the steering angle
+         *
+         * @param[in] robot speed
+         * @return steering angle
+         */
+        double getSteerangle(double* robotSpeed);
+        /**
+         * @brief calculates the speed
+         *
+         * @param[in] robot speed
+         * @return speed
+         */
+        double getSpeed(double *robotSpeed);
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        void repulsiveForce(std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
         double repulsivex(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
         double repulsivey(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
-        void setTotalPotential(std::vector<double> *distanceOstacle,
-                               std::vector<double> *laserRes);
-        void setTotalPotential(std::vector<double> *Xdistance,
-                               std::vector<double> *Ydistance,
-                               std::vector<double> *laserRes);
-        // compute and return steering angle
-        double getSteerangle(double* robotSpeed);
-        double getSpeed(double *robotSpeed);
+        void setTotalPotential(std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
     private:
         // Obstacle beyond this limit are omitted in calcolus
         double _distThreshold;
