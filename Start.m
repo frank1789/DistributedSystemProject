@@ -4,7 +4,7 @@ clear all;
 clear class;
 clc;
 addpath ('Cost Function', 'Occupacy grid from Image')
-%  diary log.txt
+% diary log.txt
 % load map
 MapName = 'map_square.mat';
 mapStuct = load( MapName );
@@ -14,7 +14,8 @@ mapStuct = load( MapName );
 mapStuct.map.points = [[0 16 16 0]; [0 0 16 16]];
 % mapStuct.map.points = [ mapStuct.map.points, [12 12; 10 16]];
 % mapStuct.map.lines = [mapStuct.map.lines,[5;6]];
-% 
+
+% more wall 
 mapStuct.map.points = [ mapStuct.map.points, [12 12; 12 10],[12 12; 14 16],[13 6; 10 10],[4 4; 4 0],[4 8; 4 4]];
 mapStuct.map.lines = [mapStuct.map.lines,[5;6], [7;8], [9;10], [11;12], [13;14]];
 
@@ -33,11 +34,11 @@ p=1;
 MdlInit.Ts = 0.05;
 
 % Length of simulation
-MdlInit.T = 97;
+MdlInit.T = 95;
 nit = 0:MdlInit.Ts:MdlInit.T; 
 
 % Vehicle set-up Vehicle initial conditions
-Vehicle.q{1} = [0.5, 0.5, 0];
+Vehicle.q{1} = [.5, .5, 0];
 % Vehicle.q{2} = [1 1; pi];
 % Vehicle.q{3} = [-7; 3; 0];
 a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p}); % istance robot
@@ -63,8 +64,8 @@ lid_mat = zeros(max_x,2*max_y,n_mis);
 laserScan_xy = cell.empty;
 jj=1;
 
-
-a.setpointtarget([15 15 0]);
+% use this method to set target
+a.setpointtarget([15 13 0]);
 
 w = waitbar(0,'Please wait simulation in progress...');
 
@@ -171,7 +172,6 @@ end % end animation
 %     figure
 %     mesh(occ_mat(:,:,i));
 % end
-%%
-%  mex -output potentialfield Src/potentialfield.cpp Src/PFM.cpp Src/robotinterface.cpp
+
 
 
