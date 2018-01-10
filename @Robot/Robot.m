@@ -19,7 +19,7 @@ classdef Robot < handle
         Dt =[]; 
         target = [];
         steerangle =[];
-        speed = 2;
+        speed = 0;
     end
 
     % Virtual incremental encoder
@@ -83,8 +83,8 @@ classdef Robot < handle
             % initialize simulation time and sample
             this.Dt = sampletime;     % Sampling time
             dimension = length(0:sampletime:time);  % Length of simulation
-            this.distance{1,dimension} = [];
-            this.laserScan_xy{1,dimension} = [];
+            this.distance{1,dimension + 1} = [];
+            this.laserScan_xy{1,dimension + 1} = [];
 
             % set initial position
             this.q = initialposition;
