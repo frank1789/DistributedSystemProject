@@ -13,7 +13,7 @@
 #include <limits>
 #include <cmath>
 
-#define securdistance 0.55
+#define securdistance 0.65
 
 using namespace PFM;
 
@@ -83,6 +83,8 @@ void PathPlanner::repulsiveForce(std::vector<double> *Xdistance, std::vector<dou
 {
     // initialize vector
     std::vector<double> distobs;
+    int counterposx, counternegx,counterposy,counternegy;
+    counterposx = 0, counternegx = 0,counterposy = 0,counternegy = 0;
     //compute distance in robot reference frame
     for (int i = 0; i < Xdistance->size(); i++)
     {
@@ -93,15 +95,34 @@ void PathPlanner::repulsiveForce(std::vector<double> *Xdistance, std::vector<dou
     {
         // for x
         if (distobs.at(j) <= securdistance && !std::isnan(distobs.at(j)) && laserRes->at(j) >= 0)
+        {
             _XrepulsiveForce +=  (1.0 / pow(distobs.at(j), _k)) * cos(_currentOrientation + laserRes->at(j));
+//            std::cout<<"iter: "<<j<<" dist: "<<distobs.at(j)<<" orient: "<<_currentOrientation<<" laser: "<<laserRes->at(j)<<" computed: "<< _XrepulsiveForce<<"\n";
+            ++counterposx;
+//            std::cout<<"counter pos x: "<<counterposx<<"\n";
+        }
         if (distobs.at(j) <= securdistance && !std::isnan(distobs.at(j)) && laserRes->at(j) < 0)
+        {
             _XrepulsiveForce +=  (1.0 / pow(distobs.at(j), _k)) * cos(_currentOrientation - laserRes->at(j));
+//            std::cout<<"iter: "<<j<<" dist: "<<distobs.at(j)<<" orient: "<<_currentOrientation<<" neg laser: "<<laserRes->at(j)<<" computed: "<< _XrepulsiveForce<<"\n";
+            ++counternegx; //std::cout<<"counter neg x: "<<counternegx<<"\n";
+        }
         // for y
         if (distobs.at(j) <= securdistance && !std::isnan(distobs.at(j)) && laserRes->at(j) >= 0)
+        {
             _YrepulsiveForce +=  (1.0 / pow(distobs.at(j), _k)) * sin(_currentOrientation + laserRes->at(j));
+//            std::cout<<"iter: "<<j<<" dist: "<<distobs.at(j)<<" orient: "<<_currentOrientation<<" laser: "<<laserRes->at(j)<<" computed: "<< _YrepulsiveForce<<"\n";
+            ++counterposy;
+        }
         if (distobs.at(j) <= securdistance && !std::isnan(distobs.at(j)) && laserRes->at(j) < 0)
+        {
             _YrepulsiveForce +=  (1.0 / pow(distobs.at(j), _k)) * sin(_currentOrientation - laserRes->at(j));
+//            std::cout<<"iter: "<<j<<" dist: "<<distobs.at(j)<<" orient: "<<_currentOrientation<<" neg y laser: "<<laserRes->at(j)<<" computed: "<< _YrepulsiveForce<<"\n";
+            ++counternegy;
+        }
     }
+    (counternegy > 0 && counterposy == 0) ? (_YrepulsiveForce = _YrepulsiveForce * -1) : (_YrepulsiveForce);
+    (counternegx > 0 && counterposx == 0) ? (_XrepulsiveForce = _XrepulsiveForce * -1) : (_XrepulsiveForce);
 }
 
 /**
@@ -126,8 +147,8 @@ inline void PathPlanner::totalPotential()
 {
     _XtotalPotential = _XattractiveForce - (_repPotScaling * _XrepulsiveForce);
     _YtotalPotential = _YattractiveForce - (_repPotScaling * _YrepulsiveForce);
-    std::cout<<"check TOTAL x force: "<<_XtotalPotential<<std::endl;
-    std::cout<<"check TOTAL y force: "<<_YtotalPotential<<std::endl;
+//    std::cout<<"check TOTAL x force: "<<_XtotalPotential<<std::endl;
+//    std::cout<<"check TOTAL y force: "<<_YtotalPotential<<std::endl;
 }
 
 /**
@@ -144,8 +165,8 @@ void PathPlanner::setTotalPotential(std::vector<double> *Xdistance, std::vector<
     PathPlanner::repulsiveForce(Xdistance, Ydistance, laserRes);
     //compute attractive force
     PathPlanner::attractiveForce();
-    std::cout<<"check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
-    std::cout<<"check attr   force: x="<<_XattractiveForce<<" y= "<<_YattractiveForce<<std::endl;
+//    std::cout<<"check repuls force: x="<<_XrepulsiveForce<<" y="<<_YrepulsiveForce<<std::endl;
+//    std::cout<<"check attr   force: x="<<_XattractiveForce<<" y= "<<_YattractiveForce<<std::endl;
     // compute total potential
     PathPlanner::totalPotential();
 }
@@ -161,7 +182,7 @@ double PathPlanner::getSteerangle(double* robotSpeed)
     double potentialvectorX = *robotSpeed * cos(_currentOrientation) + _XtotalPotential;
     double potentialvectorY = *robotSpeed * sin(_currentOrientation) + _YtotalPotential;
     _steer = atan2(potentialvectorY, potentialvectorX) - _currentOrientation;
-    std::cout<<"steer: "<<_steer<<"\n";
+//    std::cout<<"steer: "<<_steer<<"\n";
     return _steer;
 }
 
