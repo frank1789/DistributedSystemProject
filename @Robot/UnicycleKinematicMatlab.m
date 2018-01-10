@@ -18,35 +18,21 @@ function this = UnicycleKinematicMatlab(this, piterator)
 %  t(double) = last row of time computed by ode45 [n, m]
 %  q(double) = last row of time computed by ode45 [n, m]
 
-persistent t1 q; % allocate static varible to perform ode45
+persistent t1 q;             % allocate static varible to perform ode45
 if isempty(t1) && isempty(q) % check if void, otherwise it takes last solution ode45
     t1 = this.t;
     q = this.q;
 end
 
-this.detectangle(piterator);
-
-switch round(q(end,3),5) == round(this.steerangle,5)
-    case false
-        % Unicycle dynamic
-        [t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
-        q(end,3) = wrapToPi(q(end,3));
-        q(end,3) = round(q(end,3),7);
-        this.q(end+1,:) = q(end,:); % store last row of solution - postion
-        this.t(end+1) = t1(end);    % store last row of solution - time
-    case true
-        % check minimun distance from obstacle
-        
-        % Unicycle dynamic
-        [t1, q] = ode45(@(t, y) this.UnicycleModel(t, y), [t1(end) t1(end)+0.05], q(end,:));
-        q(end,3) = wrapToPi(q(end,3));
-        this.q(end+1,:) = q(end,:); % store last row of solution - postion
-        this.t(end+1) = t1(end);    % store last row of solution - time
-end
-
+% Unicycle dynamic
+[t1, q] = ode45(@(t, y, it) this.UnicycleModel(t, y, piterator), [t1(end) t1(end)+0.05], q(end,:));
+q(end,3) = wrapToPi(q(end,3));
+this.q(end+1,:) = q(end,:); % store last row of solution - postion
+this.t(end+1) = t1(end);    % store last row of solution - time
+% end
 
 % Input sequence
-[v, omega] = this.UnicycleInputs(this.t, this.steerangle);
+[v, omega] = this.UnicycleInputs(this.t, this.speed, this.steerangle);
 this.u = [v'; omega']; % store vector of velocity
-this.EncoderSim(); % perform encoder simulation
+this.EncoderSim();     % perform encoder simulation
 end % method

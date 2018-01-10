@@ -26,8 +26,17 @@ pos_y = y - this.width/2;
 
 % set base vehicle display a circle radius equal to 1
 % robot represent the scheme of plot
-body = rectangle('Position',[pos_x pos_y this.width this.length], 'Curvature', [1 1], 'FaceColor',[0.5 0.5 0.5 0.5]);
 
+% xcir = (this.lasermaxdistance * cos(this.laserTheta)) .* this.rotationMatrix(theta) + x;
+% ycir = (this.lasermaxdistance * sin(this.laserTheta)) * this.rotationMatrix(theta) + y;
+FOV = [this.lasermaxdistance * cos(this.laserTheta); this.lasermaxdistance * sin(this.laserTheta)]' / this.rotationMatrix(theta) + [1 0];
+xcir = FOV(:,1);
+ycir = FOV(:,2);
+
+body = [rectangle('Position',[pos_x pos_y this.width this.length], 'Curvature', [1 1], 'FaceColor',[0.5 0.5 0.5 0.5]),...
+        line([FOV(1,1) FOV(end,1)], [FOV(1,2) FOV(end,2)]),...
+        line(xcir,ycir)];
+        %plot(this.lasermaxdistance*cos(this.laserTheta), this.lasermaxdistance*sin(this.laserTheta)) ];
 % label print on robot the ID number
 label = text(pos_x + .1, pos_y + .1, sprintf('ID: %i',this.ID));
 
