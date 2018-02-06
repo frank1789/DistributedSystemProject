@@ -47,7 +47,7 @@ PathPlanner::PathPlanner(Robot<double> *position, Point<double> *target)
 }
 
 /**
- * @brief calculates the distance between the current point and the target
+ * @brief calculates euclidean distance between the current point and the target
  *
  * @param none
  * @return distance
@@ -59,7 +59,7 @@ double PathPlanner::distance()
 }
 
 /**
- * @brief calculates the angle between the current point and the target
+ * @brief calculates the angle by difference between the current point and the target
  *
  * @param none
  * @return angle
@@ -121,6 +121,7 @@ void PathPlanner::repulsiveForce(std::vector<double> *Xdistance, std::vector<dou
             ++counternegy;
         }
     }
+    // avoid bad angle at start
     (counternegy > 0 && counterposy == 0) ? (_YrepulsiveForce = _YrepulsiveForce * -1) : (_YrepulsiveForce);
     (counternegx > 0 && counterposx == 0) ? (_XrepulsiveForce = _XrepulsiveForce * -1) : (_XrepulsiveForce);
 }
@@ -138,7 +139,7 @@ inline void PathPlanner::attractiveForce()
 }
 
 /**
- * @brief calculate the potential
+ * @brief calculate the total potential
  *
  * @param none
  * @return none

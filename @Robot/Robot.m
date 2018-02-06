@@ -105,7 +105,7 @@ classdef Robot < handle
         end % definition constructor
 
         % function to compute the kinematics simulation
-        this = UnicycleKinematicMatlab(this, MdlInit, Vehicle);
+        this = UnicycleKinematicMatlab(this, it);
         this = setpointtarget(this, point);
         test(this);
         % function to compute Extend Kalman Filter
