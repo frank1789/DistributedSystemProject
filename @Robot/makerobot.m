@@ -29,7 +29,7 @@ pos_y = y - this.width/2;
 
 % xcir = (this.lasermaxdistance * cos(this.laserTheta)) .* this.rotationMatrix(theta) + x;
 % ycir = (this.lasermaxdistance * sin(this.laserTheta)) * this.rotationMatrix(theta) + y;
-FOV = [this.lasermaxdistance * cos(this.laserTheta); this.lasermaxdistance * sin(this.laserTheta)]' / this.rotationMatrix(theta) + [1 0];
+FOV = [this.lasermaxdistance * cos(this.laserTheta); this.lasermaxdistance * sin(this.laserTheta)]' / this.rotationMatrix(theta) + [x y];
 xcir = FOV(:,1);
 ycir = FOV(:,2);
 
