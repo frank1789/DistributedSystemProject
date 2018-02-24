@@ -36,5 +36,9 @@ R = this.rotationMatrix(alpha);
 rotatescan = [laserReadings(2,:).*cos(this.laserTheta);...
     laserReadings(2,:).*sin(this.laserTheta)]' / R + [this.q(it,1); this.q(it,2)]';
 this.laserScan_xy{it} = rotatescan';    % return cell
+
+this.laserScan_2_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);... 
+    laserReadings(2,:).*sin(this.laserTheta)]; 
+
 this.getmeasure(it);                    % compute the measure from xy
 end % method

@@ -62,6 +62,7 @@ classdef Robot < handle
     properties (SetAccess = private, Hidden = false)
         C_l_xy = {};
         laserScan_xy = cell.empty; % contains scans at a certain location
+        laserScan_2_xy = cell.empty; % contains scans at a certain location
         distance = cell.empty;  % contains distance at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
@@ -85,10 +86,11 @@ classdef Robot < handle
             dimension = length(0:sampletime:time);  % Length of simulation
             this.distance{1,dimension + 1} = [];
             this.laserScan_xy{1,dimension + 1} = [];
+            this.laserScan_2_xy{1,dimension + 1} = [];
 
             % set initial position
             this.q = initialposition;
-            this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [−pi pi].
+            this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [???pi pi].
             this.t = 0;
             this.steerangle = 0;
 
