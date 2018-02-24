@@ -1,6 +1,6 @@
 %% Main file
 close all;
-clear;
+clear all;
 clear class;
 clc;
 addpath ('Cost Function', 'Occupacy grid from Image')
@@ -25,7 +25,7 @@ p=1;
 % Sampling time
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 95;
+MdlInit.T = 44;
 nit = 0:MdlInit.Ts:MdlInit.T;
 % Vehicle set-up Vehicle initial conditions
 Vehicle.q{1} = [5, 1.5, 0];
@@ -46,16 +46,17 @@ y_g=floor(y);
 max_x = max(x_g);
 max_y = max(y_g);
 
-n_mis = 201;%length(laserScan_xy);
+n_mis = 1000;%length(laserScan_xy);
 
 occ_mat = zeros(max_x,2*max_y,n_mis);
 lid_mat = zeros(max_x,2*max_y,n_mis);
 
 laserScan_xy = cell.empty;
-jj=1;
+j=1;
+kk=1;
 
 % use this method to set target
-a.setpointtarget([15 13 0]);
+a.setpointtarget([14 2 0]);
 
 w = waitbar(0,'Please wait simulation in progress...');
 
@@ -67,15 +68,17 @@ for ii = 1:1:length(nit)
     end
     a.UnicycleKinematicMatlab(ii);
     
-    %         laserScan_xy{ii} = a.laserScan_xy(ii);
-    %
-    %         if(isempty(laserScan_xy{1,ii}{1,1}) || all((all(isnan(laserScan_xy{1,ii}{1,1})))==1))
-    %
-    %         else
-    %             out = laserScan_xy{1,ii}{1,1}(:,all(~isnan(laserScan_xy{1,ii}{1,1})));
-    %             [ occ_mat(:,:,jj)] = Occ_Grid( occ_mat(:,:,jj),lid_mat(:,:,jj),out);
-    %             jj=jj+1;
-    %         end
+              laserScan_xy{ii} = a.laserScan_2_xy(ii);
+    
+             if(isempty(laserScan_xy{1,ii}{1,1}) || all((all(isnan(laserScan_xy{1,ii}{1,1})))==1))
+    
+             else
+                 out = laserScan_xy{1,ii}{1,1}(:,all(~isnan(laserScan_xy{1,ii}{1,1})));
+                 [ occ_mat(:,:,kk)] = Occ_Grid( occ_mat(:,:,kk),lid_mat(:,:,kk),out);
+                 kk=kk+1;
+             end
+ %  laserScan_xy{ii} = a.laserScan_2_xy(ii);
+ % [ occ_mat,kk ] = Occ_Mat( occ_mat,lid_mat,laserScan_xy,ii,kk);
     waitbar(ii/steps,w,sprintf('Please wait simulation in progress... %3.2f%%',ii/steps *100))
 end
 close(w)
@@ -98,7 +101,7 @@ rf_y= cell.empty;
 rf_z= cell.empty;
 % setup figure
 figure();
-for n= 1:1:length(a.t)
+for n= 1:30:length(a.t)
     title(['Time: ', num2str(a.t(n),5)])
     axis([0, 18, 0, 18]); hold on; axis equal; grid on;
     hold on
@@ -132,5 +135,69 @@ end % end animation
 %     mesh(occ_mat(:,:,i));
 % end
 
+save test.mat
 
+ 
+ 
+%% Initial Condition
+n=1;
+    title(['Time: ', num2str(a.t(n),5)])
+    axis([0, 18, 0, 18]); hold on; axis equal; grid on;
+    hold on
+    plotMap(mapStuct.map);
+    fa = quiver(a.q(n,1), a.q(n,2),a.target(1)-a.q(n,1), a.target(2)-a.q(n,2),'c');
+    plot(a.target(1), a.target(2), '*r')
+    plot(a.q(:,1), a.q(:,2), 'g-.')
+    for j=1:1
+        if n == 1
+            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.makerobot(n);
+        else
+            delete([body{j}, label{j},  rf_x{j}, rf_y{j}, rf_z{j}]);
+            [body{j}, label{j},  rf_x{j}, rf_y{j}, rf_z{j}] =a.animate(n);
+        end
+        drawnow;
+    end
+    hold off
+    % local variable cluodpoint
+    cloudpoint = (a.getlaserscan(n));
+    % verify cloudpoint is nonvoid vector
+    if ~isempty(cloudpoint)
+        cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.b'); % plot
+    end
+    axis equal
+    grid on
 
+    figure
+    mesh(occ_mat(:,:,1))
+    
+%% Final Condition
+figure
+n=length(a.t);
+    title(['Time: ', num2str(a.t(n),5)])
+    axis([0, 18, 0, 18]); hold on; axis equal; grid on;
+    hold on
+    plotMap(mapStuct.map);
+    fa = quiver(a.q(n,1), a.q(n,2),a.target(1)-a.q(n,1), a.target(2)-a.q(n,2),'c');
+    plot(a.target(1), a.target(2), '*r')
+    plot(a.q(:,1), a.q(:,2), 'g-.')
+    for j=1:1
+        if n == 1
+            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.makerobot(n);
+        else
+            delete([body{j}, label{j},  rf_x{j}, rf_y{j}, rf_z{j}]);
+            [body{j}, label{j},  rf_x{j}, rf_y{j}, rf_z{j}] =a.animate(n);
+        end
+        drawnow;
+    end
+    hold off
+    % local variable cluodpoint
+    cloudpoint = (a.getlaserscan(n));
+    % verify cloudpoint is nonvoid vector
+    if ~isempty(cloudpoint)
+        cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.b'); % plot
+    end
+    axis equal
+    grid on
+    
+     figure
+    mesh(occ_mat(:,:,370))
