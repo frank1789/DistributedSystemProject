@@ -50,48 +50,46 @@ scambio = zeros(3);
 
 tic
 
-%% Online Simulation of all 3 Robot 
+%% Online Simulation of all 3 Robot
 
-    for ii = 1:1:nit
-      for i = 1:length(robot)
-            if mod(ii,2) == 0 % simualte laserscan @ 10Hz
-                robot{i}.scanenvironment(mapStuct.map.points, mapStuct.map.lines, ii);        
-            end
-            robot{i}.UnicycleKinematicMatlab(ii);
-       end
-           
-        for rr = 1:1:length(robot)
-            
-           %If lidar information is avaible update Global Map of each robot
-           if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s
-               
-             laserScan_xy{ii} = robot{rr}.laserScan_2_xy(ii);
-    
-             if(isempty(laserScan_xy{1,ii}{1,1}) || all((all(isnan(laserScan_xy{1,ii}{1,1})))==1))
-    
-             else
-                 
-                 %Update Global map
-                 Update_gbmap(robot{rr},ii,wdt,lgth,occ_mat,lid_mat,laserScan_xy);
-                 if mod(ii,40)==0
-                     %Compute Cost matrix
-                     Cost_map(:,:,rr)  = Update_vis( Cost_map(:,:,rr),robot{rr},ii,wdt,lgth,occ_mat,ris ); %ToDo da rivedere
-                     %Reset Target Location
-                     robot{rr}.setpointtarget(Reset_Target(robot{rr},ris,Cost_map(:,:,rr),ii));
-                 end
-             end
-             
-           end
-           
-           
-             for vv = 1:1:length(robot)
-                if (mod(ii,20) == 0 && vv~=rr &&  sqrt( (robot{rr}.q(ii,1) - robot{vv}.q(ii,1))^2 +  (robot{rr}.q(ii,2) - robot{vv}.q(ii,2))^2 )< 6)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo
-
-                           Utilities_Manage(robot,vv,ris,Cost_map,ii);
-                end
-             end
-
+for ii = 1:1:nit
+    for i = 1:length(robot)
+        if mod(ii,2) == 0 % simualte laserscan @ 10Hz
+            robot{i}.scanenvironment(mapStuct.map.points, mapStuct.map.lines, ii);
         end
+        robot{i}.UnicycleKinematicMatlab(ii);
+    end
+    
+    for rr = 1:1:length(robot)
+        
+        %If lidar information is avaible update Global Map of each robot
+        if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s
+            
+            laserScan_xy{ii} = robot{rr}.laserScan_2_xy(ii);
+            
+            if(isempty(laserScan_xy{1,ii}{1,1}) || all((all(isnan(laserScan_xy{1,ii}{1,1})))==1))   
+            else
+                
+                %Update Global map
+                Update_gbmap(robot{rr},ii,wdt,lgth,occ_mat,lid_mat,laserScan_xy);
+                if mod(ii,40)==0
+                    %Compute Cost matrix
+                    Cost_map(:,:,rr)  = Update_vis( Cost_map(:,:,rr),robot{rr},ii,wdt,lgth,occ_mat,ris ); %ToDo da rivedere
+                    %Reset Target Location
+                    robot{rr}.setpointtarget(Reset_Target(robot{rr},ris,Cost_map(:,:,rr),ii));
+                end
+            end
+            
+        end
+        
+        
+        for vv = 1:1:length(robot)
+            if (mod(ii,20) == 0 && vv~=rr &&  sqrt( (robot{rr}.q(ii,1) - robot{vv}.q(ii,1))^2 +  (robot{rr}.q(ii,2) - robot{vv}.q(ii,2))^2 )< 6)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo  
+                Utilities_Manage(robot,vv,ris,Cost_map,ii);
+            end
+        end
+        
+    end
         
         
 
