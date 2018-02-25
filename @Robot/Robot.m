@@ -58,7 +58,16 @@ classdef Robot < handle
         distance = cell.empty;  % contains distance at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
-        occgridglobal; % store occupacy grid
+        room_length = 49;
+        room_width  = 49;
+        ris = 0.15;
+        lgth =  0;
+        wdt  =  0;
+
+
+        occgridglobal =[]; % store occupacy grid
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     end
     
     methods
@@ -92,6 +101,9 @@ classdef Robot < handle
             this.EKF_q_store(:,1) = this.EKF_q_est;
             % initialize sector of angle laser theta
             this.laserTheta = pi/180*(-90:this.laserAngularResolution:90);
+            lgth =  floor(this.room_length/this.ris);
+        wdt  =  floor(this.room_width/this.ris);
+        this.occgridglobal =zeros(lgth,wdt);
         end % definition constructor
         % function to compute the kinematics simulation
         this = UnicycleKinematicMatlab(this, it);
