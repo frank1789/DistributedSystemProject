@@ -3,11 +3,11 @@ close all
 clear
 
 %%
-mex -output test  src/*.cpp
+% mex -output test  src/*.cpp
 
 %%
 a = Map(80, 100, 7);
-a.plotMap
+a.plotMap;
 % MapName = 'map_square.mat';
 % mapStuct = load( MapName );
 % 
