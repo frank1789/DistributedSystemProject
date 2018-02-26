@@ -11,23 +11,23 @@ classdef Map < handle
     end
     
     methods
-        function this = Map(p_width, p_length, p_type) % define constructor's Map
+        function this = Map(width, length, p_type) % define constructor's Map
             % check input
-            validateattributes(p_width, {'double'}, {'positive'});
-            validateattributes(p_length, {'double'}, {'positive'});
-            validType = validatestring(p_type, this.validStrings);
+            validateattributes(width, {'double'}, {'positive'});
+            validateattributes(length, {'double'}, {'positive'});
+%             validType = validatestring(p_type, this.validStrings);
             % if all inputs are correct continue
-            this.width = p_width / 2;
-            this.length = p_length / 2;
-            
-            switch validType
-                case 'Simple'
-                    this.setlimit();
-                case 'Fixed'
-                    disp('Not working')
-                case 'Random'
-                    disp('Not working')
-            end
+            this.width = width;
+            this.length = length;
+            test(width, length, p_type);
+%             switch validType
+%                 case 'Simple'
+%                     this.setlimit();
+%                 case 'Fixed'
+%                     disp('Not working')
+%                 case 'Random'
+%                     disp('Not working')
+%             end
         end % constructor
     end
     
