@@ -19,15 +19,6 @@
 #define MINCORRIDORLENGTH 2
 #define MAXCORRIDORLENGTH 12
 
-void copyarray(std::vector<geometry::point>& dungeonpoint, double* vectorin, int size)
-{
-    for(int i = 0; i < size; i++)
-    {
-        int j = i / 2;
-        (i % 2 == 0) ? vectorin[i] = dungeonpoint.at(j).first : vectorin[i] = dungeonpoint.at(j).second;
-    }
-}
-
 
 struct Rect
 {
