@@ -9,6 +9,7 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 #include "numbermanipulate.h"
+#include "geomentity.h"
 #include <vector>
 #include <stdio.h>
 
@@ -17,6 +18,15 @@
 #define MAXROOMSIZE 8
 #define MINCORRIDORLENGTH 2
 #define MAXCORRIDORLENGTH 12
+
+void copyarray(std::vector<geometry::point>& dungeonpoint, double* vectorin, int size)
+{
+    for(int i = 0; i < size; i++)
+    {
+        int j = i / 2;
+        (i % 2 == 0) ? vectorin[i] = dungeonpoint.at(j).first : vectorin[i] = dungeonpoint.at(j).second;
+    }
+}
 
 
 struct Rect
@@ -46,15 +56,27 @@ public:
     South,
     West,
     East,
-    DirectionCount
+//    DirectionCount
   };
+
+  int const DirectionCount = 5;
 
 public:
   Dungeon(int width, int height);
   void generate(int maxFeatures);
   void print();
 
-  void bo();
+
+
+  void setPointRoom();
+  void setPointCorridor();
+  void setPointDoor(int x, int y);
+  std::vector<geometry::point> getDoor();
+  std::vector<geometry::point> getRoom();
+  std::vector<geometry::point> getCorridor();
+  geometry::point getCorridor(int n);
+  geometry::point getRoom(int n);
+  geometry::point getDoor(int n);
 private:
   char getTile(int x, int y) const;
   void setTile(int x, int y, char tile);
@@ -70,6 +92,10 @@ private:
   std::vector<char> _tiles;
   std::vector<Rect> _rooms; // rooms for place stairs or monsters
   std::vector<Rect> _exits; // 4 sides of rooms or corridors
+  int _doorcounter;
+  std::vector<geometry::point> _doorpoint;
+  std::vector<geometry::point> _roompoint;
+  std::vector<geometry::point> _corridorpoint;
 };
 
 #endif // DUNGEON_H
