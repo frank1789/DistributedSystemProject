@@ -2,7 +2,7 @@
 #include "iostream"
 #include "geomentity.h"
 #include "dungeon.h"
-//#include "interface.h"
+#include "interface.h"
 
 #define N_ROW 2
 
@@ -21,24 +21,31 @@ void mexFunction( int nlhs, mxArray *plhs[],
     std::cout << test <<std::endl;
     Dungeon d(static_cast<int>(*width), static_cast<int>(*height));
     d.generate(static_cast<int>(*room));
-    d.print();
-    
+     d.print();
     // read data from dungeon generator
-//    d.setPointRoom();
+    d.setPointRoom();
 //    d.setPointCorridor();
-//    // set dimension for output MATLAB array
-//    int dim_room_point = 2 * static_cast<int>(d.getRoom().size());
-//    // allocate return array
-//    double* point = new double[dim_room_point];
-//    // fill the array
-//    copyarray(d.getRoom(), point, dim_room_point);
+    // set dimension for output MATLAB array
+    int dim_room_point = 2* static_cast<int>(d.getRoom().size());
+    // allocate return array
+    double* point = new double[dim_room_point];
+    double* line = new double[dim_room_point];
+    // fill the array
+    copyarray(d.getRoom(), point, dim_room_point);
+    std::vector<int>* point_to_point = new std::vector<int>;
+    connectpoint(d.getRoom(), point_to_point);
+    std::copy(point_to_point->begin(), point_to_point->end(), line);
 //    // return outputs from MEX-function
-//    plhs[0] = mxCreateDoubleMatrix(N_ROW, dim_room_point, mxREAL);
-//    memcpy(mxGetPr(plhs[0]), point, dim_room_point * sizeof(double));
+    plhs[0] = mxCreateDoubleMatrix(N_ROW, dim_room_point, mxREAL);
+    plhs[1] = mxCreateDoubleMatrix(N_ROW, point_to_point->size(), mxREAL);
+    memcpy(mxGetPr(plhs[0]), point, dim_room_point * sizeof(double));
+    memcpy(mxGetPr(plhs[1]), line, point_to_point->size() * sizeof(double));
 //    if (nlhs > 1) {
 //        plhs[1] = mxCreateDoubleScalar(dim_room_point);
 //    }
 //
-//    // dellocate heap space
-//    delete [] point;
+    // dellocate heap space
+    delete [] point;
+    delete [] line;
+    delete point_to_point;
 }

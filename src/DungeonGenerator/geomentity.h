@@ -3,17 +3,9 @@
 #include <list>
 
 namespace geometry {
-  typedef std::pair<int, int> point;
-  typedef std::pair<point, point> line;
-
-//  template<int n>
-//  struct rectangle {
-//    point p[n];
-//  };
-
+  typedef std::pair<int, int> i_point;
+  typedef std::pair<float, float> f_point;
+  typedef std::pair<f_point, f_point> line;
 }
-
-
-
 
 #endif // GEOMENTITY_H

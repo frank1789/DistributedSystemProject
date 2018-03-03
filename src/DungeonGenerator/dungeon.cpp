@@ -19,14 +19,16 @@ Dungeon::Dungeon(int width, int height)
   , _exits()
 {
   _doorcounter = 0;
+  //() << "initialize class Dungeon, set scenario dimension (w,h):" << _width << _height;
 }
 
 void Dungeon::generate(int maxFeatures)
 {
-
+  //() << "Start generation, then set room's number: #" << maxFeatures;
   // place the first room in the center
   if (!makeRoom(_width / 2, _height / 2, static_cast<Direction>(randomInt(4), true)))
     {
+      //() << "Unable to place the first room.\n";
       return;
     }
 
@@ -35,19 +37,20 @@ void Dungeon::generate(int maxFeatures)
     {
       if (!createFeature())
         {
+          //() << "Unable to place more features (placed " << i << ").\n";
           break;
         }
     }
 
   //  if (!placeObject(UpStairs))
   //    {
-
+  //      //() << "Unable to place up stairs.\n";
   //      return;
   //    }
 
   //  if (!placeObject(DownStairs))
   //    {
-  //      qDebug() << "Unable to place down stairs.\n";
+  //      //() << "Unable to place down stairs.\n";
   //      return;
   //    }
 
@@ -112,7 +115,7 @@ bool Dungeon::createFeature()
   return false;
 }
 
-bool Dungeon::createFeature(int x, int y, Dungeon::Direction dir)
+bool Dungeon::createFeature(int x, int y, Direction dir)
 {
   static const int roomChance = 50; // corridorChance = 100 - roomChance
   int dx = 0;
@@ -152,7 +155,7 @@ bool Dungeon::createFeature(int x, int y, Dungeon::Direction dir)
           if (getTile(x + dx, y + dy) == Floor)
             {
               setTile(x, y, ClosedDoor);
-              setPointDoor(x, y);
+//              setPointDoor(x, y);
             }
           else // don't place a door between corridors
             {
@@ -221,7 +224,7 @@ bool Dungeon::makeCorridor(int x, int y, Dungeon::Direction dir)
   if (randomBool()) // horizontal corridor
     {
       corridor.width = randomInt(MINCORRIDORLENGTH, MAXCORRIDORLENGTH);
-      corridor.height = 2;
+      corridor.height = 1;
       switch(dir)
         {
         case North:
@@ -231,7 +234,6 @@ bool Dungeon::makeCorridor(int x, int y, Dungeon::Direction dir)
               corridor.x = x - corridor.width + 1;
             }
           break;
-
         case South:
           corridor.y = y + 1;
           if (randomBool()) // west
@@ -246,10 +248,12 @@ bool Dungeon::makeCorridor(int x, int y, Dungeon::Direction dir)
           corridor.x = x + 1;
           break;
         }
+      //save point of horizzontal corridor
+//      setPointHorizzontalCorridor(corridor.x, corridor.y, corridor.height, corridor.width);
     }
   else // vertical corridor
     {
-      corridor.width = 2;
+      corridor.width = 1;
       corridor.height = randomInt(MINCORRIDORLENGTH, MAXCORRIDORLENGTH);
       switch(dir)
         {
@@ -293,8 +297,12 @@ bool Dungeon::makeCorridor(int x, int y, Dungeon::Direction dir)
         {
           _exits.emplace_back(Rect{ corridor.x + corridor.width, corridor.y, 1, corridor.height });
         }
+      //save point of vertical corridor
+      setPointCorridor(corridor.x, corridor.y, corridor.height, corridor.width);
       return true;
+
     }
+
   return false;
 }
 
@@ -314,38 +322,31 @@ bool Dungeon::placeRect(const Rect &rect, char tile)
     for (int x = rect.x - 1; x < rect.x + rect.width + 1; ++x)
       {
         if (x == rect.x - 1 || y == rect.y - 1 || x == rect.x + rect.width || y == rect.y + rect.height)
-          setTile(x, y, Wall);
+          {
+            setTile(x, y, Wall);
+            setPointWall(x, y);
+          }
         else
           setTile(x, y, tile);
       }
   return true;
 }
 
-//bool Dungeon::placeObject(char tile)
-//{
-//  if (_rooms.empty())
-//    {
-//      return false;
-//    }
-//  int r = randomInt(_rooms.size()); // choose a random room
-//  int x = randomInt(_rooms[r].x + 1, _rooms[r].x + _rooms[r].width - 2);
-//  int y = randomInt(_rooms[r].y + 1, _rooms[r].y + _rooms[r].height - 2);
-//  if (getTile(x, y) == Floor)
-//    {
-//      setTile(x, y, tile);
-//      // place one object in one room (optional)
-//      _rooms.erase(_rooms.begin() + r);
-//      return true;
-//    }
-//  return false;
-//}
-
-
-
+/**
+ * @brief Dungeon::setPointRoom
+ */
 void Dungeon::setPointRoom()
 {
+  //()<<"Extract room coordinate generated:"<< _rooms.size();
   for (unsigned long i= 0; i < _rooms.size(); ++i)
     {
+      {
+        //() << "Coordinate for room: #" << i;
+        //() << "\tcoordinate p1" << _rooms[i].x << _rooms[i].y;
+        //() << "\tcoordinate p2" << _rooms[i].x + _rooms[i].width << _rooms[i].y;
+        //() << "\tcoordinate p3" << _rooms[i].x << _rooms[i].y+ _rooms[i].height;
+        //() << "\tcoordinate p4" << _rooms[i].x + _rooms[i].width << _rooms[i].y + _rooms[i].height;
+      }
       _roompoint.push_back({_rooms[i].x, _rooms[i].y});                                        ///store point 1
       _roompoint.push_back({_rooms[i].x + _rooms[i].width , _rooms[i].y});                     ///store point 2
       _roompoint.push_back({_rooms[i].x ,_rooms[i].y+ _rooms[i].height});                      ///store point 3
@@ -353,49 +354,94 @@ void Dungeon::setPointRoom()
     }
 }
 
-void Dungeon::setPointCorridor()
+
+/**
+ * @brief Dungeon::setPointVerticalCorridor
+ * @param x
+ * @param y
+ * @param height
+ * @param width
+ */
+void Dungeon::setPointCorridor(int &x, int &y, int &height, int &width)
 {
-  for(unsigned long i = 0; i< _exits.size(); ++i)
-    {
-      _corridorpoint.push_back({_exits[i].x, _exits[i].y});                                        ///store point 1
-      _corridorpoint.push_back({_exits[i].x + _exits[i].width , _exits[i].y});                     ///store point 2
-      _corridorpoint.push_back({_exits[i].x ,_exits[i].y+ _exits[i].height});                      ///store point 3
-      _corridorpoint.push_back({_exits[i].x +_exits[i].width , _exits[i].y + _exits[i].height});  ///store point 4
-    }
+  {
+    //() << "Extract corridor:";
+    //() << "\tcoordinate c1" << x << y;
+    //() << "\tcoordinate c2" << x + width << y;
+    //() << "\tcoordinate c3" << x << y + height;
+    //() << "\tcoordinate c4" << x + width << y + height;
+  }
+  _corrvertpoint.push_back({x, y});                    ///store point 1
+  _corrvertpoint.push_back({x + width , y});           ///store point 2
+  _corrvertpoint.push_back({x , y + height});           ///store point 3
+  _corrvertpoint.push_back({x + width , y + height});  ///store point 4
 }
 
+/**
+ * @brief Dungeon::setPointHorizzontalCorridor
+ * @param x
+ * @param y
+ * @param height
+ * @param width
+ */
+void Dungeon::setPointHorizzontalCorridor(int &x, int &y, int &height, int &width)
+{
+  {
+    //() << "Extract coordinate for horizzontal corridor:";
+    //() << "\tcoordinate c1" << x << y;
+    //() << "\tcoordinate c2" << x + width << y;
+    //() << "\tcoordinate c3" << x << y + height;
+    //() << "\tcoordinate c4" << x + width << y + height;
+  }
+  _corrhorzpoint.push_back({x, y});                    ///store point 1
+  _corrhorzpoint.push_back({x + width , y});           ///store point 2
+  _corrhorzpoint.push_back({x , y+ height});           ///store point 3
+  _corrhorzpoint.push_back({x + width , y + height});  ///store point 4
+}
+
+/**
+ * @brief Dungeon::setPointDoor
+ * @param x
+ * @param y
+ */
 void Dungeon::setPointDoor(int x, int y)
 {
-  _doorpoint.push_back({y, y});
+  //() << "Exctract Door coordinate";
+  _doorpoint.push_back({x, y});
+  //() << "Door: #" << _doorcounter << "\n\t coordinate"<< x << y;
   _doorcounter++;
 }
 
-
-geometry::point Dungeon::getDoor(int n) {return _doorpoint[n];}
-
-geometry::point Dungeon::getRoom(int n)
+void Dungeon::setPointWall(int x, int y)
 {
-  setPointRoom();
-  return _roompoint[n];
+//  //() << "Exctract Door coordinate";
+  _wallpoint.push_back({x, y});
+//  //() << "coordinate"<< x << y;
+//  _doorcounter++;
 }
 
-geometry::point Dungeon::getCorridor(int n)
-{
-  setPointCorridor();
-  return _corridorpoint[n];
-}
+/**
+ * @brief Dungeon::getDoor
+ * @return
+ */
+std::vector<geometry::i_point> Dungeon::getDoor() { return _doorpoint;}
 
+/**
+ * @brief Dungeon::getRoom
+ * @return
+ */
+std::vector<geometry::i_point> Dungeon::getRoom(){ return _roompoint;}
 
-std::vector<geometry::point> Dungeon::getDoor() {return _doorpoint;}
+/**
+ * @brief Dungeon::getVerticalCorridor
+ * @return
+ */
+std::vector<geometry::i_point> Dungeon::getCorridor() { return _corrvertpoint;}
 
-std::vector<geometry::point> Dungeon::getRoom()
-{
-  setPointRoom();
-  return _roompoint;
-}
+/**
+ * @brief Dungeon::getHorizzontalCorridor
+ * @return
+ */
+std::vector<geometry::i_point> Dungeon::getHorizzontalCorridor() { return _corrhorzpoint;}
 
-std::vector<geometry::point> Dungeon::getCorridor()
-{
-  setPointCorridor();
-  return _corridorpoint;
-}
+std::vector<geometry::i_point> Dungeon::getWall() { return _wallpoint;}
