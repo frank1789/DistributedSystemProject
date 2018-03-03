@@ -4,7 +4,6 @@ classdef Map < handle
         length;
         points = [];
         lines = [];
-        z;
     end
     
     properties (Constant, Access = 'private')
@@ -20,7 +19,7 @@ classdef Map < handle
             % if all inputs are correct continue
             this.width = width;
             this.length = length;
-            [point, lines ]= test(width, length, p_type)
+            [point, lines ]= test(width, length, p_type);
 
             this.points = point;
             this.lines = lines;
