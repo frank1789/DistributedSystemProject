@@ -1,14 +1,84 @@
 #include "interface.h"
 #include "dungeon.h"
-#include <vector>
 #include <math.h>
 #include <algorithm>
 #include <utility>
-#include <iostream>
+//#include <QDebug>
+
+void connectpoint(const std::vector<geometry::i_point> &dungeonpoint, std::vector<int>* vec)
+{
+  for(unsigned long i = 0; i < dungeonpoint.size(); i += 4)
+    {
+      //const struct to assemble line
+      vec->push_back(i + 1);
+      vec->push_back(i + 2);
+      vec->push_back(i + 2);
+      vec->push_back(i + 4);
+      vec->push_back(i + 4);
+      vec->push_back(i + 3);
+      vec->push_back(i + 3);
+      vec->push_back(i + 1);
+    }
+}
+
+void copyarray(const std::vector<geometry::i_point> &result, std::vector<int>* vector_in)
+{
+  for(int i = 0; i < result.size(); i++)
+  {
+      vector_in->push_back(result.at(i).first);
+      vector_in->push_back(result.at(i).second);
+    }
+}
+
+void copyarray(const std::vector<geometry::i_point> &result, int *vector_in)
+{
+  for(int i = 0; i < result.size(); i++)
+  {
+      int j = i / 2;
+        (i % 2 == 0) ? vector_in[i] = result.at(j).first : vector_in[i] =  result.at(j).second;
+    }
+}
+
 
 #define N_ROW 2
 
 using namespace geometry;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//void collinear(int x1, int y1, int x2, int y2,
+//                              int x3, int y3)
+//{
+//    if ((y3 - y2)*(x2 - x1) == (y2 - y1)*(x3 - x2))
+//        printf("Yes");
+//    else
+//        printf("No");
+//}
+
+//void iscollinear(),[]{};
+
+//auto colinear = [](i_point p1, i_point p2, i_point p3){return true;}
+
+
+
 
 int getcolunm(const std::vector<i_point> &dungeonfeature)
 {
@@ -17,63 +87,29 @@ int getcolunm(const std::vector<i_point> &dungeonfeature)
   return n_colunm;
 }
 
-void copyarray(const std::vector<i_point> &dungeon, double *vectorin1, int size)
-{
-//    std::vector<int>* point_to_point = new std::vector<int>;
-//    point_to_point->reserve(size);
-    
-  for(int i = 0; i < size; i++)
-  {
-      
-      int j = i /2;
-        (i % 2 == 0) ? vectorin1[i] = dungeon.at(j).first : vectorin1[i] = dungeon.at(j).second;
-//        connectpoint((i/4), point_to_point);
-      // << vectorin[i];
-    }
-//    std::copy(point_to_point->begin(), point_to_point->end(), vectorin2);
-//    delete point_to_point;
-}
+//void copyarray(const std::vector<i_point> &dungeon, double *vectorin1, int size, double *vectorin2)
+//{
+//  for(int i = 0; i < size; i++)
+//  {
+//      int j = i / 2;
+//        (i % 2 == 0) ? vectorin1[i] = dungeon.at(j).first : vectorin1[i] = dungeon.at(j).second;
+//        connectpoint(i, vectorin2, size);
+//      // << vectorin[i];
+//    }
+//}
 
-void connectpoint(int i, std::vector<int> *vec)
-{
-//    arrayconnect[i * 0 + 0] = (i * 1) + 1;
-//    arrayconnect[i * 1 + 1] = (i * 2) + 2;
-//    arrayconnect[i * 2 + 2] = (i * 2) + 2;
-//    arrayconnect[i * 3 + 3] = (i * 4) + 4;
-//    arrayconnect[i * 4 + 4] = (i * 4) + 4;
-//    arrayconnect[i * 5 + 5] = (i * 3) + 3;
-//    arrayconnect[i * 6 + 7] = (i * 3) + 3;
-//    arrayconnect[i * 7 + 7] = (i * 1) + 1;
-
-vec->push_back((i * 1) + 1);
-vec->push_back((i * 2) + 2);
-vec->push_back((i * 2) + 2);
-vec->push_back((i * 4) + 4);
-vec->push_back((i * 4) + 4);
-vec->push_back((i * 3) + 3);
-vec->push_back((i * 3) + 3);
-vec->push_back((i * 1) + 1);
-}
-
-void connectpoint(const std::vector<i_point> &dungeonpoint, std::vector<int>* vec)
-{
-    std::cout <<"connect point" << dungeonpoint.size();
-    //reserve size
-//    vec->reserve(dungeonpoint.size());
-    for(unsigned long i = 0; i < dungeonpoint.size(); i+=4 )
-    {
-        //const struct to assemble line
-        vec->push_back(i + 1);
-        vec->push_back(i + 2);
-        vec->push_back(i + 2);
-        vec->push_back(i + 4);
-        vec->push_back(i + 4);
-        vec->push_back(i + 3);
-        vec->push_back(i + 3);
-        vec->push_back(i + 1);
-    }
-    std::cout << vec->size();
-}
+//// correct way to return a rectangle in mat plot
+//void connectpoint(int i, double *arrayconnect, int size)
+//{
+//    arrayconnect[0] =   1;
+//    arrayconnect[1] =   2;
+//    arrayconnect[2] =   2;
+//    arrayconnect[3] =   4;
+//    arrayconnect[4] =   4;
+//    arrayconnect[5] =   3;
+//    arrayconnect[6] =   3;
+//    arrayconnect[7] =   1;
+//}
 
 void setStraightHorizzontalLine(std::vector<geometry::i_point> *p_room)
 {
@@ -85,7 +121,7 @@ void setStraightHorizzontalLine(std::vector<geometry::i_point> *p_room)
     }
 
   for (auto iter = test.begin(); iter != test.end(); ++iter) {
-      // << *iter << ' ';
+     //qDebug() << *iter << ' ';
     }
 }
 
@@ -97,12 +133,13 @@ void bo(Dungeon &dungeon)
   setStraightHorizzontalLine(p_room);
   //    std::vector<f_point> temp;
   //search door aligned with room
-
+ //qDebug()<<"--------------h line------------";
   assembleHorizzontalLine(p_room, p_door);
   //search
-
+ //qDebug()<<"--------------------------------";
+ //qDebug()<<"--------------v line------------";
   assembleVerticalLine(p_room, p_door);
-  //<<"--------------------------------";
+ //qDebug()<<"--------------------------------";
   //free the heap
   delete p_room;
   delete p_door;
@@ -121,7 +158,7 @@ void assembleHorizzontalLine(std::vector<geometry::i_point> *p_room, std::vector
          p_door->at(j).first > p_room->at(i).first && p_door->at(j).first < p_room->at(i).first)
         //            if(p_door->at(j).second == p_room->at(i).second)
         {
-          // << "door is alinged"<< p_door->at(j) << "with point" <<p_room->at(i);
+         //qDebug() << "door is alinged"<< p_door->at(j) << "with point" <<p_room->at(i);
           f_point space1 = p_door->at(j);
           f_point space2 = p_door->at(j);
           (p_door->at(j).first >= p_room->at(i).first && p_door->at(j).first <= p_room->at(i).first) ? space1.first += 0.5 : space1.first -= 0.5;
@@ -144,7 +181,7 @@ void assembleHorizzontalLine(std::vector<geometry::i_point> *p_room, std::vector
   //           }
   // check
   for (auto iter = temp1->begin(); iter != temp1->end(); ++iter) {
-      // << *iter << ' ';
+     //qDebug() << *iter << ' ';
     }
 
 
@@ -155,7 +192,7 @@ void assembleHorizzontalLine(std::vector<geometry::i_point> *p_room, std::vector
   //      h_line.push_back({p_room->at(i-1),p_room->at(i)});
 
   for (auto iter = h_line.begin(); iter != h_line.end(); ++iter) {
-      // << *iter << ' ';
+     //qDebug() << *iter << ' ';
     }
 
   delete temp1;
@@ -201,7 +238,7 @@ void assembleVerticalLine(std::vector<geometry::i_point>* p_room,std::vector<geo
     for(unsigned long j = 0; j < p_door->size(); j++)
       if(p_door->at(j).first >= p_room->at(i).first && p_door->at(j).first <= p_room->at(i).first)
         {
-          // << "door is alinged"<< p_door->at(j) << "with point" <<p_room->at(i);
+         //qDebug() << "door is alinged"<< p_door->at(j) << "with point" <<p_room->at(i);
           f_point space1 = p_door->at(j);
           f_point space2 = p_door->at(j);
           (p_door->at(j).second >= p_room->at(i).second && p_door->at(j).second <= p_room->at(i).second) ? space1.second += 0.5 : space1.second -= 0.5;
@@ -217,7 +254,7 @@ void assembleVerticalLine(std::vector<geometry::i_point>* p_room,std::vector<geo
   temp1->erase(last, temp1->end());
   // check
   for (auto iter = temp1->begin(); iter != temp1->end(); ++iter) {
-      // << *iter << ' ';
+     //qDebug() << *iter << ' ';
     }
   delete temp1;
   //
@@ -235,3 +272,13 @@ void assembleVerticalLine(std::vector<geometry::i_point>* p_room,std::vector<geo
 //  delete p_room;
 //  delete p_door;
 //}
+
+
+
+
+
+
+
+
+
+

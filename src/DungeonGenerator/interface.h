@@ -2,16 +2,17 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+void connectpoint(const std::vector<geometry::i_point> &dungeonpoint, std::vector<int>* vec);
+void copyarray(const std::vector<geometry::i_point> &result, double *vector_in);
+void copyarray(const std::vector<geometry::i_point> &result, std::vector<int>* vector_in);
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int getcolunm(const std::vector<geometry::i_point> &dungeonfeature);
 
-void copyarray(const std::vector<geometry::i_point> &dungeon, double *vectorin1, int size, double *vectorin2);
+void copyarray(const std::vector<geometry::i_point> &dungeonpoint, double *vectorin, int size);
 
-void connectpoint(int i, double *arrayconnect, int size);
-
-void connectpoint(int i, std::vector<int> *vec);
-
-void connectpoint(const std::vector<geometry::i_point> &dungeonpoint, std::vector<int>* vec);
-void copyarray(const std::vector<geometry::i_point> &dungeon, double *vectorin1, int size);
 
 void bo(Dungeon &dungeon);
 
