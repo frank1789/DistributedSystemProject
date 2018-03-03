@@ -20,8 +20,10 @@ classdef Map < handle
             % if all inputs are correct continue
             this.width = width;
             this.length = length;
-            [z ]= test(width, length, p_type)
-            this.z = z;
+            [point, lines ]= test(width, length, p_type)
+
+            this.points = point;
+            this.lines = lines;
 %             switch validType
 %                 case 'Simple'
 %                     this.setlimit();
