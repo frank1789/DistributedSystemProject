@@ -19,10 +19,13 @@ classdef Map < handle
             % if all inputs are correct continue
             this.width = width;
             this.length = length;
-            [point, lines ]= test(width, length, p_type);
-
-            this.points = point;
-            this.lines = lines;
+            [point, lines, cpoint, cline ]= test(width, length, p_type);
+            cline = cline + max(lines(1,:));
+            temp = [point, cpoint];
+            offset = min(temp(temp<0));
+            temp(2,:) = temp(2,:) + abs(offset);
+            this.points = temp;
+            this.lines = [lines, cline];
 %             switch validType
 %                 case 'Simple'
 %                     this.setlimit();
