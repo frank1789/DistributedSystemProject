@@ -229,6 +229,7 @@ tic
                    
                end
 
+        comunicate(robot,ii)
 
            end
    % end
