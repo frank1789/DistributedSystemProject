@@ -7,8 +7,8 @@ clear
 
 %%
 % a = Map();
- a = Map("Load");
-a.plotMap;
+ a = Map("LOAD");
+a.plotMap();
 % MapName = 'map_square.mat';
 % mapStuct = load( MapName );
 % 
@@ -18,4 +18,4 @@ a.plotMap;
 % hold off
 % axis equal
 % grid on
-
+a.points

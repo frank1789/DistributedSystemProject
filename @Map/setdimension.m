@@ -1,14 +1,14 @@
 function this = setdimension(this, varargin)
-switch nargin
-    case 2
-         errordlg('Specifies height and number of rooms to be generated','Eroor');
-    case 3
-        warndlg('Specifies the number of rooms to be generated','Error');
-    case 4
-        this.width  = varargin{1};
-        this.height = varargin{2};
-        this.nrooms = varargin{3};
-    otherwise
-        errordlg('Specifies all data: map("New", width, heigth, n # rooms)','Eroor');
-end
+% setdimension check the argument passed to constructor if are enough to
+% build map.
+tmp = varargin{:};
+validateattributes(tmp{2}, {'double'}, {'positive'});
+validateattributes(tmp{3}, {'double'}, {'positive',});
+validateattributes(tmp{4}, {'double'}, {'positive','>=' 1});
+% if attribute are satisied continue
+this.width  = tmp{2};
+this.height = tmp{3};
+this.nrooms = tmp{4};
+% clear temporay 
+clear tmp
 end % function
