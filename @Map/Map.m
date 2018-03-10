@@ -45,13 +45,16 @@ classdef Map < handle
                     matchedStr = validatestring(str,this.validStrings);
                     this.checkinput(matchedStr, varargin);
                     % generate map
-                    [point, lines, cpoint, cline ]= test(this.width, this.height, this.nrooms);
+                    if(~isempty(this.width) && ~isempty(this.height) && ~isempty(this.nrooms))
+                        [point, lines, cpoint, cline ]= test(this.width, this.height, this.nrooms);
+                    
                     %             cline = cline + max(lines(1,:));
                     temp = [point, cpoint];
                     %             offset = min(temp(temp<0));
                     %             temp(2,:) = temp(2,:) + abs(offset);
                     this.points = temp;
                     this.lines = [lines, cline];
+                    end % if
                 otherwise
                     mode = struct('WindowStyle','non-modal', 'Interpreter','tex');
                     errordlg({'Try to type instead: map("New", width, heigth, # rooms) or map("Load")'},...
