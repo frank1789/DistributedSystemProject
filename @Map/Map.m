@@ -3,13 +3,14 @@ classdef Map < handle
     % from a file stroed in 'presetmap'.
     % To create a new Map object, type for example:
     % - map = Map("New", x, y, z) to launch the creation a new map of
-    %     specified dimensions and a maximum number of rooms to the data
-    %     specified as the fourth argument
+    %   specified dimensions and a maximum number of rooms to the data
+    %   specified as the fourth argument
     % - map = Map("Load") starts a ui from which you can load a saved
-    %     previous map.
+    %   previous map.
     % To view the created map, for example, 'map.plotMap();'.
     % All class attributes are private in writing, therefore not accessible
-    %     from outside the class, on the contrary they can be accessed only in read mode.
+    % from outside the class, on the contrary they can be accessed only in
+    % read mode.
     % To pass arguments to the function, type 'map.points' and 'map.lines'.
     properties (SetAccess = 'private')
         width;  % max width of map
@@ -32,7 +33,7 @@ classdef Map < handle
             % @param[in] numeric number of room
             % if first param is a string equal 'load' to one of those expressed
             % previously, it allows to load an existing map from file.
-            % if 4 input parameters are supplied preceded by 'new', it 
+            % if 4 input parameters are supplied preceded by 'new', it
             % generates a new map.
             switch nargin
                 case 1
