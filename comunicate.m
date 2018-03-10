@@ -1,4 +1,4 @@
-function communicate(obj, it)
+function comunicate(obj, it)
 %COMMUNICATE
 
 MAX = 6; % 6[m] maximum distance of comunication
@@ -10,4 +10,5 @@ for n = 1:length(c)
         fprintf("establish link\t robot: %i <---> robot: %i\n",c{n,1}.ID,c{n,2}.ID);
     end % if
 end % for
+clear c dist % free memory
 end % function
