@@ -1,49 +1,70 @@
 classdef Map < handle
-    properties %(Access = 'private')
+    properties (SetAccess = 'private')
         width;
-        length;
+        height;
+        nrooms;
         points = [];
-        lines = [];
+        lines  = [];
     end
     
     properties (Constant, Access = 'private')
-        validStrings = ["Simple", "Fixed", "Random"];
+        validStrings = ["New", "new", "NEW", "Load", "load", "LOAD"];
     end
     
     methods
-        function this = Map(width, length, p_type) % define constructor's Map
-            % check input
-            validateattributes(width, {'double'}, {'positive'});
-            validateattributes(length, {'double'}, {'positive'});
-%             validType = validatestring(p_type, this.validStrings);
-            % if all inputs are correct continue
-            this.width = width;
-            this.length = length;
-            [point, lines, cpoint, cline ]= test(width, length, p_type);
-            cline = cline + max(lines(1,:));
-            temp = [point, cpoint];
-            offset = min(temp(temp<0));
-            temp(2,:) = temp(2,:) + abs(offset);
-            this.points = temp;
-            this.lines = [lines, cline];
-%             switch validType
-%                 case 'Simple'
-%                     this.setlimit();
-%                 case 'Fixed'
-%                     disp('Not working')
-%                 case 'Random'
-%                     disp('Not working')
-%             end
+        function this = Map(varargin)%str,width, length, p_type) % define constructor's Map
+            switch nargin
+                case 1
+                    str = varargin{1};
+                    matchedStr = validatestring(str,this.validStrings);
+                    this.checkinput(matchedStr);
+                    return
+                case 3
+                    str = varargin{1};
+                    validateattributes(varargin{2}, {'double'}, {'positive'});
+                    validateattributes(varargin{3}, {'double'}, {'positive'});
+                    % if attributes are valid, then continue
+                    width  = varargin{2};
+                    heigth = varargin{3};
+                    matchedStr = validatestring(str,this.validStrings);
+                    this.checkinput(matchedStr, width, heigth);
+                case 4
+                    str = varargin{1};
+                    validateattributes(varargin{2}, {'double'}, {'positive'});
+                    validateattributes(varargin{3}, {'double'}, {'positive'});
+                    validateattributes(varargin{4}, {'double'}, {'positive'});
+                    % if attributes are valid, then continue
+                    width  = varargin{2};
+                    heigth = varargin{3};
+                    nrooms = varargin{4};
+                    matchedStr = validatestring(str,this.validStrings);
+                    this.checkinput(matchedStr, width, heigth, nrooms);
+                    % generate map
+                    [point, lines, cpoint, cline ]= test(this.width, this.height, this.nrooms);
+                    %             cline = cline + max(lines(1,:));
+                    temp = [point, cpoint];
+                    %             offset = min(temp(temp<0));
+                    %             temp(2,:) = temp(2,:) + abs(offset);
+                    this.points = temp;
+                    this.lines = [lines, cline];
+                otherwise
+                    mode = struct('WindowStyle','non-modal', 'Interpreter','tex');
+                    errordlg('Try to type instead: map("New", width, heigth, n # rooms) or ("Load", file.mat)',...
+                        'Error Map generator', mode);
+            end 
         end % constructor
     end
     
     methods
-        this = plotMap(mapStructure , textIndex)
+        this = plotMap(this, textIndex)
         savemap(this, p_name)
         
     end
     methods (Access = 'private')
         this = setlimit(this)
+        checkinput(this, varargin)
+        this = setdimension(this, varargin)
+        this = setFromFile(this)
     end
     
     methods (Static, Access = 'private')
