@@ -7,7 +7,7 @@ clear
 
 %%
 % a = Map();
- a = Map("LOAD");
+ a = Map("new",22,80,3);
 a.plotMap();
 % MapName = 'map_square.mat';
 % mapStuct = load( MapName );

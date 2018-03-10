@@ -54,7 +54,7 @@ classdef Map < handle
                     this.lines = [lines, cline];
                 otherwise
                     mode = struct('WindowStyle','non-modal', 'Interpreter','tex');
-                    errordlg('Try to type instead: map("New", width, heigth, # rooms) or ("Load", file.mat)',...
+                    errordlg({'Try to type instead: map("New", width, heigth, # rooms) or map("Load")'},...
                         'Error Map generator', mode);
             end
         end % constructor
