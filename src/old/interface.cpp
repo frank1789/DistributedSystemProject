@@ -4,7 +4,9 @@
 #include <iterator>
 #include <algorithm>
 
-void connectpoint(const std::vector<geometry::i_point> &dungeonpoint, std::vector<int>* vec)
+#include "iostream"
+
+void connectpoint(const std::vector<point> &dungeonpoint, std::vector<int>* vec)
 {
     int last;
     (vec->size() != 0) ? last = *std::max_element(vec->begin(), vec->end()) : last = 0;
@@ -22,12 +24,13 @@ void connectpoint(const std::vector<geometry::i_point> &dungeonpoint, std::vecto
     }
 }
 
-
-void copyarray(const std::vector<geometry::i_point> &v_in, std::vector<int>* v_out)
+void copyarray(const std::vector<point> &v_in, std::vector<int>* v_out)
 {
-    for(auto point: v_in)
+  for(auto point: v_in)
     {
-        v_out->push_back(point.first);
-        v_out->push_back(point.second);
+      v_out->push_back(point.first);
+      v_out->push_back(point.second);
     }
 }
+
+

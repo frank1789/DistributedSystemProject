@@ -2,6 +2,7 @@
 #include "geomentity.h"
 #include "dungeon.h"
 #include "interface.h"
+#include "myclass.h"
 #include <iostream>
 #include <vector>
 
@@ -48,16 +49,26 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             unsigned long dim_line = point_to_point->size() ;
             double* line = new double[dim_line];
             std::copy(point_to_point->begin(), point_to_point->end(), line);
+            
+            map::MyClass b(d.getWall());
+            b.setPointsMatlab();
+            std::vector<double>* t = new std::vector<double>;
+            for (auto j: b.getPointsMatlab()) t->push_back(j);
+            double* test = new double[t->size()];
+            std::copy(t->begin(), t->end(), test);
+            
 
             // preallocated return array
             plhs[0] = mxCreateDoubleMatrix(N_ROW, structure->size()/2, mxREAL);
             plhs[1] = mxCreateDoubleMatrix(N_ROW, dim_line/2, mxREAL);
+            plhs[2] = mxCreateDoubleMatrix(N_ROW, b.getPointsMatlab().size(), mxREAL);
 
             // return outputs from MEX-function
-            if (nlhs == 2)
+            if (nlhs >= 2)
                 {
                     memcpy(mxGetPr(plhs[0]), points, structure->size() * sizeof(double));
                     memcpy(mxGetPr(plhs[1]), line, dim_line * sizeof(double));
+                    memcpy(mxGetPr(plhs[2]), test, b.getPointsMatlab().size()* sizeof(double));
                 }
             else // exit MEX file
                 mexErrMsgIdAndTxt("MyProg:ConvertString", "Four return variables are required.");
@@ -71,6 +82,9 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
             delete corridor;
             delete wall;
             delete point_to_point;
+            delete [] test;
+            delete t;
+
         }
     else
         mexErrMsgIdAndTxt("MyProg:ConvertString", "Three input parameters are required:\n\t width,\n\t height,\n\t number of rooms");

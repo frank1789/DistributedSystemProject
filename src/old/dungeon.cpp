@@ -7,10 +7,10 @@
 //
 
 #include "dungeon.h"
-#include "iostream"
+#include <iostream>
 
 
-
+using namespace dungeon;
 Dungeon::Dungeon(int width, int height)
   : _width(width)
   , _height(height)
@@ -19,16 +19,18 @@ Dungeon::Dungeon(int width, int height)
   , _exits()
 {
   _doorcounter = 0;
-  //() << "initialize class Dungeon, set scenario dimension (w,h):" << _width << _height;
+  //qDebug() << "initialize class Dungeon, set scenario dimension (w,h):" << _width << _height;
+  _wallpoint.clear();
+  _roompoint.clear();
 }
 
 void Dungeon::generate(int maxFeatures)
 {
-  //() << "Start generation, then set room's number: #" << maxFeatures;
+  //qDebug() << "Start generation, then set room's number: #" << maxFeatures;
   // place the first room in the center
   if (!makeRoom(_width / 2, _height / 2, static_cast<Direction>(randomInt(4), true)))
     {
-      //() << "Unable to place the first room.\n";
+      //qDebug() << "Unable to place the first room.\n";
       return;
     }
 
@@ -37,20 +39,20 @@ void Dungeon::generate(int maxFeatures)
     {
       if (!createFeature())
         {
-          //() << "Unable to place more features (placed " << i << ").\n";
+          //qDebug() << "Unable to place more features (placed " << i << ").\n";
           break;
         }
     }
 
   //  if (!placeObject(UpStairs))
   //    {
-  //      //() << "Unable to place up stairs.\n";
+  //      //qDebug() << "Unable to place up stairs.\n";
   //      return;
   //    }
 
   //  if (!placeObject(DownStairs))
   //    {
-  //      //() << "Unable to place down stairs.\n";
+  //      //qDebug() << "Unable to place down stairs.\n";
   //      return;
   //    }
 
@@ -58,8 +60,8 @@ void Dungeon::generate(int maxFeatures)
     {
       if (tile == Unused)
         tile = '.';
-      else if (tile == Floor || tile == Corridor)
-        tile = ' ';
+      else if (tile == Floor )//|| tile == Corridor)
+        tile = '*';
     }
 }
 
@@ -337,15 +339,15 @@ bool Dungeon::placeRect(const Rect &rect, char tile)
  */
 void Dungeon::setPointRoom()
 {
-  //()<<"Extract room coordinate generated:"<< _rooms.size();
+  //qDebug()<<"Extract room coordinate generated:"<< _rooms.size();
   for (unsigned long i= 0; i < _rooms.size(); ++i)
     {
       {
-        //() << "Coordinate for room: #" << i;
-        //() << "\tcoordinate p1" << _rooms[i].x << _rooms[i].y;
-        //() << "\tcoordinate p2" << _rooms[i].x + _rooms[i].width << _rooms[i].y;
-        //() << "\tcoordinate p3" << _rooms[i].x << _rooms[i].y+ _rooms[i].height;
-        //() << "\tcoordinate p4" << _rooms[i].x + _rooms[i].width << _rooms[i].y + _rooms[i].height;
+        //qDebug() << "Coordinate for room: #" << i;
+        //qDebug() << "\tcoordinate p1" << _rooms[i].x << _rooms[i].y;
+        //qDebug() << "\tcoordinate p2" << _rooms[i].x + _rooms[i].width << _rooms[i].y;
+        //qDebug() << "\tcoordinate p3" << _rooms[i].x << _rooms[i].y+ _rooms[i].height;
+        //qDebug() << "\tcoordinate p4" << _rooms[i].x + _rooms[i].width << _rooms[i].y + _rooms[i].height;
       }
       _roompoint.push_back({_rooms[i].x, _rooms[i].y});                                        ///store point 1
       _roompoint.push_back({_rooms[i].x + _rooms[i].width , _rooms[i].y});                     ///store point 2
@@ -365,16 +367,16 @@ void Dungeon::setPointRoom()
 void Dungeon::setPointCorridor(int &x, int &y, int &height, int &width)
 {
   {
-    //() << "Extract corridor:";
-    //() << "\tcoordinate c1" << x << y;
-    //() << "\tcoordinate c2" << x + width << y;
-    //() << "\tcoordinate c3" << x << y + height;
-    //() << "\tcoordinate c4" << x + width << y + height;
+    //qDebug() << "Extract corridor:";
+    //qDebug() << "\tcoordinate c1" << x << y;
+    //qDebug() << "\tcoordinate c2" << x + width << y;
+    //qDebug() << "\tcoordinate c3" << x << y + height;
+    //qDebug() << "\tcoordinate c4" << x + width << y + height;
   }
-  _corrvertpoint.push_back({x, y});                    ///store point 1
-  _corrvertpoint.push_back({x + width , y});           ///store point 2
-  _corrvertpoint.push_back({x , y + height});           ///store point 3
-  _corrvertpoint.push_back({x + width , y + height});  ///store point 4
+  _corridorpoint.push_back({x, y});                    ///store point 1
+  _corridorpoint.push_back({x + width , y});           ///store point 2
+  _corridorpoint.push_back({x , y + height});           ///store point 3
+  _corridorpoint.push_back({x + width , y + height});  ///store point 4
 }
 
 /**
@@ -387,11 +389,11 @@ void Dungeon::setPointCorridor(int &x, int &y, int &height, int &width)
 void Dungeon::setPointHorizzontalCorridor(int &x, int &y, int &height, int &width)
 {
   {
-    //() << "Extract coordinate for horizzontal corridor:";
-    //() << "\tcoordinate c1" << x << y;
-    //() << "\tcoordinate c2" << x + width << y;
-    //() << "\tcoordinate c3" << x << y + height;
-    //() << "\tcoordinate c4" << x + width << y + height;
+    //qDebug() << "Extract coordinate for horizzontal corridor:";
+    //qDebug() << "\tcoordinate c1" << x << y;
+    //qDebug() << "\tcoordinate c2" << x + width << y;
+    //qDebug() << "\tcoordinate c3" << x << y + height;
+    //qDebug() << "\tcoordinate c4" << x + width << y + height;
   }
   _corrhorzpoint.push_back({x, y});                    ///store point 1
   _corrhorzpoint.push_back({x + width , y});           ///store point 2
@@ -406,17 +408,17 @@ void Dungeon::setPointHorizzontalCorridor(int &x, int &y, int &height, int &widt
  */
 void Dungeon::setPointDoor(int x, int y)
 {
-  //() << "Exctract Door coordinate";
+  //qDebug() << "Exctract Door coordinate";
   _doorpoint.push_back({x, y});
-  //() << "Door: #" << _doorcounter << "\n\t coordinate"<< x << y;
+  //qDebug() << "Door: #" << _doorcounter << "\n\t coordinate"<< x << y;
   _doorcounter++;
 }
 
 void Dungeon::setPointWall(int x, int y)
 {
-//  //() << "Exctract Door coordinate";
+//  //qDebug() << "Exctract Door coordinate";
   _wallpoint.push_back({x, y});
-//  //() << "coordinate"<< x << y;
+//  //qDebug() << "coordinate"<< x << y;
 //  _doorcounter++;
 }
 
@@ -424,24 +426,24 @@ void Dungeon::setPointWall(int x, int y)
  * @brief Dungeon::getDoor
  * @return
  */
-std::vector<geometry::i_point> Dungeon::getDoor() { return _doorpoint;}
+std::vector<point> Dungeon::getDoor() { return _doorpoint;}
 
 /**
  * @brief Dungeon::getRoom
  * @return
  */
-std::vector<geometry::i_point> Dungeon::getRoom(){ return _roompoint;}
+std::vector<point> Dungeon::getRoom(){ return _roompoint;}
 
 /**
- * @brief Dungeon::getVerticalCorridor
+ * @brief Dungeon::getCorridor
  * @return
  */
-std::vector<geometry::i_point> Dungeon::getCorridor() { return _corrvertpoint;}
+std::vector<point> Dungeon::getCorridor() { return _corridorpoint;}
 
 /**
  * @brief Dungeon::getHorizzontalCorridor
  * @return
  */
-std::vector<geometry::i_point> Dungeon::getHorizzontalCorridor() { return _corrhorzpoint;}
+std::vector<point> Dungeon::getHorizzontalCorridor() { return _corrhorzpoint;}
 
-std::vector<geometry::i_point> Dungeon::getWall() { return _wallpoint;}
+std::vector<point> Dungeon::getWall() { return _wallpoint;}

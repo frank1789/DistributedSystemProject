@@ -9,7 +9,6 @@
 #ifndef DUNGEON_H
 #define DUNGEON_H
 #include "numbermanipulate.h"
-#include "geomentity.h"
 #include <vector>
 #include <stdio.h>
 
@@ -17,6 +16,11 @@
 #define MAXROOMSIZE 8
 #define MINCORRIDORLENGTH 1
 #define MAXCORRIDORLENGTH 12
+
+namespace dungeon {
+
+
+typedef std::pair<double,double>point;
 
 
 struct Rect
@@ -53,12 +57,12 @@ public: // define public method
   void generate(int maxFeatures);
   void print();
   void setPointRoom();
-  std::vector<geometry::i_point> getDoor();
-  std::vector<geometry::i_point> getRoom();
-  std::vector<geometry::i_point> getCorridor();
-  std::vector<geometry::i_point> getHorizzontalCorridor();
-  std::vector<geometry::i_point> getVerticalCorridor();
-  std::vector<geometry::i_point> getWall();
+  std::vector<point> getDoor();
+  std::vector<point> getRoom();
+  std::vector<point> getCorridor();
+  std::vector<point> getHorizzontalCorridor();
+  std::vector<point> getVerticalCorridor();
+  std::vector<point> getWall();
   void setPointCorridor(int &x, int &y, int &height, int &width);
 private: // define private method
   char getTile(int x, int y) const;
@@ -80,13 +84,15 @@ private:
   std::vector<Rect> _exits; // 4 sides of rooms or corridors
   int const DirectionCount = 5;
   int _doorcounter;
-  std::vector<geometry::i_point> _doorpoint;
-  std::vector<geometry::i_point> _roompoint;
-  std::vector<geometry::i_point> _corrvertpoint;
-  std::vector<geometry::i_point> _corrhorzpoint;
-  std::vector<geometry::i_point> _wallpoint;
   void setPointWall(int x, int y);
+  std::vector<point> _doorpoint;
+  std::vector<point> _roompoint;
+  std::vector<point> _corridorpoint;
+  std::vector<point> _corrhorzpoint;
+  std::vector<point> _wallpoint;
+
 
 };
+}
 
 #endif // DUNGEON_H
