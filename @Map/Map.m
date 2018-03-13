@@ -15,9 +15,9 @@ classdef Map < handle
     properties (SetAccess = 'private')
         width;  % max width of map
         height; % max height of map
-        nrooms; % max number of rooms can be generated
         points = []; % store points of plant
         lines  = []; % store lines of plant
+        available = []; % explorable points
     end
     
     properties (Constant, Access = 'private')
@@ -40,24 +40,26 @@ classdef Map < handle
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
                     this.checkinput(matchedStr);
-                case 4
+                case 3
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
                     this.checkinput(matchedStr, varargin);
                     % generate map
-                    if(~isempty(this.width) && ~isempty(this.height) && ~isempty(this.nrooms))
-                        [point, lines, cpoint, cline ]= test(this.width, this.height, this.nrooms);
-                    
-                    %             cline = cline + max(lines(1,:));
-                    temp = [point, cpoint];
-                    %             offset = min(temp(temp<0));
-                    %             temp(2,:) = temp(2,:) + abs(offset);
-                    this.points = temp;
-                    this.lines = [lines, cline];
+                    if(~isempty(this.width) && ~isempty(this.height))
+                        disp('Start to create new map!')
+                        disp('Take a while...');
+                        [data] = this.mapgen(this.width, this.height);
+                        this.setpoints(data);
+                        this.setAvailablePoints(data);
+                        vert = this.setverticalsegment(data);
+                        horz = this.sethorizontalsegment(data);
+                        this.lines = horzcat(vert, horz);
+                        disp('Complete!')
+                        disp('Show plot...');
                     end % if
                 otherwise
                     mode = struct('WindowStyle','non-modal', 'Interpreter','tex');
-                    errordlg({'Try to type instead: map("New", width, heigth, # rooms) or map("Load")'},...
+                    errordlg({'Try to type instead: map("New", width, heigth) or map("Load")'},...
                         'Error Map generator', mode);
             end
         end % constructor
@@ -65,6 +67,7 @@ classdef Map < handle
     
     methods
         this = plotMap(this, textIndex)
+        point = getAvailablePoints(this)
         savemap(this, p_name)
     end
     methods (Access = 'private')
@@ -72,9 +75,15 @@ classdef Map < handle
         checkinput(this, varargin)
         this = setdimension(this, varargin)
         this = setFromFile(this)
+        [vsegment] = setverticalsegment(this, input)
+        [hsegment] = sethorizontalsegment(this, input)
+        this = setpoints(this, data)
+        this = setAvailablePoints(this, input)
     end
     
     methods (Static, Access = 'private')
         [p] = plotLine(initialPoint, finalPoint, lineColor, lineWidth, lineStyle)
+        [data] = mapgen(width, height);
+        
     end
 end % definition class

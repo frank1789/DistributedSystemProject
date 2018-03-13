@@ -1,26 +1,31 @@
 function this = setdimension(this, varargin)
 % setdimension check the argument passed to constructor if are enough to
 % build map.
+
 if ~isempty(varargin)
     tmp = varargin{:};
-    if (isa(tmp{2}, 'double') && tmp{2} >= 15)
+    % check second argument
+    if (isa(tmp{2}, 'double') && tmp{2} >= 8 && tmp{2} == tmp{3})
         this.width  = tmp{2};
+    elseif (isa(tmp{2}, 'double') && tmp{2} >= 8 && tmp{2} ~= tmp{3})
+        h = warndlg('the second (width) argument must be euqal third argument (height)','Warning');
+        uiwait(h);
+        return
     else
-        h = warndlg('the second (width) argument must be a number >= 15','Warning');
+        h = warndlg('the second (width) argument must be a number >= 8','Warning');
         uiwait(h);
         return
     end
-    if (isa(tmp{3}, 'double') && tmp{3} >= 15)
-    this.height = tmp{3};
-    else
-        h = warndlg('the third (height) argument must be a number >= 15','Warning');
+    
+    % check third argument
+    if (isa(tmp{3}, 'double') && tmp{3} >= 8 && tmp{3} == tmp{2})
+        this.height = tmp{3};
+    elseif (isa(tmp{3}, 'double') && tmp{3} >= 8 && tmp{3} ~= tmp{2})
+        h = warndlg('the second (width) argument must be euqal third argument (height)','Warning');
         uiwait(h);
         return
-    end
-    if (isa(tmp{4}, 'double') && tmp{4} >= 1)
-    this.nrooms = tmp{4};
     else
-        h = warndlg('the fourth (# rooms) argument must be a number >= 1','Warning');
+        h = warndlg('the third (height) argument must be a number >= 8','Warning');
         uiwait(h);
         return
     end
