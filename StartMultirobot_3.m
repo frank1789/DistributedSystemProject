@@ -158,6 +158,7 @@ tic
            end
            
         end
+    for rr = 1:length(robot)
         
         for ss = 1:1:3 % 3 numero robot
           if (mod(ii,20) == 0 && ss~=rr &&  sqrt( (robot{rr}.q(ii,1) - robot{ss}.q(ii,1))^2 +  (robot{rr}.q(ii,2) - robot{ss}.q(ii,2))^2 )< 6)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo
@@ -229,7 +230,7 @@ tic
                    
                end
 
-        comunicate(robot,ii)
+        communicate(robot,ii)
 
            end
    % end
@@ -242,12 +243,9 @@ toc
 % pre-allocating for speed
 body = cell.empty;
 label = cell.empty;
-rf  = cell.empty;
 rf_x= cell.empty;
 rf_y= cell.empty;
 rf_z= cell.empty;
-cl_point = cell.empty;
-cloudpoint = cell.empty;
 % setup figure
 figure();
 for n= 1:30:length(robot{1}.t)
@@ -265,16 +263,10 @@ for n= 1:30:length(robot{1}.t)
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
         end
         drawnow;
-%         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-%         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-%             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-%         end
-%         if isempty(cl_point)
-%             delete([cl_point]);
-%         end
     end
     hold off
 end % animation
+clear body label rf_x rf_y rf_z
 
 figure
 mesh(Global_map(:,:,1))
