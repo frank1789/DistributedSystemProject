@@ -5,6 +5,6 @@ function [ point ] = getAvailablePoints(this)
 % @param [in] input = matrix from map generator
 
 x = randi(length(this.available));
-    point = this.available(:,x);
+    point = [this.available(:,x).', 0];
 
 end % function
