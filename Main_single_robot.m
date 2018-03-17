@@ -15,7 +15,7 @@ map.plotMap();
 % Sampling time
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 10;
+MdlInit.T = 25;
 time = 0:MdlInit.Ts:MdlInit.T;
 
 %% Vehicle set-up initial conditions
@@ -35,7 +35,7 @@ for indextime = 1:1:length(time)
         sprintf('Please wait simulation in progress... %3.2f%%',...
         indextime/length(time) * 100));
 end
-delete(w); % delete ui
+close(w); clear w; % delete ui
 
 % update measure
     a.prediction(indextime);
@@ -52,12 +52,12 @@ rf_z= cell.empty;
 % set-up figure
 hold on; axis equal
 figure(800);
-for n= 1:30:length(a.t)
-    title(['Time: ', num2str(a.t(n),5)])
+for n= 1:1:length(time)
+    title(['Time: ', num2str(time(n),5)])
     hold on
-    %     fa = quiver(a.q(n,1), a.q(n,2),a.target(1)-a.q(n,1), a.target(2)-a.q(n,2),'c');
+    fa = quiver(a.q(n,1), a.q(n,2),a.target(1)-a.q(n,1), a.target(2)-a.q(n,2),'c');
     plot(a.target(1), a.target(2), '*r')
-    %     plot(a.q(:,1), a.q(:,2), 'g-.')
+    plot(a.q(:,1), a.q(:,2), 'g-.')
     for j=1:1
         if n == 1
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] =a.makerobot(n);
@@ -65,13 +65,18 @@ for n= 1:30:length(a.t)
             delete([body{j}, label{j},  rf_x{j}, rf_y{j}, rf_z{j}]);
             [body{j}, label{j},  rf_x{j}, rf_y{j}, rf_z{j}] =a.animate(n);
         end
+        
         drawnow;
     end
-    hold off
     % local variable cluodpoint
     cloudpoint = (a.getlaserscan(n));
     if ~isempty(cloudpoint) % verify cloudpoint is not empty vector
-        cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.r'); % plot
+        cl_point = plot(cloudpoint(1,:),cloudpoint(2,:),'.g'); % plot 
     end
+    if ~isempty(cl_point)
+        delete(cl_point);
+    end
+    delete(fa);
 end % end animation
-clear body label rf_x rf_y rf_z % remove draw variables
+hold off
+clear body label rf_x rf_y rf_z cloudpoint % remove draw variables
