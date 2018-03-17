@@ -19,9 +19,20 @@ hold off
 axis equal
 grid on
 pause(1); close(figure(800));
+close all
+clear class
+clear
+clc
+
+%% Generating map
+% build a new map with map = Map("new",widht,height);
+map = Map("new",100,100);
+figure(800); axis equal
+map.plotMap();
+pause(3); close(figure(800));
 p=1;
 
-%% simulation
+%% set-up simulation parameters
 % Sampling time
 MdlInit.Ts = 0.05;
 % Length of simulation
@@ -32,7 +43,11 @@ Vehicle.q{1} = [5, 1.5, 0];
 % Vehicle.q{2} = [1 1; pi];
 % Vehicle.q{3} = [-7; 3; 0];
 a  = Robot(1, MdlInit.T, MdlInit.Ts, Vehicle.q{p}); % istance robot
+MdlInit.T = 500;
+time = 0:MdlInit.Ts:MdlInit.T;
 
+%% Vehicle set-up initial conditions
+Vehicle.q = map.getAvailablePoints();
 theta=-pi/2:0.36*pi/180:pi/2;
 ris = 0.015;
 r0=4/ris;
