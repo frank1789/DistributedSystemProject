@@ -1,4 +1,3 @@
-%% Prediction
 function this = prediction(this, it)
 %PREDICTION function to estimate the new position and orientation of robot in EKF algortihm
 % @param [in] i = iterator from cycle
