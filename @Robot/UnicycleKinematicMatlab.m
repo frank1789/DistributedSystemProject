@@ -18,6 +18,6 @@ this.q(end+1,:) = q(end,:); % store last row of solution - postion
 this.t(end+1) = t1(end);    % store last row of solution - time
 % Input sequence
 [v, omega] = this.UnicycleInputs(this.t, this.speed, this.steerangle);
-this.u = [v'; omega']; % store vector of velocity
-this.EncoderSim();     % perform encoder simulation
+this.u(:,piterator) = [v(end)'; omega(end)']; % store vector of velocity
+this.EncoderSim(piterator); % perform encoder simulation
 end % method
