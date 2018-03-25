@@ -18,7 +18,7 @@ classdef Robot < handle
         Dt =[];
         target = [];
         steerangle =[];
-        speed = 0;
+        speed = 0.5;
     end
     % Virtual incremental encoder
     properties (Constant, Access = private)
@@ -31,16 +31,13 @@ classdef Robot < handle
         RightEnc = []; % right encoder values
         LeftEnc = [];  % left encoder values
         % Quantization effect
-        quatizeffect_LeftEnc = [];  % right encoder measure
-        quatizeffect_RightEnc = []; % left encoder measure
+        noisyLeftEnc = [];  % right encoder measure
+        noisyRightEnc = []; % left encoder measure
         % EKF quantities
         EKF_q_est;      % position estimation
         EKF_P;
         EKF_Q;
-        EKF_NumS;       % step
         EKF_q_store;    % position data stored
-        q_est_p;
-        P_p;
     end
     % definition laser sensor
     properties (Constant, Access = private)
@@ -55,7 +52,6 @@ classdef Robot < handle
         C_l_xy = {};
         laserScan_xy = cell.empty;   % contains scans at a certain location
         laserScan_2_xy = cell.empty; % contains scans at a certain location
-        distance = cell.empty;  % contains distance at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
         occgridglobal; % store occupacy grid
@@ -75,21 +71,22 @@ classdef Robot < handle
             % initialize simulation time and sample
             this.Dt = sampletime;     % Sampling time
             dimension = length(0:sampletime:time);  % Length of simulation
-            this.distance{1,dimension + 1} = [];
-            this.laserScan_xy{1,dimension + 1} = [];
-            this.laserScan_2_xy{1,dimension + 1} = [];
+            this.laserScan_xy{1,dimension} = [];
+            this.laserScan_2_xy{1,dimension} = [];
             % set initial position
             this.q = initialposition;
             this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [???pi pi].
             this.t = 0;
             this.steerangle = 0;
             % initialize Extend Kalman Filter aka EKF
+            this.RightEnc = zeros(1,dimension); % right encoder values
+            this.LeftEnc = zeros(1,dimension); % left encoder values
+            this.noisyLeftEnc = zeros(1,dimension);  % right encoder measure
+            this.noisyRightEnc = zeros(1,dimension); % left encoder measure
             this.EKF_q_est = zeros(3,1);
-            this.EKF_P = 1e2 * eye(3);
+            this.EKF_P = eps * eye(3);
             this.EKF_Q = diag([this.enc_sigma^2, this.enc_sigma^2]);
-            this.EKF_NumS = length(this.t);
-            this.EKF_q_store = zeros(3, this.EKF_NumS);
-            this.EKF_q_store(:,1) = this.EKF_q_est;
+            this.EKF_q_store = zeros(3, dimension);
             % initialize sector of angle laser theta
             this.laserTheta = pi/180*(-90:this.laserAngularResolution:90);
         end % definition constructor
@@ -98,9 +95,7 @@ classdef Robot < handle
         this = setpointtarget(this, point);
         test(this);
         % function to compute Extend Kalman Filter
-        this = prediciton(this, i);
-        this = update(this, i);
-        this = store(this, i);
+        this = ekfslam(this, it)
         % plot function
         [body, label, rf_x, rf_y, rf_z] = makerobot(this, t);
         [body, label, rf_x, rf_y, rf_z] = animate(this, it);
@@ -116,12 +111,7 @@ classdef Robot < handle
     methods (Access = private)
         % function to compute the kinematics simulation
         dy = UnicycleModel(this, t, y, piterator)
-        % Encoder Simulation
-        this = EncoderSim(this, Vehicle);
-        this = EncoderNoise(this);
-        % method to comupte laser scansion of the environment
-        this = getmeasure(this, it)
-        this = detectangle(this, piterator)
+        this = EncoderSim(this, Vehicle); % Encoder Simulation
     end
     methods (Static, Access = private)
         [v, omega] = UnicycleInputs(t, pdistance, ptheta) % Kinematic simulation

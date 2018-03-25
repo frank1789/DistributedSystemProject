@@ -31,14 +31,12 @@ laserReadings(2,:)= F;  % update original matrix of scan
 
 % compute the laserscan
 alpha = this.q(it,3);
-%project scan in robot reference frame
+% apply rotation matrix
 R = this.rotationMatrix(alpha);
 rotatescan = [laserReadings(2,:).*cos(this.laserTheta);...
     laserReadings(2,:).*sin(this.laserTheta)]' / R + [this.q(it,1); this.q(it,2)]';
-this.laserScan_xy{it} = rotatescan';    % return cell
+this.laserScan_xy{it} = rotatescan';    % global frame
 
 this.laserScan_2_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);... 
-    laserReadings(2,:).*sin(this.laserTheta)]; 
-
-this.getmeasure(it);                    % compute the measure from xy
+    laserReadings(2,:).*sin(this.laserTheta)]; % robot frame
 end % method
