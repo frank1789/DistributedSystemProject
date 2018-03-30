@@ -75,7 +75,7 @@ classdef Robot < handle
             this.laserScan_2_xy{1,dimension} = [];
             % set initial position
             this.q = initialposition;
-            this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [???pi pi].
+            this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [-pi pi].
             this.t = 0;
             this.steerangle = 0;
             % initialize Extend Kalman Filter aka EKF
@@ -113,7 +113,7 @@ classdef Robot < handle
         dy = UnicycleModel(this, t, y, piterator)
         this = EncoderSim(this, Vehicle); % Encoder Simulation
     end
-    methods (Static, Access = private)
+    methods (Static)
         [v, omega] = UnicycleInputs(t, pdistance, ptheta) % Kinematic simulation
         [R] = rotationMatrix(theta) % compute rotation matrix in plane 2D
     end
