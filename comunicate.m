@@ -8,6 +8,7 @@ for n = 1:length(c)
     if (dist < MAX)
         fprintf("one or more robots are in the communication area\n");
         fprintf("establish link\t robot: %i <---> robot: %i\n",c{n,1}.ID,c{n,2}.ID);
+        %exchange laserscan and odometry
     end % if
 end % for
 clear c dist % free memory
