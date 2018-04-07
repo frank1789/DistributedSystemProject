@@ -1,10 +1,10 @@
-function Update_gbmap(robot,ii,wdt,lgth,occ_mat,lid_mat,laserScan_xy)
+function Update_gbmap(robot,ii,wdt,lgth,occ_mat,lid_mat)
 %UPDATE_GBMAP Summary of this function goes here
 %   Detailed explanation goes here
 
 % initialize local variable
 tempglobalmap = robot.getOccupacygridglobal();
-out = laserScan_xy{1,ii}{1,1}(:,all(~isnan(laserScan_xy{1,ii}{1,1})));
+ out = robot.laserScan_2_xy{ii}(:,all(~isnan(robot.laserScan_2_xy{ii})));
 [ occ_mat(:,:)] = Occ_Grid( occ_mat(:,:),lid_mat(:,:),out);
 for i = 1:1:length(occ_mat(:,1))
     for j = 1:1:length(occ_mat(1,:))
