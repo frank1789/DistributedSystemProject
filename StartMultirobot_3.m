@@ -1,45 +1,29 @@
-%% Start multirobot
-close all;
-clear class;
-clear;
-clc;
+%% Main - Start multirobot
+close all
+clear class
+clear
+clc
 
-% load map
-MapName = 'squarecorridor.mat';
-mapStuct = load( MapName );
-a = mapStuct.mapStuct.map;
-clear mapStuct
-mapStuct.map = a;
-%mapStuct.map.points = [[0 16 16 0]; [0 0 16 16]];
-% more wall
-mapStuct.map.points = [mapStuct.map.points];%, [12 12; 12 10],[12 12; 14 16],[13 6; 10 10],[4 4; 4 0],[4 8; 4 4]];
-mapStuct.map.lines  = [mapStuct.map.lines];%,[5;6], [7;8], [9;10], [11;12], [13;14]];
+%% Generating map
+% build a new map with map = Map("new",widht,height);
+% or load an existing one map = Map("load")
+map = Map('load');
+figure(800); axis equal
+map.plotMap();
 
-figure(800)
-hold on
-plotMap(mapStuct.map);
-hold off
-axis equal
-grid on
-pause(3);
-close(800);
-% time sample
+%% set-up simulation parameters
+% Sampling time
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 100;
+MdlInit.T = 10;
+time = 0:MdlInit.Ts:MdlInit.T;
 
 %cost parameter
 beta=0.5;
 
-nit = MdlInit.T / MdlInit.Ts;  %Total application iteration
-
-% Vehicle set-up initial conditions
-Vehicle.q{1} = [1 1 0];
-Vehicle.q{2} = [1 45 4/5*pi];
-Vehicle.q{3} = [46 1 -pi/4];
-robot = cell.empty;
+%% Vehicle set-up initial conditions
 for jj = 1:3
-    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, Vehicle.q{jj});
+    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints());
 end
 
 
@@ -56,11 +40,11 @@ tic
 
 %% Online Simulation of all 3 Robot 
 
-    for ii = 1:1:nit
-        if mod(ii,2) == 0 % simualte laserscan @ 10Hz
-            for i = 1:length(robot)
-            robot{i}.scanenvironment(mapStuct.map.points, mapStuct.map.lines, ii);
-            end
+%% Online Simulation of all 3 Robot
+for indextime = 1:length(time)
+    if mod(indextime,2) == 0 % simualte laserscan @ 10Hz
+        for i = 1:length(robot)
+            robot{i}.scanenvironment(map.points, map.lines, indextime);
         end
            
         for rr = 1:1:3
@@ -157,6 +141,7 @@ tic
            end
            
         end
+    for rr = 1:length(robot)
         
         for ss = 1:1:3 % 3 numero robot
           if (mod(ii,20) == 0 && ss~=rr &&  sqrt( (robot{rr}.q(ii,1) - robot{ss}.q(ii,1))^2 +  (robot{rr}.q(ii,2) - robot{ss}.q(ii,2))^2 )< 6)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo
@@ -228,6 +213,7 @@ tic
 %                    
 %                end
 
+        communicate(robot,ii)
 
            end
    % end
@@ -239,20 +225,17 @@ toc
 %% Animation
 % pre-allocating for speed
 body = cell.empty;
-label = cell.empty;
-rf  = cell.empty;
+label = cell.empty;  
 rf_x= cell.empty;
 rf_y= cell.empty;
 rf_z= cell.empty;
-cl_point = cell.empty;
-cloudpoint = cell.empty;
-% setup figure
-figure();
+% set-up figure
+hold on; axis equal
+figure(800);
 for n= 1:30:length(robot{1}.t)
     title(['Time: ', num2str(robot{1}.t(n),5)])
     hold on
-    axis([0, 48, 0, 48]); axis equal; grid on;
-    plotMap(mapStuct.map);
+%     axis([0, 48, 0, 48]); axis equal; grid on;
     for j = 1:1:length(robot)
         plot(robot{j}.target(1), robot{j}.target(2), '*r')
         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
@@ -263,16 +246,10 @@ for n= 1:30:length(robot{1}.t)
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
         end
         drawnow;
-%         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-%         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-%             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-%         end
-%         if isempty(cl_point)
-%             delete([cl_point]);
-%         end
     end
     hold off
 end % animation
+clear body label rf_x rf_y rf_z
 
 figure
 mesh(Global_map(:,:,1))

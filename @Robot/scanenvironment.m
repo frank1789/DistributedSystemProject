@@ -13,8 +13,6 @@ function this = scanenvironment(this, ppoints, plines, it)
 
 % set postion [x, y, theta]
 initposition = [this.q(it,1), this.q(it,2) this.q(it,3)];
-% inititialize matrix uncertainty
-C_l_rho_theta = diag([this.laser_rho_sigma^2, this.laser_theta_sigma^2]);
 % initialize laser beam
 laser = [initposition, pi, this.laserAngularResolution*pi/180,...
     this.laser_theta_sigma, this.laser_rho_sigma] ;
@@ -31,14 +29,13 @@ laserReadings(2,:)= F;  % update original matrix of scan
 
 % compute the laserscan
 alpha = this.q(it,3);
-%project scan in robot reference frame
+
+% apply rotation matrix
 R = this.rotationMatrix(alpha);
 rotatescan = [laserReadings(2,:).*cos(this.laserTheta);...
     laserReadings(2,:).*sin(this.laserTheta)]' / R + [this.q(it,1); this.q(it,2)]';
-this.laserScan_xy{it} = rotatescan';    % return cell
-
+this.laserScan_xy{it} = rotatescan';    % global frame
+% raw data scan
 this.laserScan_2_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);... 
-    laserReadings(2,:).*sin(this.laserTheta)]; 
-
-this.getmeasure(it);                    % compute the measure from xy
+    laserReadings(2,:).*sin(this.laserTheta)]; % robot frame
 end % method
