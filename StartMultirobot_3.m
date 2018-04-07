@@ -68,12 +68,11 @@ tic
             
            %If lidar information is avaible update Global Map of each robot
            if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s
-                        laserScan_xy{ii} = robot{rr}.laserScan_2_xy(ii);
-    
-             if(isempty(laserScan_xy{1,ii}{1,1}) || all((all(isnan(laserScan_xy{1,ii}{1,1})))==1))
-    
-             else
-                 out = laserScan_xy{1,ii}{1,1}(:,all(~isnan(laserScan_xy{1,ii}{1,1})));
+
+              if(isempty(robot{rr}.laserScan_2_xy{ii}) || all((all(isnan(robot{rr}.laserScan_2_xy{ii})))==1))
+            
+               else
+                 out = robot{rr}.laserScan_2_xy{ii}(:,all(~isnan(robot{rr}.laserScan_2_xy{ii})));
                  [ occ_mat(:,:)] = Occ_Grid( occ_mat(:,:),lid_mat(:,:),out);
                
                   for i = 1:1:length(occ_mat(:,1))
@@ -206,28 +205,28 @@ tic
           end
         end
              %In case of possible comunication we weight the caming
-             %information we the already avaible one.
-               if(sqrt( (robot{2}.q(ii,1) - robot{1}.q(ii,1))^2 +  (robot{1}.q(ii,2) - robot{1}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
-                   %problema Iniziale riduzione della probabilit? di zone gi? viste da parte di robot che non ancora lo hanno.
-             
-                   Global_map(:,:,1)=  0.8*Global_map(:,:,1) + 0.2*Global_map(:,:,2);
-                   Global_map(:,:,2)=  0.2*Global_map(:,:,1) + 0.8*Global_map(:,:,2); 
-                   
-               end
-               
-               if(sqrt( (robot{3}.q(ii,1) - robot{1}.q(ii,1))^2 +  (robot{1}.q(ii,3) - robot{1}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
-               
-                   Global_map(:,:,1)=  0.8*Global_map(:,:,1) + 0.2*Global_map(:,:,3);
-                   Global_map(:,:,3)=  0.2*Global_map(:,:,1) + 0.8*Global_map(:,:,3);
-                   
-               end
-               
-               if(sqrt( (robot{3}.q(ii,1) - robot{2}.q(ii,2))^2 +  (robot{1}.q(ii,3) - robot{2}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
-               
-                   Global_map(:,:,2)=  0.8*Global_map(:,:,2) + 0.2*Global_map(:,:,3);
-                   Global_map(:,:,3)=  0.2*Global_map(:,:,2) + 0.8*Global_map(:,:,3);
-                   
-               end
+%              %information we the already avaible one.
+%                if(sqrt( (robot{2}.q(ii,1) - robot{1}.q(ii,1))^2 +  (robot{1}.q(ii,2) - robot{1}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
+%                    %problema Iniziale riduzione della probabilit? di zone gi? viste da parte di robot che non ancora lo hanno.
+%              
+%                    Global_map(:,:,1)=  0.8*Global_map(:,:,1) + 0.2*Global_map(:,:,2);
+%                    Global_map(:,:,2)=  0.2*Global_map(:,:,1) + 0.8*Global_map(:,:,2); 
+%                    
+%                end
+%                
+%                if(sqrt( (robot{3}.q(ii,1) - robot{1}.q(ii,1))^2 +  (robot{1}.q(ii,3) - robot{1}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
+%                
+%                    Global_map(:,:,1)=  0.8*Global_map(:,:,1) + 0.2*Global_map(:,:,3);
+%                    Global_map(:,:,3)=  0.2*Global_map(:,:,1) + 0.8*Global_map(:,:,3);
+%                    
+%                end
+%                
+%                if(sqrt( (robot{3}.q(ii,1) - robot{2}.q(ii,2))^2 +  (robot{1}.q(ii,3) - robot{2}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
+%                
+%                    Global_map(:,:,2)=  0.8*Global_map(:,:,2) + 0.2*Global_map(:,:,3);
+%                    Global_map(:,:,3)=  0.2*Global_map(:,:,2) + 0.8*Global_map(:,:,3);
+%                    
+%                end
 
 
            end
