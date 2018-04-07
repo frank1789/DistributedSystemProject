@@ -1,29 +1,19 @@
-%% Start multirobot
-close all;
-clear class;
-clear;
-clc;
+%% Main - Start multirobot
+close all
+clear class
+clear
+clc
 
-% load map
-MapName = 'map_square.mat';
-mapStuct = load( MapName );
-mapStuct.map.points = [[0 16 16 0]; [0 0 16 16]];
-% more wall
-mapStuct.map.points = [mapStuct.map.points, [12 12; 12 10],[12 12; 14 16],[13 6; 10 10],[4 4; 4 0],[4 8; 4 4]];
-mapStuct.map.lines  = [mapStuct.map.lines,[5;6], [7;8], [9;10], [11;12], [13;14]];
-
-figure(800)
-hold on
-plotMap(mapStuct.map);
-hold off
-axis equal
-grid on
-pause(3);
-close(800);
+%% Generating map
+% build a new map with map = Map("new",widht,height);
+% or load an existing one map = Map("load")
+map = Map('load');
+figure(800); axis equal
+map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 200;
+MdlInit.T = 100;
 
 %cost parameter
 beta=0.5;
@@ -55,10 +45,14 @@ tic
 for ii = 1:1:nit
     for i = 1:length(robot)
         if mod(ii,2) == 0 % simualte laserscan @ 10Hz
-            robot{i}.scanenvironment(mapStuct.map.points, mapStuct.map.lines, ii);
+            robot{i}.scanenvironment(map.points, map.lines, ii);
         end
         robot{i}.UnicycleKinematicMatlab(ii);
+        robot{i}.ekfslam(ii);
     end
+    
+    
+    
    if mod(ii,2) == 0 
     
     for rr = 1:1:length(robot)
@@ -139,31 +133,31 @@ cl_point = cell.empty;
 cloudpoint = cell.empty;
 % setup figure
 figure();
-for n= 1:30:length(robot{1}.t)
-    title(['Time: ', num2str(robot{1}.t(n),5)])
-    hold on
-    axis([0, 16, 0, 16]); axis equal; grid on;
-    plotMap(mapStuct.map);
-    for j = 1:1:length(robot)
-        plot(robot{j}.target(1), robot{j}.target(2), '*r')
-        plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
-        if n == 1
-            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
-        else
-            delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
-            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
-        end
-        drawnow;
-%         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-%         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-%             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
+% for n= 1:30:length(robot{1}.t)
+%     title(['Time: ', num2str(robot{1}.t(n),5)])
+%     hold on
+%     axis([0, 16, 0, 16]); axis equal; grid on;
+%     plotMap(mapStuct.map);
+%     for j = 1:1:length(robot)
+%         plot(robot{j}.target(1), robot{j}.target(2), '*r')
+%         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
+%         if n == 1
+%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
+%         else
+%             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
+%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
 %         end
-%         if isempty(cl_point)
-%             delete([cl_point]);
-%         end
-    end
-    hold off
-end % animation
+%         drawnow;
+% %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
+% %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
+% %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
+% %         end
+% %         if isempty(cl_point)
+% %             delete([cl_point]);
+% %         end
+%     end
+%     hold off
+% end % animation
 
 figure
 mesh(robot{1}.occgridglobal)
@@ -174,3 +168,9 @@ mesh(robot{3}.occgridglobal)
 
 
 %save test_3.mat
+for x = 1:3
+figure()
+hold on
+plot(robot{x}.EKF_q_store(1,1:end-1),robot{x}.EKF_q_store(2,1:end-1),'red')
+plot(robot{x}.q(:,1),robot{x}.q(:,2),'blue')
+end
