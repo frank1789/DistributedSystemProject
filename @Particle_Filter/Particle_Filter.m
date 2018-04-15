@@ -12,6 +12,7 @@ classdef Particle_Filter < handle
         LastOdom;
         xOdomLast;
         xP;
+        xEst;
     end
     
     
@@ -20,30 +21,31 @@ classdef Particle_Filter < handle
     %nParticles = 400;
     %Map = max(pMap.points(1,:))*rand(2,30);% - (max(pMap.point(1,:))/2);  %landmark position
     methods
-        function this = Particle_Filter(Robot, it)
+        function this = Particle_Filter(Robot, pMap, it)
             this.nParticles = 1000;
             this.UTrue = diag([0.01,0.01,1*pi/180]).^2;
             this.RTrue = diag([2.0,3*pi/180]).^2;
             this.UEst = 1.0 * this.UTrue;
             this.REst = 1.0 * this.RTrue;
             this.xTrue = Robot.q(it,:)';
-            
+            this.Map = max(pMap.points(1,:))*rand(2,30);% - (max(pMap.point(1,:))/2);  %landmark position 
             this.xOdomLast = this.GetOdometry(Robot, it);
             this.nSteps = 2000;
             %initial conditions: - a point cloud around truth
             this.xP = repmat(this.xTrue,1,this.nParticles) ...
                 + diag([8,8,0.4]) * randn(3,this.nParticles);
+            this.xEst = [];
             %%%%%%%%% storage %%%%%%%%
         end
         angle = AngleWrapping(this, angle)
-        [z] = DoObservationModel(xVeh, iFeature,Map)
-        [z,iFeature] = GetObservation(k)
-        [xEst,x_st,x_od] = update(this, k)
+        z = DoObservationModel(this, xVeh, iFeature)
+        [z, iFeature] = GetObservation(this, it)
+        [xEst] = update(this, Robot, it)
         [xnow] =  GetOdometry(this, Robot, it)
          u = GetRobotControl(this, Robot,it)
-        this = SimulateWorld(k,Robot,it)
+        this = SimulateWorld(this, Robot, it)
         tac = tcomp(this, tab, tbc)
-        tba=tinv(tab)
-        tba=tinv1(tab)
+        tba = tinv(this, tab)
+        tba = tinv1(this, tab)
     end
 end

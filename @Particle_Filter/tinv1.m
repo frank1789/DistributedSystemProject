@@ -1,5 +1,4 @@
-%-------------------------------------------------------
-function tba=tinv1(tab)
+function tba = tinv1(this, tab)
 %
 % calculates the inverse of one transformations
 %-------------------------------------------------------
