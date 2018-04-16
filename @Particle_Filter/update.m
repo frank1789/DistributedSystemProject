@@ -1,17 +1,17 @@
-function [xEst, x_st] = update(this, Robot, it)
+function this = update(this, Robot, it)
             %initial graphics
-            figure(101)
-            plot(this.Map(1,:),this.Map(2,:),'g*');hold on;
-%             pMap.plotMap(); hold off
-            
-            figure(1); hold on; grid off ; axis equal;
-            plot(this.Map(1,:),this.Map(2,:),'g*');hold on;
-            
-            set(gcf,'doublebuffer' , 'on');
-            hObsLine = line ([0,0],[0,0]);
-            set(hObsLine,'linestyle',':');
-%             pMap.plotMap();
-            hPoints = plot(this.xP(1,:),this.xP(2,:), ' .' );
+%             figure(101)
+%             plot(this.Map(1,:),this.Map(2,:),'g*');hold on;
+% %             pMap.plotMap(); hold off
+%             
+%             figure(1); hold on; grid off ; axis equal;
+%             plot(this.Map(1,:),this.Map(2,:),'g*');hold on;
+%             
+%             set(gcf,'doublebuffer' , 'on');
+%             hObsLine = line ([0,0],[0,0]);
+%             set(hObsLine,'linestyle',':');
+% %             pMap.plotMap();
+%             hPoints = plot(this.xP(1,:),this.xP(2,:), ' .' );
             
             
             %do world iteration and get also the new xTrue
@@ -21,23 +21,27 @@ function [xEst, x_st] = update(this, Robot, it)
             L = ones(this.nParticles, 1) / this.nParticles;
             
             %figure out control
-            xOdomNow = Robot.getOdometry(it); %GetOdometry(k,Robot,it);
-            u = this.tcomp(this.tinv(this.xOdomLast),xOdomNow);
-            this.xOdomLast = xOdomNow;
-            
+            xOdomNow = this.setOdometry(Robot, it);
+%             xOdomNow = this.setOdometry(Robot, it);%Robot.getOdometry(it); %GetOdometry(k,Robot,it);
+            u = this.tcomp(this.tinv(this.xOdomLast(:,it-1)),xOdomNow);
+            this.xOdomLast(:,it) = xOdomNow;
+
+           
+           
             %% do prediction
             %for each particle we add in control vector AND noise
             %the control noise adds diversity within the generation
-            for p = 1:this.nParticles
-                this.xP(:,p) = this.tcomp(this.xP(:,p),u+sqrt(this.UEst)*randn(3,1));
+            parfor (p = 1:this.nParticles,4)
+                xP(:,p) = this.tcomp(this.xP(:,p),u+sqrt(this.UEst)*randn(3,1));
             end
+            this.xP = xP;
             this.xP(3,:) = this.AngleWrapping(this.xP(3,:));
             
             %% observe a randomn feature
             [z,iFeature] = this.GetObservation(it);
             if(~isempty(z))
                 %predict observation
-                for p = 1:this.nParticles 
+                parfor (p = 1:this.nParticles,4)
                     %what do we expect observation to be for this particle ?
                     zPred = this.DoObservationModel(this.xP(:,p), iFeature);
                     %on GetObs -> z = DoObservationModel(xTrue, iFeature,Map)+sqrt(RTrue)*randn(2,1);
@@ -66,18 +70,19 @@ function [xEst, x_st] = update(this, Robot, it)
             this.xP = this.xP(:, iNextGeneration);
             %our estimate is simply the mean of teh particles
             this.xEst(it, :) = mean(this.xP,2);
-            if(mod(it-2,10)==0)
-                figure(1);
-                set(hPoints,'XData',this.xP(1,:));
-                set(hPoints,'YData',this.xP(2,:));
-                
-                if(~isempty(z))
-                    set(hObsLine,'XData',[this.xEst(1),this.Map(1,iFeature)]);
-                    set(hObsLine,'YData',[this.xEst(2),this.Map(2,iFeature)]);
-                end
-                
-                figure(2);plot(this.xP(1,:),this.xP(2,:), ' .' );
-                drawnow;
-            end
-            xEst = this.xEst; % return estimated
+%             if(mod(it-2,10)==0)
+%                 figure(1);
+%                 set(hPoints,'XData',this.xP(1,:));
+%                 set(hPoints,'YData',this.xP(2,:));
+%                 
+%                 if(~isempty(z))
+%                     set(hObsLine,'XData',[this.xEst(1),this.Map(1,iFeature)]);
+%                     set(hObsLine,'YData',[this.xEst(2),this.Map(2,iFeature)]);
+%                 end
+%                 
+%                 figure(2);plot(this.xP(1,:),this.xP(2,:), ' .' );
+%                 drawnow;
+%             end
+           % xEst = this.xEst; % return estimated
+            %xEst((xEst)==0,:))=[];
         end % update

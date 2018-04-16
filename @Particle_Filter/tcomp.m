@@ -4,7 +4,7 @@ result = tab(3) + tbc(3); % add the angles of the input tbc to state tab
 
 %we check to avoid discontinuity
 if result > pi || result <= -pi
-    result = AngleWrapping(result);
+    result = this.AngleWrapping(result);
 end
 
 s = sin(tab(3));
