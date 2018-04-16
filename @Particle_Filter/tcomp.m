@@ -1,4 +1,9 @@
 function tac = tcomp(this, tab, tbc)
+%TCOMP  support function 
+%
+%@param[in] tab - angle
+%@param[in] tbc - angle
+
 % final angle
 result = tab(3) + tbc(3); % add the angles of the input tbc to state tab
 
