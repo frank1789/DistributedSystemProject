@@ -1,5 +1,5 @@
-function this = setOccupacygridglobal(this, occgrid)
+function this = setOccupacygridglobal(this,occ_mat)
 %setOccupacygridglobal store the global occupacy grid in the robot
 % @param[in] occgrid occupacy grid matrix
-this.occgridglobal = occgrid;
+this.occgridglobal = occ_mat;
 end % method

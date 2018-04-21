@@ -3,6 +3,7 @@ close all
 clear class
 clear
 clc
+addpath('Utility-Mapping')
 
 %% Generating map
 % build a new map with map = Map("new",widht,height);
@@ -13,7 +14,7 @@ map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 100;
+MdlInit.T = 80;
 
 %cost parameter
 beta=0.5;
@@ -21,7 +22,7 @@ beta=0.5;
 nit = MdlInit.T / MdlInit.Ts;  %Total application iteration
 
 % Vehicle set-up initial conditions
-Vehicle.q{1} = [1 1 0];
+Vehicle.q{1} = [1 2 pi];
 Vehicle.q{2} = [1 4 4/5*pi];
 Vehicle.q{3} = [5 8 -pi/4];
 robot = cell.empty;
@@ -30,9 +31,9 @@ for jj = 1:3
 end
 
 
- robot{1}.setpointtarget([1,15,0]);
- robot{2}.setpointtarget([15,15,0]);
- robot{3}.setpointtarget([10,12,0]);
+ robot{1}.setpointtarget([10,13,pi]);
+ robot{2}.setpointtarget([15,15,0 ]);
+ robot{3}.setpointtarget([10,12,0 ]);
 
 run CI_initialize.m
 
@@ -43,7 +44,7 @@ tic
 %% Online Simulation of all 3 Robot
 
 for ii = 1:1:nit
-    for i = 1:length(robot)
+    for i = 1:1:length(robot)
         if mod(ii,2) == 0 % simualte laserscan @ 10Hz
             robot{i}.scanenvironment(map.points, map.lines, ii);
         end
@@ -56,20 +57,22 @@ for ii = 1:1:nit
    if mod(ii,2) == 0 
     
     for rr = 1:1:length(robot)
+    
+        %Update Global map
+        Update_gbmap(robot{rr},ii,wdt,lgth,occ_mat,lid_mat);
         
         %If lidar information is avaible update Global Map of each robot
-      if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s
+      if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
             
          if(isempty(robot{rr}.laserScan_2_xy{ii}))   
              robot{rr}.setpointtarget(Reset_Target(robot{rr},ris,Cost_map(:,:,rr),ii));
             else
                 
-                %Update Global map
-                Update_gbmap(robot{rr},ii,wdt,lgth,occ_mat,lid_mat);
-                if mod(ii,40)==0
+
+                if mod(ii,40)==0  % ii = 40
                     fprintf('aggiorno il target sulla mappa iterazione: %5i\n', ii);
                     %Compute Cost matrix
-                    %Cost_map(:,:,rr)  = Update_vis( Cost_map(:,:,rr),robot{rr},ii,wdt,lgth,occ_mat,ris ); %ToDo da rivedere
+                    Cost_map(:,:,rr)  = Update_vis( Cost_map(:,:,rr),robot{rr},ii,wdt,lgth,occ_mat,lid_mat,ris ); %ToDo da rivedere
                     %Reset Target Location
                     robot{rr}.setpointtarget(Reset_Target(robot{rr},ris,Cost_map(:,:,rr),ii));
                 end
@@ -80,7 +83,7 @@ for ii = 1:1:nit
         
       %  for vv = 1:1:length(robot)
             if (mod(ii,400) == 0)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo  
-             %   Utilities_Manage(robot,rr,ris,Cost_map,ii);
+         %       Utilities_Manage(robot,rr,ris,Cost_map,ii);
             end
        % end
         
@@ -88,33 +91,7 @@ for ii = 1:1:nit
         
    end 
 
-      
-%              %In case of possible comunication we weight the caming
-%              %information we the already avaible one.
-%                if(sqrt( (robot{2}.q(ii,1) - robot{1}.q(ii,1))^2 +  (robot{1}.q(ii,2) - robot{1}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
-%                    %problema Iniziale riduzione della probabilit? di zone gi? viste da parte di robot che non ancora lo hanno.
-%              
-%                    Global_map(:,:,1)=  0.8*Global_map(:,:,1) + 0.2*Global_map(:,:,2);
-%                    Global_map(:,:,2)=  0.2*Global_map(:,:,1) + 0.8*Global_map(:,:,2); 
-%                    
-%                end
-%                
-%                if(sqrt( (robot{3}.q(ii,1) - robot{1}.q(ii,1))^2 +  (robot{1}.q(ii,3) - robot{1}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
-%                
-%                    Global_map(:,:,1)=  0.8*Global_map(:,:,1) + 0.2*Global_map(:,:,3);
-%                    Global_map(:,:,3)=  0.2*Global_map(:,:,1) + 0.8*Global_map(:,:,3);
-%                    
-%                end
-%                
-%                if(sqrt( (robot{3}.q(ii,1) - robot{2}.q(ii,2))^2 +  (robot{1}.q(ii,3) - robot{2}.q(ii,2))^2 )< 6)  %6 maximum distance of comunication
-%                
-%                    Global_map(:,:,2)=  0.8*Global_map(:,:,2) + 0.2*Global_map(:,:,3);
-%                    Global_map(:,:,3)=  0.2*Global_map(:,:,2) + 0.8*Global_map(:,:,3);
-%                    
-%                end
-
-
-           end
+end
 
     
 toc
@@ -133,44 +110,28 @@ cl_point = cell.empty;
 cloudpoint = cell.empty;
 % setup figure
 figure();
-% for n= 1:30:length(robot{1}.t)
-%     title(['Time: ', num2str(robot{1}.t(n),5)])
-%     hold on
-%     axis([0, 16, 0, 16]); axis equal; grid on;
-%     plotMap(mapStuct.map);
-%     for j = 1:1:length(robot)
-%         plot(robot{j}.target(1), robot{j}.target(2), '*r')
-%         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
-%         if n == 1
-%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
-%         else
-%             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
-%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
+for n= 1:30:length(robot{1}.t)
+    title(['Time: ', num2str(robot{1}.t(n),5)])
+    hold on
+    axis([0, 16, 0, 16]); axis equal; grid on;
+    map.plotMap();
+    for j = 1:1:length(robot)
+        plot(robot{j}.target(1), robot{j}.target(2), '*r')
+        plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
+        if n == 1
+            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
+        else
+            delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
+            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
+        end
+        drawnow;
+%         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
+%         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
+%             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
 %         end
-%         drawnow;
-% %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-% %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-% %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-% %         end
-% %         if isempty(cl_point)
-% %             delete([cl_point]);
-% %         end
-%     end
-%     hold off
-% end % animation
-
-figure
-mesh(robot{1}.occgridglobal)
-figure
-mesh(robot{2}.occgridglobal)
-figure
-mesh(robot{3}.occgridglobal)
-
-
-%save test_3.mat
-for x = 1:3
-figure()
-hold on
-plot(robot{x}.EKF_q_store(1,1:end-1),robot{x}.EKF_q_store(2,1:end-1),'red')
-plot(robot{x}.q(:,1),robot{x}.q(:,2),'blue')
-end
+%         if isempty(cl_point)
+%             delete([cl_point]);
+%         end
+    end
+    hold off
+end % animation
