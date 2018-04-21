@@ -52,7 +52,6 @@ function this = update(this, Robot, lentime, it)
                     %if predicted obs is very different from actual obs this score will be low
                     %->this particle is not very good at representing state . A lower score means
                     %it is less likely to be selected for the next generation ...
-                    L(p) = exp(-0.5*Innov'*inv(this.REst)*Innov)+0.001;
                     L(p) = exp(-0.5 * Innov' / (this.REst) * Innov) + 0.001;
                 end
             end
