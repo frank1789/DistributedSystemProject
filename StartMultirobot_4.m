@@ -8,38 +8,32 @@ addpath('Utility-Mapping')
 %% Generating map
 % build a new map with map = Map("new",widht,height);
 % or load an existing one map = Map("load")
-map = Map('load');
+map = Map('new',100,100);
 figure(800); axis equal
 map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 80;
+MdlInit.T = 400;
 
 %cost parameter
 beta=0.5;
 
 nit = MdlInit.T / MdlInit.Ts;  %Total application iteration
 
-% Vehicle set-up initial conditions
-Vehicle.q{1} = [1 2 pi];
-Vehicle.q{2} = [1 4 4/5*pi];
-Vehicle.q{3} = [5 8 -pi/4];
+% preallocate
 robot = cell.empty;
+occparamters = cell.empty;
+pf = cell.empty;
+
+% Vehicle set-up initial conditions jj = 1:3
 for jj = 1:3
-    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, Vehicle.q{jj});
+    %initialize robot and destination
+    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints());
+    robot{jj}.setpointtarget(map.getAvailablePoints());
+    %initialize parameters for occupacy & cost function
+    [ occparamters{jj} ] = cinitialize(robot{jj}, map, nit, 0.15);
 end
-
-
- robot{1}.setpointtarget([10,13,pi]);
- robot{2}.setpointtarget([15,15,0 ]);
- robot{3}.setpointtarget([10,12,0 ]);
-
-run CI_initialize.m
-
-scambio = zeros(3);
-
-tic
 
 %% Online Simulation of all 3 Robot
 
@@ -50,52 +44,43 @@ for ii = 1:1:nit
         end
         robot{i}.UnicycleKinematicMatlab(ii);
         robot{i}.ekfslam(ii);
+        if ii == 1
+            pf{i} = Particle_Filter(robot{i}, map.landmark, ii);
+        else
+            pf{i}.update(robot{i}, nit, ii);
+        end
     end
     
-    
-    
-   if mod(ii,2) == 0 
-    
     for rr = 1:1:length(robot)
-    
-        %Update Global map
-        Update_gbmap(robot{rr},ii,wdt,lgth,occ_mat,lid_mat);
-        
         %If lidar information is avaible update Global Map of each robot
-      if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
+        if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
             
-         if(isempty(robot{rr}.laserScan_2_xy{ii}))   
-             robot{rr}.setpointtarget(Reset_Target(robot{rr},ris,Cost_map(:,:,rr),ii));
+            %Update Global map
+            Update_gbmap(robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris);
+            
+            if(isempty(robot{rr}.laserScan_2_xy{ii}))
+                robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
             else
                 
-
+                
                 if mod(ii,40)==0  % ii = 40
                     fprintf('aggiorno il target sulla mappa iterazione: %5i\n', ii);
                     %Compute Cost matrix
-                    Cost_map(:,:,rr)  = Update_vis( Cost_map(:,:,rr),robot{rr},ii,wdt,lgth,occ_mat,lid_mat,ris ); %ToDo da rivedere
+                    occparamters{rr}.Cost_map(:,:)  = Update_vis(occparamters{rr}.Cost_map(:,:),robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris ); %ToDo da rivedere
                     %Reset Target Location
-                    robot{rr}.setpointtarget(Reset_Target(robot{rr},ris,Cost_map(:,:,rr),ii));
+                    robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
                 end
             end
             
         end
         
         
-      %  for vv = 1:1:length(robot)
-            if (mod(ii,400) == 0)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo  
-         %       Utilities_Manage(robot,rr,ris,Cost_map,ii);
-            end
-       % end
-        
+        %  for vv = 1:1:length(robot)
+        if (mod(ii,400) == 0)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo
+            %       Utilities_Manage(robot,rr,ris,Cost_map,ii);
+        end
     end
-        
-   end 
-
 end
-
-    
-toc
-
 
 
 %% Animation
@@ -125,13 +110,13 @@ for n= 1:30:length(robot{1}.t)
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
         end
         drawnow;
-%         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-%         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-%             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-%         end
-%         if isempty(cl_point)
-%             delete([cl_point]);
-%         end
+        %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
+        %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
+        %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
+        %         end
+        %         if isempty(cl_point)
+        %             delete([cl_point]);
+        %         end
     end
     hold off
 end % animation
