@@ -3,11 +3,10 @@ function this = setdimension(this, varargin)
 % build map.
 
 if ~isempty(varargin)
-    tmp = varargin{:};
     % check second argument
-    if (isa(tmp{2}, 'double') && tmp{2} >= 8 && tmp{2} == tmp{3})
-        this.width  = tmp{2};
-    elseif (isa(tmp{2}, 'double') && tmp{2} >= 8 && tmp{2} ~= tmp{3})
+    if (isa(varargin{1}, 'double') && varargin{1} >= 8 && varargin{1} == varargin{2})
+        this.width  = varargin{1};
+    elseif (isa(varargin{1}, 'double') && varargin{1} >= 8 && varargin{1} ~= varargin{2})
         h = warndlg('the second (width) argument must be euqal third argument (height)','Warning');
         uiwait(h);
         return
@@ -18,9 +17,9 @@ if ~isempty(varargin)
     end
     
     % check third argument
-    if (isa(tmp{3}, 'double') && tmp{3} >= 8 && tmp{3} == tmp{2})
-        this.height = tmp{3};
-    elseif (isa(tmp{3}, 'double') && tmp{3} >= 8 && tmp{3} ~= tmp{2})
+    if (isa(varargin{2}, 'double') && varargin{2} >= 8 && varargin{2} == varargin{1})
+        this.height = varargin{2};
+    elseif (isa(varargin{2}, 'double') && varargin{2} >= 8 && varargin{2} ~= varargin{1})
         h = warndlg('the second (width) argument must be euqal third argument (height)','Warning');
         uiwait(h);
         return
@@ -30,9 +29,8 @@ if ~isempty(varargin)
         return
     end
 else
-    mode = struct('WindowStyle','non-modal', 'Interpreter','tex');
-    errordlg('Try to type instead: map("New", width, heigth, # rooms)',...
-        'Error Map generator', mode);
+    err = this.error();
+    uiwait(err);
 end
 % clear temporay
 clear tmp
