@@ -31,7 +31,7 @@ classdef Particle_Filter < handle
     %     tinv(this, tab) - support function
     %     tinv1(this, tab) - support function
     
-    properties (SetAccess = private, Hidden = false)
+    properties (SetAccess = 'private', Hidden = false)
         nParticles;
         xTrue;
         Map;
@@ -46,7 +46,7 @@ classdef Particle_Filter < handle
     end
     
     methods
-        function this = Particle_Filter(Robot, pMap, it)
+        function this = Particle_Filter(Robot, landmark, it)
             %PARTICLE_FILTER default construtctor initialize class properties
             %
             %@param[in] Robot - class Robot
@@ -56,10 +56,12 @@ classdef Particle_Filter < handle
             this.nParticles = 20000;
             this.UTrue = diag([0.01,0.01,1*pi/180]).^2;
             this.RTrue = diag([2.0,3*pi/180]).^2;
+            this.nParticles = 400;
             this.UEst = 1.0 * this.UTrue;
             this.REst = 1.0 * this.RTrue;
             this.xTrue = Robot.q(it,:)';
             this.Map = max(pMap.points(1,:))*rand(2,30);
+            this.Map = landmark;
             this.xOdomLast =  Robot.q(it,:)';
             this.qEst = Robot.q(it,:)';
             this.xEst(1,:) = Robot.q(it,:)';
