@@ -3,7 +3,7 @@ classdef Robot < handle
     %   Detailed explanation goes here
     
     % Vehicle property
-    properties (Constant, Access = private)
+    properties (Constant)
         wheelradius = 0.07; % dimension of whell [m]
         interaxle = 0.30;   % dimension of interaxle [m]
         length  = 1/3;    % data for drawing
@@ -21,7 +21,7 @@ classdef Robot < handle
         speed = 0.5;
     end
     % Virtual incremental encoder
-    properties (Constant, Access = private)
+    properties (Constant)
         enc_quantization = 2 * (pi / 2600);   % encoder quantization
         % encoder noise
         enc_mu = 0;                           % mean
@@ -40,7 +40,7 @@ classdef Robot < handle
         EKF_q_store;    % position data stored
     end
     % definition laser sensor
-    properties (Constant, Access = private)
+    properties (Constant)
         laserAngularResolution = 0.36;  % [deg] laser sensor parameters
         lasermaxdistance = 4; % [m] laser sensor parameters Max FOV
         lasermindistance = 0; % [m] laser sensor parameters min FOV
