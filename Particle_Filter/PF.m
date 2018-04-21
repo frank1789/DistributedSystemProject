@@ -10,7 +10,7 @@ global UTrue;
 global nSteps;
 global LastOdom;
 
-nSteps = 2000;
+nSteps = 8000;
 
 %change this to see how sensitive we are to the number of particle
 %(hypotheses run) especially in relation to initial distribution !
@@ -19,7 +19,7 @@ Map = max(pMap.points(1,:))*rand(2,30);% - (max(pMap.point(1,:))/2);  %landmark 
 
 UTrue = diag([0.01,0.01,1*pi/180]).^2;
 
-RTrue = diag([2.0,3*pi/180]).^2;
+RTrue = diag([0.7071,3*pi/180]).^2;
 
 UEst = 1.0*UTrue;
 
@@ -27,7 +27,8 @@ REst = 1.0*RTrue;
 
 xTrue = Robot.q(it,:)';
 
-xOdomLast = GetOdometry(1,Robot,it);
+xOdomLast = Robot.q(it,:)';
+x_st(it,1:3)= Robot.q(it,:)';
 
 %initial conditions: - a point cloud around truth
 xP =repmat(xTrue,1,nParticles)+diag([8,8,0.4])*randn(3,nParticles);
@@ -101,19 +102,19 @@ for it = 2:nSteps
     xP = xP(:,iNextGeneration);
     %our estimate is simply the mean of teh particles
     xEst = mean(xP,2);
-            if(mod(it-2,10)==0)
-            figure(1);
-            set(hPoints,'XData',xP(1,:));
-            set(hPoints,'YData',xP(2,:));
-            
-                if(~isempty(z))
-                set(hObsLine,'XData',[xEst(1),Map(1,iFeature)]);
-                set(hObsLine,'YData',[xEst(2),Map(2,iFeature)]);
-                end;
-            
-            figure(2);plot(xP(1,:),xP(2,:), ' .' );
-            drawnow;
-            end;
+%             if(mod(it-2,10)==0)
+%             figure(1);
+%             set(hPoints,'XData',xP(1,:));
+%             set(hPoints,'YData',xP(2,:));
+%             
+%                 if(~isempty(z))
+%                 set(hObsLine,'XData',[xEst(1),Map(1,iFeature)]);
+%                 set(hObsLine,'YData',[xEst(2),Map(2,iFeature)]);
+%                 end;
+%             
+%             figure(2);plot(xP(1,:),xP(2,:), ' .' );
+%             drawnow;
+%             end;
 x_st(it,1:3)= xEst;
 %x_od(it,1:3)= xOdomLast;
 end;
