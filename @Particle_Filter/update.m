@@ -32,7 +32,7 @@ function this = update(this, Robot, lentime, it)
             % do prediction
             %for each particle we add in control vector AND noise
             %the control noise adds diversity within the generation
-            parfor (p = 1:this.nParticles,4)
+            for p = 1:this.nParticles
                 xP(:,p) = this.tcomp(this.xP(:,p),u+sqrt(this.UEst)*randn(3,1));
             end
             this.xP = xP;
@@ -41,7 +41,7 @@ function this = update(this, Robot, lentime, it)
             [z,iFeature] = this.GetObservation(it, lentime);
             if(~isempty(z))
                 %predict observation
-                parfor (p = 1:this.nParticles,4)
+                for p = 1:this.nParticles
                     %what do we expect observation to be for this particle ?
                     zPred = this.DoObservationModel(this.xP(:,p), iFeature);
                     %on GetObs -> z = DoObservationModel(xTrue, iFeature,Map)+sqrt(RTrue)*randn(2,1);

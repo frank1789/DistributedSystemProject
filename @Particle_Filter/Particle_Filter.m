@@ -60,7 +60,6 @@ classdef Particle_Filter < handle
             this.UEst = 1.0 * this.UTrue;
             this.REst = 1.0 * this.RTrue;
             this.xTrue = Robot.q(it,:)';
-            this.Map = max(pMap.points(1,:))*rand(2,30);
             this.Map = landmark;
             this.xOdomLast =  Robot.q(it,:)';
             this.qEst = Robot.q(it,:)';
