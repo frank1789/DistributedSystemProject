@@ -53,7 +53,6 @@ classdef Particle_Filter < handle
             %@param[in] pMap - class Map
             %@param[in] it - index of time simulation
             
-            this.nParticles = 20000;
             this.UTrue = diag([0.01,0.01,1*pi/180]).^2;
             this.RTrue = diag([2.0,3*pi/180]).^2;
             this.nParticles = 400;
