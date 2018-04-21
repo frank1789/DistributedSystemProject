@@ -15,12 +15,12 @@ function [  ] = Utilities_Manage(robot,ss,ris,Cost_map,ii)
                          robot{ss}.setpointtarget([front(1,i) ,front(2,i) , 0]);
                          
                         [ P ] = Utilities_Function( robot,ss,length(robot),robot{ss}.mindistance);  % 3 number of robot %4 max range
-% 
-%                            Ct=0; %cost inizialization
-%                                 for mm=1:1:length(robot) %number of robot 
-%                                         Ct = Ct + beta*norm(robot{mm}.target(1:2)-robot{mm}.q(ii,1:2));
-%                                 end
-%                                P = P-Ct;
+
+                           Ct=0; %cost inizialization
+                                for mm=1:1:length(robot) %number of robot 
+                                        Ct = Ct + beta*norm(robot{mm}.target(1:2)-robot{mm}.q(ii-1,1:2));
+                                end
+                               P = P-Ct;
                                 if(U<P)
                                     U=P;
                                     idx = i;

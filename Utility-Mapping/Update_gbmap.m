@@ -9,9 +9,9 @@ tempglobalmap = robot.getOccupacygridglobal();
 for i = 1:1:length(occ_mat(:,1))
     for j = 1:1:length(occ_mat(1,:))
         if(occ_mat(i,j)~=0)
-            A     = [cos(robot.q(ii,3)), -sin(robot.q(ii,3)), robot.q(ii,1)/0.015;
-                sin(robot.q(ii,3)),  cos(robot.q(ii,3)), robot.q(ii,2)/0.015;
-                0                 0             1]*[i ;267-j; 1];
+            A     = [cos(robot.q(ii,3)), -sin(robot.q(ii,3)), robot.q(ii,1)/0.15;
+                     sin(robot.q(ii,3)),  cos(robot.q(ii,3)), robot.q(ii,2)/0.15;
+                       0                 0             1]*[i ;(length(occ_mat(1,:)))/2+1-j; 1];
             A=floor(A);
             if(A(2)>wdt || A(2)==wdt)
                 A(2) = wdt-1;
@@ -28,14 +28,16 @@ for i = 1:1:length(occ_mat(:,1))
             CC=[A(2),A(1)];
             if tempglobalmap(wdt-CC(1),CC(2))==0
                 tempglobalmap(wdt-CC(1),CC(2))= occ_mat(i,j);
+                %Global(wdt-CC(1),CC(2))= occ_mat(i,j);
             else
                 tempglobalmap(wdt-CC(1),CC(2))= (occ_mat(i,j) + tempglobalmap(wdt-CC(1),CC(2)))/2;
+                %Global(wdt-CC(1),CC(2))= (occ_mat(i,j) + Global(wdt-CC(1),CC(2)))/2;
             end % if
         end %if
     end % end for-cycle j
 end % for-cycle i
 % save the temp data
 robot.setOccupacygridglobal(tempglobalmap);
-clear tempglobalmap
+%clear tempglobalmap
 end % function
 

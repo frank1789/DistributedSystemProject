@@ -4,7 +4,7 @@ function [target] = Reset_Target(robot, ris, Cost_map, ii)
 
 [front] = limitfov(robot, ris, ii);
 
-%for ll = 1:1:250
+% for ll = 1:1:250
 %     if(isnan(robot.laserScan_2_xy{1,ii}(1,251-ll)) && front(1,251-ll)>0 && front(2,251-ll)>0)
 %         robot.setpointtarget([front(1,251-ll) front(2,251-ll) robot.q(ii,3)-0.0063*ll]);
 %         target = [front(1,251-ll) front(2,251-ll) robot.q(ii,3)-0.0063*ll];    %0.0063 = 0.36*(pi)/180 
@@ -27,7 +27,11 @@ function [target] = Reset_Target(robot, ris, Cost_map, ii)
 %     robot.setpointtarget([ceil(column*0.15),ceil(17-raw*0.15),robot.q(ii,3)]);
 %     target = [ceil(column*0.15),ceil(17-raw*0.15),robot.q(ii,3)];
 % end
-%end
+% if(ll==250)
+% target = [front(1,251) front(2,251) 0];
+% end
+% 
+% end
 for ll = 1:1:250
     if(isnan(robot.laserScan_2_xy{1,ii}(1,251-ll)) && front(1,251-ll)>0 && front(2,251-ll)>0) %front > 0 to avoid setting target outside positive region
         robot.setpointtarget([front(1,251-ll) front(2,251-ll) 0 ]);                           %map is suppose to be only positive
