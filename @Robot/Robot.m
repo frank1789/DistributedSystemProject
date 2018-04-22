@@ -70,7 +70,7 @@ classdef Robot < handle
             fprintf('Initialize robot n: %3i\n', this.ID);
             % initialize simulation time and sample
             this.Dt = sampletime;     % Sampling time
-            dimension = length(0:sampletime:time);  % Length of simulation
+            dimension = length(0:sampletime:time) - 1;  % Length of simulation
             this.laserScan_xy{1,dimension} = [];
             this.laserScan_2_xy{1,dimension} = [];
             % set initial position
