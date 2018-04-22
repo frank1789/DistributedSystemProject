@@ -54,21 +54,12 @@ classdef Robot < handle
         laserScan_2_xy = cell.empty; % contains scans at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
-        room_length = 100;
-        room_width  = 100;
-        ris = 0.15;
-        lgth =  0;
-        wdt  =  0;
-
-
-        occgridglobal =[]; % store occupacy grid
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        occgridglobal; % store occupacy grid
     end
     
     methods
         % class constructor
-        function this = Robot(inputID, time, sampletime, initialposition)
+        function this = Robot(inputID, time, sampletime, initialposition, Map, ris)
             % check input constructor for passed arguments
             validateattributes(inputID,{'double'},{'nonnegative'})
             validateattributes(time,{'double'},{'nonnegative'})
@@ -98,9 +89,12 @@ classdef Robot < handle
             this.EKF_q_store = zeros(3, dimension);
             % initialize sector of angle laser theta
             this.laserTheta = pi/180*(-90:this.laserAngularResolution:90);
-            lgth =  floor(this.room_length/this.ris);
-        wdt  =  floor(this.room_width/this.ris);
-        this.occgridglobal =zeros(lgth,wdt);
+            %initialize occupacygrid
+            room_length = max(Map.points(1,:));
+            room_width  = max(Map.points(1,:));
+            lgth =  floor(room_length / ris);
+            wdth =  floor(room_width / ris);
+            this.occgridglobal =zeros(lgth,wdth);
         end % definition constructor
         % function to compute the kinematics simulation
         this = UnicycleKinematicMatlab(this, it);
