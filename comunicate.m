@@ -1,4 +1,4 @@
-function comunicate(obj, it)
+function comunicate(obj, it,rr,occparamters)
 %COMMUNICATE
 
 MAX = 6; % 6[m] maximum distance of comunication
@@ -9,6 +9,7 @@ for n = 1:length(c)
         fprintf("one or more robots are in the communication area\n");
         fprintf("establish link\t robot: %i <---> robot: %i\n",c{n,1}.ID,c{n,2}.ID);
         %exchange laserscan and odometry
+        Utilities_Manage(obj,rr,occparamters{rr}.ris,occparamters{rr}.Cost_map,it);
     end % if
 end % for
 clear c dist % free memory

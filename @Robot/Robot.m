@@ -54,8 +54,8 @@ classdef Robot < handle
         laserScan_2_xy = cell.empty; % contains scans at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
-        room_length = 49;
-        room_width  = 49;
+        room_length = 100;
+        room_width  = 100;
         ris = 0.15;
         lgth =  0;
         wdt  =  0;

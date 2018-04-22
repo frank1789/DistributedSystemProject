@@ -22,24 +22,24 @@ else
 CovMatMeas = [];
 H = [];
 Z = [];
- 
-for j=1:1 
-
-    if rand(1) > 0.5 && not(isempty(this.q(it,1))) 
-        Hj = eye(3);
-        %Covariance matrix of GPS 
-        CovMatj = diag([1,1,1]); 
-        %Measure coming from GPS 
-        Zj = this.q(it,1:3)'; 
-
-        % Stack together the measures
-        H = [H; Hj];
-        
-        CovMatMeas = blkdiag(CovMatMeas, CovMatj);
-        Z = [Z; Zj];
-    end
-
-end
+%  
+% for j=1:1 
+% 
+%     if rand(1) > 0.5 && not(isempty(this.q(it,1))) 
+%         Hj = eye(3);
+%         %Covariance matrix of GPS 
+%         CovMatj = diag([1,1,1]); 
+%         %Measure coming from GPS 
+%         Zj = this.q(it,1:3)'; 
+% 
+%         % Stack together the measures
+%         H = [H; Hj];
+%         
+%         CovMatMeas = blkdiag(CovMatMeas, CovMatj);
+%         Z = [Z; Zj];
+%     end
+% 
+% end
 
 
     % If there are available measures

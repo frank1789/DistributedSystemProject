@@ -8,13 +8,13 @@ addpath('Utility-Mapping')
 %% Generating map
 % build a new map with map = Map("new",widht,height);
 % or load an existing one map = Map("load")
-map = Map('new',100,100);
+map = Map('load');
 figure(800); axis equal
 map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 400;
+MdlInit.T = 800;
 
 %cost parameter
 beta=0.5;
@@ -56,7 +56,7 @@ for ii = 1:1:nit
         if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
             
             %Update Global map
-            Update_gbmap(robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris);
+      %      Update_gbmap(robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris);
             
             if(isempty(robot{rr}.laserScan_2_xy{ii}))
                 robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
@@ -66,7 +66,7 @@ for ii = 1:1:nit
                 if mod(ii,40)==0  % ii = 40
                     fprintf('aggiorno il target sulla mappa iterazione: %5i\n', ii);
                     %Compute Cost matrix
-                    occparamters{rr}.Cost_map(:,:)  = Update_vis(occparamters{rr}.Cost_map(:,:),robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris ); %ToDo da rivedere
+      %              occparamters{rr}.Cost_map(:,:)  = Update_vis(occparamters{rr}.Cost_map(:,:),robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris ); %ToDo da rivedere
                     %Reset Target Location
                     robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
                 end
@@ -74,10 +74,9 @@ for ii = 1:1:nit
             
         end
         
-        
-        %  for vv = 1:1:length(robot)
-        if (mod(ii,400) == 0)   %Settare un controllo sulla distanza e dare un intervallo che non lo faccia ripetere subito dopo
-            %       Utilities_Manage(robot,rr,ris,Cost_map,ii);
+    
+        if (mod(ii,60) == 0)   %  dare un intervallo che non lo faccia ripetere subito dopo
+                  comunicate(robot,ii,rr,occparamters)
         end
     end
 end
@@ -94,12 +93,13 @@ rf_z= cell.empty;
 cl_point = cell.empty;
 cloudpoint = cell.empty;
 % setup figure
-figure();
+figure(); hold on;
+map.plotMap();
 for n= 1:30:length(robot{1}.t)
     title(['Time: ', num2str(robot{1}.t(n),5)])
     hold on
-    axis([0, 16, 0, 16]); axis equal; grid on;
-    map.plotMap();
+ axis equal; grid on;
+    
     for j = 1:1:length(robot)
         plot(robot{j}.target(1), robot{j}.target(2), '*r')
         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
@@ -120,3 +120,4 @@ for n= 1:30:length(robot{1}.t)
     end
     hold off
 end % animation
+hold off

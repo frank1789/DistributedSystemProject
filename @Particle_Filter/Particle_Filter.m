@@ -54,7 +54,7 @@ classdef Particle_Filter < handle
             %@param[in] it - index of time simulation
             
             this.UTrue = diag([0.01,0.01,1*pi/180]).^2;
-            this.RTrue = diag([0.7071,3*pi/180]).^2;
+            this.RTrue = diag([sqrt((1/3)^2+(1/3)^2),3*pi/180]).^2;
             this.nParticles = 400;
             this.UEst = 1.0 * this.UTrue;
             this.REst = 1.0 * this.RTrue;

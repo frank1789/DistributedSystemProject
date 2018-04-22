@@ -31,6 +31,6 @@ function [  ] = Utilities_Manage(robot,ss,ris,Cost_map,ii)
                     %robot{ss}.setpointtarget([front(1,idx), front(2,idx), robot{ss}.q(ii,3)+0.0063*(251-idx)]);
                      robot{ss}.setpointtarget([front(1,idx), front(2,idx),0]);
                     else
-                    robot{ss}.setpointtarget(Reset_Target(robot{ss},ris,Cost_map(:,:,ss),ii)); 
+                    robot{ss}.setpointtarget(Reset_Target(robot{ss},ris,Cost_map(:,:),ii)); 
                 end
 end
