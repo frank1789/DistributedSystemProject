@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+[every node/.style={fill,draw=orange,fill=orange!75,text=white,drop shadow},
+accepting/.style ={green!50!black,text=white},
+level distance=10mm,
+level 1/.style={sibling distance=20mm},
+level 2/.style={sibling distance=10mm},
+level 3/.style={sibling distance=5mm}]
+
+%k-d tree decomposition for the point set
+\node (Root) {\tiny $(7,2)$}
+    child { node {\tiny $(5,4)$}
+    		child { node {\tiny $(2,3)$}} %3rdlevel
+    			%child { node {\tiny $(1,10)$}}}%last level
+    		child { node {\tiny $(4,7)$}} %3rd level
+    			%child { node {\tiny $(50,50)$}}}%last level
+    			}		
+	child { node {\tiny $(9,6)$}
+    			child { node {\tiny $(8,1)$}}
+    			child [missing]{}
+    		};
+\end{tikzpicture}
