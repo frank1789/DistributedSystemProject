@@ -18,9 +18,6 @@ function [target] = Reset_Target(robot, ris, Cost_map, ii)
 %     end
 % end % end for-cycle
 % 
-% if(ll==250)
-% target = [front(1,251) front(2,251) robot.q(ii,3)];;
-% end
 % 
 % if mod(ii,160)==0
 %     [raw,column] = minmat(Cost_map);
@@ -28,7 +25,7 @@ function [target] = Reset_Target(robot, ris, Cost_map, ii)
 %     target = [ceil(column*0.15),ceil(17-raw*0.15),robot.q(ii,3)];
 % end
 % if(ll==250)
-% target = [front(1,251) front(2,251) 0];
+% target = [0 0 pi/8];
 % end
 % 
 % end
@@ -45,6 +42,12 @@ for ll = 1:1:250
         end
     end
 end % end for-cycle
+
+%  if mod(ii,160)==0
+%      [raw,column] = minmat(Cost_map);
+%      robot.setpointtarget([ceil(column*0.15),ceil(17-raw*0.15),robot.q(ii,3)]);
+%      target = [ceil(column*0.15),ceil(17-raw*0.15),robot.q(ii,3)];
+%  end
 
 if(ll==250)
 target = [0 0 pi/8];
