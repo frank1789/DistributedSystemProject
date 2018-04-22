@@ -19,6 +19,8 @@ MdlInit.T = 800;
 %cost parameter
 beta=0.5;
 
+comunication = 0;
+
 nit = MdlInit.T / MdlInit.Ts;  %Total application iteration
 
 % preallocate
@@ -56,9 +58,9 @@ for ii = 1:1:nit
         if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
             
             %Update Global map
-      %      Update_gbmap(robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris);
+             Update_gbmap(robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris);
             
-            if(isempty(robot{rr}.laserScan_2_xy{ii}))
+            if(isempty(robot{rr}.laserScan_2_xy{ii}) && ~occparamters{rr}.comunication)
                 robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
             else
                 
@@ -66,7 +68,7 @@ for ii = 1:1:nit
                 if mod(ii,40)==0  % ii = 40
                     fprintf('aggiorno il target sulla mappa iterazione: %5i\n', ii);
                     %Compute Cost matrix
-      %              occparamters{rr}.Cost_map(:,:)  = Update_vis(occparamters{rr}.Cost_map(:,:),robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris ); %ToDo da rivedere
+                    occparamters{rr}.Cost_map(:,:)  = Update_vis(occparamters{rr}.Cost_map(:,:),robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris ); %ToDo da rivedere
                     %Reset Target Location
                     robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
                 end
@@ -74,11 +76,23 @@ for ii = 1:1:nit
             
         end
         
+        if (mod(ii,160) == 0 )   %  set target in base of visibility matrix
+                 robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
+        end
     
-        if (mod(ii,60) == 0)   %  dare un intervallo che non lo faccia ripetere subito dopo
-                  comunicate(robot,ii,rr,occparamters)
+        if (mod(ii,120) == 0 && ~occparamters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
+                 [occparamters] = comunicate(robot,ii,rr,occparamters);
         end
     end
+    if(occparamters{rr}.comunication)
+       occparamters{rr}.delay = occparamters{rr}.delay +1;
+    end
+    
+    if(occparamters{rr}.delay >100)
+       occparamters{rr}.comunication = 0;
+       occparamters{rr}.delay = 0;
+    end
+    
 end
 
 
