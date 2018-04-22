@@ -1,0 +1,75 @@
+\section{Modello del sistema}
+\subsection{Modello cinematico}
+Il robot è basato sul modello dell'uniciclo a trazione differenziale, la configurazione è completamente descritta da $\mathbf{q} = [x \, y \, \theta]^T$, dove $(x,y)$ sono le coordinate cartesiane del punto di contatto con il suolo e $\theta$ è l'orientamento della ruota rispetto l'asse $x$.\cite{siciliano2008robotica}, come in figura \ref{fig:model}.
+Il modello cinematico dell'uniciclo è descritto dall'equazioni (\ref{eq:modelcinematico}):
+\begin{equation}
+\label{eq:modelcinematico}
+	\begin{bmatrix}
+		\dot{x} \\ 
+		\dot{y} \\ 
+		\dot{\theta}
+	\end{bmatrix} = 
+	\begin{bmatrix}
+		\cos \theta \\
+		\sin \theta \\
+		0
+	\end{bmatrix} \, v + 
+	\begin{bmatrix}
+		0 \\
+		0 \\
+		1
+	\end{bmatrix} \, \omega
+\end{equation}
+\begin{table}[htb]
+	\centering
+	\caption{Riepilogo dimensioni}
+	\label{tab:dimensrobot}
+	\begin{tabular}{lcS[table-format=3.2]}
+	\toprule
+	\multicolumn{3}{c}{dimensioni}\\
+	\midrule
+      raggio ruote  & [\si{\metre}] & 0.07\\ % dimension wheel [m]
+      interasse     & [\si{\metre}] & 0.30\\ % dimension interaxle [m]
+     \bottomrule
+\end{tabular}
+\end{table}
+Il robot ha le dimensioni riportate in tabella \ref{tab:dimensrobot}.
+Questo è equipaggiato con un sensore virtuale \emph{lidar}, basato sul modello Hokuyo URG-04LX, collocato al centro della struttura in modo tale da evitare errori di offset, di seguito se ne riportano le caratteristiche, di cui adattate ad hoc per la simulazione. Come sensori propriocettivi presenta due encoder incrementali virtuali calettati sull'asse delle ruote, le caratteristiche di entrambi sono riportate in tabella \ref{tab:sensordata}. Una rappresentazione del robot è osservabile in figura \ref{fig:model}.
+\begin{table}[htb]
+	\centering
+	\caption{Specifiche sensori}
+	\label{tab:sensordata}
+	\begin{tabular}{lcS[table-format=3.2]}
+	\toprule
+	\multicolumn{3}{c}{specifiche lidar virtuale}\\
+	\midrule
+ 		risoluzione angolare & [\si{\degree}]	& 0.36\\  % [deg] laser sensor parameters\\
+ 		angolo di scansione  & [\si{\degree}]	& 180.00\\
+ 		massima distanza		 & [\si{\metre}]		& 4.00	\\ % [m] laser sensor parameters Max FOV
+ 		minima distanza 		 & [\si{\metre}]		& 0.02	\\ % [m] laser sensor parameters min FOV
+ 		risoluzione 			 & [\si{\milli\metre}]& 1.00\\
+%        % noise
+%        laser_rho_sigma     = 0.02;             % variance
+%        laser_theta_sigma   = 0.1 * (pi / 180); % variance
+	\bottomrule
+	\multicolumn{3}{c}{specifiche encoder virtuale}\\
+	\midrule
+	 risoluzione &  $2 \cdot (\frac{\pi}{2600})$\\   % encoder quantization
+        % encoder noise
+        %enc_mu = 0;                           % mean
+        %enc_sigma = 2 * (2 * pi / 2600) / 3;  % variance
+	\bottomrule
+	\end{tabular}
+\end{table}
+%\clearpage
+%\onecolumn
+\begin{figure}[!h]
+\centering
+    \resizebox{.8\linewidth}{!}{\input{robotmodel.tex}}
+\caption{modello cinematico}
+\label{fig:model}
+\end{figure}
+%\twocolumn
+%nuova sezione
+\input{potentialfield}
+
