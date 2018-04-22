@@ -47,7 +47,7 @@ for ll = 1:1:250
 end % end for-cycle
 
 if(ll==250)
-target = [front(1,251) front(2,251) 0];
+target = [0 0 pi/8];
 end
 
 end % function
