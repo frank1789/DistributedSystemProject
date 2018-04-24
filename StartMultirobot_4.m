@@ -1,20 +1,26 @@
 %% Main - Start multirobot
 close all
-clear class
 clear
 clc
 addpath('Utility-Mapping')
 
 %% Generating map
-% build a new map with map = Map("new",widht,height);
-% or load an existing one map = Map("load")
-map = Map('load');
+% build a new map with:
+% map = Map("New", width, heigth);
+% map = Map("New", width, heigth, #landmark, "auto");
+% map = Map("New", width, heigth, #landmark, "manual");
+% or load an existing one:
+% map = Map("Load");
+% map = Map("Load", #landamark);
+% map = Map("Load", #landamark, "auto");
+% map = Map("Load", #landamark, "manual");
+map = Map('new',100, 100);
 figure(800); axis equal
 map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 800;
+MdlInit.T = 400;
 
 %cost parameter
 beta=0.5;
@@ -25,16 +31,16 @@ nit = MdlInit.T / MdlInit.Ts;  %Total application iteration
 
 % preallocate
 robot = cell.empty;
-occparamters = cell.empty;
 pf = cell.empty;
+occparameters = cell.empty;
 
-% Vehicle set-up initial conditions jj = 1:3
-for jj = 1:3
+% Vehicle set-up initial conditions 
+for jj = 1:5
     %initialize robot and destination
-    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints());
+    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints(), map, 0.15);
     robot{jj}.setpointtarget(map.getAvailablePoints());
     %initialize parameters for occupacy & cost function
-    [ occparamters{jj} ] = cinitialize(robot{jj}, map, nit, 0.15);
+    [ occparameters{jj} ] = cinitialize(robot{jj}, map, nit, 0.15);
 end
 
 %% Online Simulation of all 3 Robot
