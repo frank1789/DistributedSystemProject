@@ -1,6 +1,56 @@
 classdef Robot < handle
-    %ROBOT Summary of this class goes here
-    %   Detailed explanation goes here
+    %ROBOT represents a differential guided robot.
+    %This robot is equipped with a laser sensor placed in the center of his
+    %body and equipped with an encoder on the wheels.
+    %Methods for kinematics, the kalman filter extended are available.
+    %Other support methods such as the transformation matrix.
+    %
+    % ROBOT properties:
+    %         wheelradius -  dimension of whell [m]
+    %         interaxle   -  dimension of interaxle [m]
+    %         length -  data for drawing
+    %         width  -  data for drawing
+    %         ID - Name of the robot
+    %         t - time [s]
+    %         q - position [m]
+    %         u - velocity vector [rectilinear[m/s] angular[rad/s]]
+    %         Dt - increment time
+    %         target - point to reach
+    %         steerangle - steering agnle
+    %         speed  - robot velocity
+    %         enc_quantization - encoder quantization
+    %         enc_mu = - mean encoder
+    %         enc_sigma - variance encoder
+    %         RightEnc - right encoder values
+    %         LeftEnc - left encoder values
+    %         noisyLeftEnc- noised right encoder measure
+    %         noisyRightEnc -  noised left encoder measure
+    %         EKF_q_est - position estimation
+    %         EKF_P -
+    %         EKF_Q - matrix of covariance
+    %         EKF_q_store - position estimated stored
+    %         laserAngularResolution - [deg] laser sensor parameters
+    %         lasermaxdistance  -  laser sensor parameters Max FOV [m]
+    %         lasermindistance - laser sensor parameters min FOV[m]
+    %         laser_rho_sigma - variance length laser
+    %         laser_theta_sigma -  variance angular resolution
+    %         laserScan_xy - contains scans at a certain location world reference
+    %         laserScan_2_xy - contains scans at a certain location robot reference
+    %         mindistance - min distance to start move [m]
+    %         laserTheta - theta's angle sector [rad]
+    %         occgridglobal - store occupacy grid
+    %
+    % ROBOT methods:
+    %         Robot - default constructor
+    %         UnicycleKinematicMatlab - function to compute the kinematics simulation
+    %         setpointtarget - set point to reach
+    %         ekfslam - compute Extend Kalman Filter
+    %         makerobot - plot function
+    %         animate - plot function for animation
+    %         scanenvironment - comupte laser scansion of the environment
+    %         getlaserscan - get the scans
+    %         setOccupacygridglobal -  store local occupacy grid in robot
+    %         getOccupacygridglobal - get occupacy grid from robot
     
     % Vehicle property
     properties (Constant)
@@ -49,7 +99,6 @@ classdef Robot < handle
         laser_theta_sigma   = 0.1 * (pi / 180); % variance
     end
     properties (SetAccess = private, Hidden = false)
-        C_l_xy = {};
         laserScan_xy = cell.empty;   % contains scans at a certain location
         laserScan_2_xy = cell.empty; % contains scans at a certain location
         mindistance = 4; % min distance to start move [m]
@@ -60,6 +109,19 @@ classdef Robot < handle
     methods
         % class constructor
         function this = Robot(inputID, time, sampletime, initialposition, Map, ris)
+            %ROBOT default constuctor to init a robot class.
+            %to start a new a new robot it is necessary to provide an
+            %identifier, the environment, and the resolution of the
+            %occupacy grid.
+            %
+            %@param[in] inputID - identification number for robot
+            %@param[in] time - length of total simulation
+            %@param[in] sampletime - sampling time
+            %@param[in] initialposition - start point, 3 coordinate
+            %(x,y,orientation)
+            %@param[in] Map - set the dimension of occupacy grid
+            %@param[in] ris - set resolution of occupacygrid
+            
             % check input constructor for passed arguments
             validateattributes(inputID,{'double'},{'nonnegative'})
             validateattributes(time,{'double'},{'nonnegative'})
@@ -99,18 +161,15 @@ classdef Robot < handle
         % function to compute the kinematics simulation
         this = UnicycleKinematicMatlab(this, it);
         this = setpointtarget(this, point);
-        test(this);
         % function to compute Extend Kalman Filter
         this = ekfslam(this, it)
         % plot function
         [body, label, rf_x, rf_y, rf_z] = makerobot(this, t);
         [body, label, rf_x, rf_y, rf_z] = animate(this, it);
-        % getter method to access proprerty class
-        numsteps = getEKFstep(this)
         % method to comupte laser scansion of the environment
         this = scanenvironment(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this, it);
-        % setter & getter method for ccupacy grid
+        % setter & getter method for occupacy grid
         this = setOccupacygridglobal(this, occgrid)
         occupacygrid = getOccupacygridglobal(this);
     end
