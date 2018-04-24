@@ -7,16 +7,16 @@ switch char(matchedStr)
         this.setdimension(varargin{:});
         % generate map
         if(~isempty(this.width) && ~isempty(this.height))
-            disp('Start to create new map!')
-            disp('Take a while...');
+            fprintf("Start to create new map...\n")
+            fprintf("Take a while...");
             [data] = this.mapgen(this.width, this.height);
             this.setpoints(data);
             this.setAvailablePoints(data);
             vert = this.setverticalsegment(data);
             horz = this.sethorizontalsegment(data);
             this.lines = horzcat(vert, horz);
-            disp('Complete!')
-            disp('Show plot...');
+            fprintf("Done\n")
+            fprintf("Start to show plot\n");
         end % if 
 end % switch
 end % function

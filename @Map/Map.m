@@ -78,6 +78,7 @@ classdef Map < handle
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
                     if (matchedStr == 'Load' || matchedStr == 'load'|| matchedStr == 'LOAD')
+                        this.checkinput(matchedStr);
                         validateattributes(varargin{2},{'numeric'},{'>=',10,'<=',65});
                         numland = varargin{2};
                         mode = validatestring(varargin{3},this.mode);
@@ -98,7 +99,7 @@ classdef Map < handle
                     % parse varargin
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    if (varargin{1} == 'New' || varargin{1} == 'new'|| varargin{1} == 'NEW') && ...
+                    if (matchedStr == 'New' || matchedStr == 'new'|| matchedStr == 'NEW') && ...
                             (isa(varargin{2}, 'double') && isa(varargin{3}, 'double'))
                         this.checkinput(matchedStr, varargin{2:3});
                         validateattributes(varargin{4},{'numeric'},{'>=',10,'<=',65});
@@ -112,7 +113,7 @@ classdef Map < handle
                     % parse varargin
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    if (varargin{1} == 'New' || varargin{1} == 'new'|| varargin{1} == 'NEW') && ...
+                    if (matchedStr == 'New' || matchedStr == 'new'|| matchedStr == 'NEW') && ...
                             (isa(varargin{2}, 'double') && isa(varargin{3}, 'double'))
                         this.checkinput(matchedStr, varargin{2:3});
                         validateattributes(varargin{4},{'numeric'},{'>=',10,'<=',65});
@@ -122,6 +123,7 @@ classdef Map < handle
                         if mode == 'manual' && numland == 10
                             this.generatelandamrk(numland, mode);
                         else
+                            fprintf("if the number of landmarks is greater than 10, the manual positioning mode is ignored\n");
                             this.generatelandamrk(numland);
                         end
                     else
