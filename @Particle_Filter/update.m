@@ -33,9 +33,9 @@ function this = update(this, Robot, lentime, it)
             %for each particle we add in control vector AND noise
             %the control noise adds diversity within the generation
             for p = 1:this.nParticles
-                xP(:,p) = this.tcomp(this.xP(:,p),u+sqrt(this.UEst)*randn(3,1));
+                this.xP(:,p) = this.tcomp(this.xP(:,p),u+sqrt(this.UEst)*randn(3,1));
             end
-            this.xP = xP;
+%             this.xP = xP;
             this.xP(3,:) = this.AngleWrapping(this.xP(3,:));
             % observe a randomn feature
             [z,iFeature] = this.GetObservation(it, lentime);

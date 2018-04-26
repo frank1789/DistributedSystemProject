@@ -3,6 +3,8 @@
 #include "leaf.h"
 #include "interface.h"
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 #include <deque>
 
 #define N_ROW 2
