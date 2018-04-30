@@ -8,13 +8,6 @@ Tra gli svantaggi, si ricorda, che la generazione procedurale di per sé non è 
 L'assenza di controllo è una mancanza comune della generazione procedurale in generale, ma forse non è più prevalente rispetto alla generazione di ambienti. Dato che, di solito gli ambienti sono realizzati a mano da designer. Lasciare questo lavoro a un algoritmo si traduce in una significativa perdita di controllo.
 Un'altra considerazione che deve essere presa in considerazione è la potenza di calcolo che è richiesta, nel nostro caso, si ha solo una matrice 2D di piccole dimensioni che deve essere generata. Tuttavia, mappe di più larga scala, avranno un costo computazionale diventa più significativo e deve essere preso in considerazione.\cite{green2016procedural}
 
-\begin{figure}[!htb]
-\centering
-    \resizebox{0.7\linewidth}{!}{\input{draw_tree}}
-\caption{risultato dell'albero \emph{k-d}.}
-\label{fig:albero}
-\end{figure}
-
 \subsection{Binary Space Partitioning}
 Il partizionamento dello spazio binario è un processo generico di divisione ricorsiva di una scena in due finché il partizionamento soddisfa uno o più requisiti. Può essere visto come una generalizzazione di altre strutture ad albero spaziale, uno in cui gli iperpiani che suddividono lo spazio possono avere qualsiasi orientamento, piuttosto che essere allineati con gli assi delle coordinate.\cite{wiki:bsp}
 L'albero \textbf{\emph{k-d}} è un albero binario in cui ogni nodo è un punto k-dimensionale. Ogni nodo non foglia può essere pensato come generare implicitamente un iperpiano scisso che divide lo spazio in due parti, note come semispazi. I punti a sinistra di questo iperpiano sono rappresentati dal sotto-albero sinistro di quel nodo e i punti a destra dell'iperpiano sono rappresentati dal sotto-albero destro. La direzione dell'iperpiano viene scelta nel modo seguente: ogni nodo dell'albero è associato a una delle dimensioni \emph{k}, con l'iperpiano perpendicolare all'asse di quella dimensione.\cite{wiki:kdtree}

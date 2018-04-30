@@ -1,0 +1,18 @@
+\subsection{Algoritmi di stima}
+
+Il sistema robotico preso in esame presenta degli errori all'ingresso degli encoder, tale errore porta il sistema a manifestare nel lungo periodo il noto comportamento di drift. Nasce allora il problema di correggere e stimare la posizione in base ad un dato modello dello stato presentato già precedentemente il modello odometrico e un modello di sensore esterno al robot che fornisca una misura approssimata della sua posizione. I metodi presentati saranno 2 , un primo di semplice applicazione ipotizza il ricevimento da parte del robot di un segnale GPS che viene integrato e sfruttato tramite il filtro di Kalman, un'altro modello e caso di studio sarà l'utilizzo di torrette Wi-fi integrate all'interno dell'ambiente che si vuole esplorare , in questo caso sarà invece implementato il particle filter. Una breve ricapitolazione del filtro di kalman sarà presentata mentre per il particle filter un'analisi più approfondita sarà condotta in quanto non argomento del corso.
+
+\subsubsection{Filtro di Kalman}
+
+Un filtro di Kalman è uno stimatore ottimale, ovvero deduce i parametri di interesse da osservazioni indirette, imprecise e incerte. È ricorsivo, così nuove misure possono essere elaborate al loro arrivo. 
+Se il rumore è gaussiano, il filtro di Kalman minimizza l'errore quadratico medio dei parametri stimati.
+Dato solo la media e la deviazione standard del rumore, il filtro di Kalman è il miglior stimatore lineare. Gli stimatori non lineari possono essere migliori.
+
+
+\subsubsection{Filtro Particellare}
+
+L'algoritmo di localizzazione PF procede come segue: si inizializzano n particelle in una mappa. Ogni particella è un vettore di stato 3 per 1 del veicolo ad ognuna di queste si applica il modello di plant e se ne aggiunge un rumore al vettore di controllo u. Successivamente per ogni particella se ne prevede l'osservazione e si confronta questo con il valore misurato, tale confronto porterà al calcolo dell'innovazione o di ciò che definiremo peso della particella.
+Si selezionano le particelle che meglio spiegano l'osservazione,un modo per farlo è quello di costruire una pdf che descriva i campioni e i loro pesi, e poi riselezionare un nuovo set di particelle da questa pdf.
+La stima della posizione del robot fornita dal filtro e la media di questo nuovo ricampionamento
+
+Il punto cruciale è che non richiede alcuna ipotesi di linearizzazione (non ci sono jacobiani coinvolti) e non ci sono ipotesi Gaussiane. È particolarmente adatto ai problemi con piccoli spazi di stato mentre in caso di vettori di stato grandi diventa computazionalmente pesante
