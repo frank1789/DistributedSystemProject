@@ -1,26 +1,20 @@
 %% Main - Start multirobot
 close all
+clear class
 clear
 clc
 addpath('Utility-Mapping')
 
 %% Generating map
-% build a new map with:
-% map = Map("New", width, heigth);
-% map = Map("New", width, heigth, #landmark, "auto");
-% map = Map("New", width, heigth, #landmark, "manual");
-% or load an existing one:
-% map = Map("Load");
-% map = Map("Load", #landamark);
-% map = Map("Load", #landamark, "auto");
-% map = Map("Load", #landamark, "manual");
-map = Map('new',100, 100);
+% build a new map with map = Map("new",widht,height);
+% or load an existing one map = Map("load")
+map = Map('load');
 figure(800); axis equal
 map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 400;
+MdlInit.T = 2000;
 
 %cost parameter
 beta=0.5;
@@ -31,13 +25,13 @@ nit = MdlInit.T / MdlInit.Ts;  %Total application iteration
 
 % preallocate
 robot = cell.empty;
-pf = cell.empty;
 occparameters = cell.empty;
+pf = cell.empty;
 
-% Vehicle set-up initial conditions 
-for jj = 1:5
+% Vehicle set-up initial conditions jj = 1:3
+for jj = 1:1
     %initialize robot and destination
-    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints(), map, 0.15);
+    robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints(),map,0.15);
     robot{jj}.setpointtarget(map.getAvailablePoints());
     %initialize parameters for occupacy & cost function
     [ occparameters{jj} ] = cinitialize(robot{jj}, map, nit, 0.15);
@@ -45,6 +39,7 @@ end
 
 %% Online Simulation of all 3 Robot
 
+itneeded =0;
 for ii = 1:1:nit
     for i = 1:1:length(robot)
         if mod(ii,2) == 0 % simualte laserscan @ 10Hz
@@ -64,40 +59,46 @@ for ii = 1:1:nit
         if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
             
             %Update Global map
-             Update_gbmap(robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris);
+            Update_gbmap(robot{rr},ii,occparameters{rr});
             
-            if(isempty(robot{rr}.laserScan_2_xy{ii}) && ~occparamters{rr}.comunication)
-                robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
-            else
+            if (ii>  occparameters{rr}.it_needed)   %  set target in base of visibility matrix
                 
-                
-                if mod(ii,40)==0  % ii = 40
-                    fprintf('aggiorno il target sulla mappa iterazione: %5i\n', ii);
-                    %Compute Cost matrix
-                    occparamters{rr}.Cost_map(:,:)  = Update_vis(occparamters{rr}.Cost_map(:,:),robot{rr},ii,occparamters{rr}.wdth,occparamters{rr}.lgth,occparamters{rr}.occ_mat,occparamters{rr}.lid_mat,occparamters{rr}.ris ); %ToDo da rivedere
-                    %Reset Target Location
-                    robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
-                end
+                [itneeded,target] = Reset_Main_Target(robot{rr},ii,occparameters{rr});
+                 fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
+                 fprintf('it needed: %5i\n', itneeded)
+                 occparameters{rr}.it_needed = itneeded +ii;
+                 robot{rr}.setpointtarget(target);
+            end
+            
+            if mod(ii,40)==0  % ii = 40
+                fprintf('aggiorno cost_map %5i\n', ii);
+                %Update visibility Matrix
+                occparameters{rr}.Cost_map(:,:)  = Update_vis(occparameters{rr},robot{rr},ii); %ToDo da rivedere
+            end
+        end
+        
+        if (length(robot)>1)
+            
+            
+            if (mod(ii,2) == 0 && ~occparameters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
+                [occparameters] = comunicate(robot,ii,rr,occparameters);
+            end
+            %Reset Comunication Parameter when a given temporal delay is overcame
+            if(occparameters{rr}.comunication)
+                occparameters{rr}.delay = occparameters{rr}.delay +1;
+            end
+            
+            if(occparameters{rr}.delay >100)
+                occparameters{rr}.comunication = 0;
+                occparameters{rr}.delay = 0;
             end
             
         end
         
-        if (mod(ii,160) == 0 )   %  set target in base of visibility matrix
-                 robot{rr}.setpointtarget(Reset_Target(robot{rr},occparamters{rr}.ris,occparamters{rr}.Cost_map(:,:),ii));
-        end
-    
-        if (mod(ii,120) == 0 && ~occparamters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
-                 [occparamters] = comunicate(robot,ii,rr,occparamters);
-        end
-    end
-    if(occparamters{rr}.comunication)
-       occparamters{rr}.delay = occparamters{rr}.delay +1;
+        
     end
     
-    if(occparamters{rr}.delay >100)
-       occparamters{rr}.comunication = 0;
-       occparamters{rr}.delay = 0;
-    end
+    
     
 end
 
