@@ -154,8 +154,8 @@ classdef Robot < handle
             %initialize occupacygrid
             room_length = max(Map.points(1,:));
             room_width  = max(Map.points(1,:));
-            lgth =  floor(room_length / ris);
-            wdth =  floor(room_width / ris);
+            lgth =  ceil(room_length / ris);
+            wdth =  ceil(room_width / ris);
             this.occgridglobal =zeros(lgth,wdth);
         end % definition constructor
         % function to compute the kinematics simulation
