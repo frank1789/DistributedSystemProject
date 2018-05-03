@@ -1,9 +1,14 @@
-function [ Cost_map ] = Update_vis( Cost_map,robot,ii,wdt,lgth,occ_mat,lid_mat,ris )
+function [ Cost_map ] = Update_vis(occparameters,robot,ii)
 %UPDATE_VIS Summary of this function goes here
 %   Detailed explanation goes here
 
+wdt      = occparameters.wdth;
+lgth     = occparameters.lgth;
+ris      = occparameters.ris;
+Cost_map = occparameters.Cost_map;
+
  out = robot.laserScan_2_xy{ii}(:,all(~isnan(robot.laserScan_2_xy{ii})));
-[ occ_mat(:,:)] = Occ_Grid( occ_mat(:,:),lid_mat(:,:),out);
+[ occ_mat(:,:)] = Occ_Grid(occparameters,out);
 
 muro = 0;
 j0 = length(occ_mat(1,:))/2;

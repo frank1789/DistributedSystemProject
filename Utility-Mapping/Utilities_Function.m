@@ -1,8 +1,8 @@
 function [ P ] = Utilities_Function( robot,idx_robot,n,max_range)
-%UTILITIES_FUNCTION Summary of this function goes here
-%   Detailed explanation goes here
 
-  
+%This function calculates the utility value for the given robot target and
+%location respect the target and location of the other ones
+%The formula is taken from the article "Coordinated Multi-Robot Exploration"
     P=0;
     
     for i=1:1:n
