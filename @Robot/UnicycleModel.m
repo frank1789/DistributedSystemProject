@@ -1,11 +1,10 @@
 function dy = UnicycleModel(this, t, y, it)
-% UNICYCLEMODEL
-% @Details: parse the position, then use the potential field to compute the
+% UNICYCLEMODEL parse the position, then use the potential field to compute the
 % trajectory for point target and avoid obstacle.
-% @param [in] t
-% @param [in] y
-% @param [in] it
-% @param [out] dy
+% @param [in] t: time
+% @param [in] y: position
+% @param [in] it: iteration
+% @param [out] dy: increment displacement
 
 % Input parser
 xu = y(1);
