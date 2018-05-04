@@ -8,7 +8,7 @@ addpath('Utility-Mapping')
 %% Generating map
 % build a new map with map = Map("new",widht,height);
 % or load an existing one map = Map("load")
-map = Map('load');
+map = Map('new',100,100);
 figure(800); axis equal
 map.plotMap();
 % time sample
@@ -29,7 +29,7 @@ occparameters = cell.empty;
 pf = cell.empty;
 
 % Vehicle set-up initial conditions jj = 1:3
-for jj = 1:1
+for jj = 1:3
     %initialize robot and destination
     robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints(),map,0.15);
     robot{jj}.setpointtarget(map.getAvailablePoints());
@@ -55,19 +55,16 @@ for ii = 1:1:nit
     end
     
     for rr = 1:1:length(robot)
-        %If lidar information is avaible update Global Map of each robot
-        if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
-            
+        % if lidar information is avaible update Global Map of each robot
+        if mod(ii,20) == 0   % update Global & Cost Map 1 Hz every 1s ii =20
             %Update Global map
             Update_gbmap(robot{rr},ii,occparameters{rr});
-            
-            if (ii>  occparameters{rr}.it_needed)   %  set target in base of visibility matrix
-                
+            if (ii > occparameters{rr}.it_needed)   %  set target in base of visibility matrix
                 [itneeded,target] = Reset_Main_Target(robot{rr},ii,occparameters{rr});
-                 fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
-                 fprintf('it needed: %5i\n', itneeded)
-                 occparameters{rr}.it_needed = itneeded +ii;
-                 robot{rr}.setpointtarget(target);
+                fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
+                fprintf('it needed: %5i\n', itneeded)
+                occparameters{rr}.it_needed = itneeded +ii;
+                robot{rr}.setpointtarget(target);
             end
             
             if mod(ii,40)==0  % ii = 40
@@ -77,68 +74,58 @@ for ii = 1:1:nit
             end
         end
         
-        if (length(robot)>1)
-            
-            
-            if (mod(ii,2) == 0 && ~occparameters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
-                [occparameters] = comunicate(robot,ii,rr,occparameters);
-            end
-            %Reset Comunication Parameter when a given temporal delay is overcame
-            if(occparameters{rr}.comunication)
-                occparameters{rr}.delay = occparameters{rr}.delay +1;
-            end
-            
-            if(occparameters{rr}.delay >100)
-                occparameters{rr}.comunication = 0;
-                occparameters{rr}.delay = 0;
-            end
-            
+        if (mod(ii,2) == 0 && ~occparameters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
+            [occparameters] = comunicate(robot,ii,rr,occparameters);
+        end
+        % Reset Comunication Parameter when a given temporal delay is overcame
+        if(occparameters{rr}.comunication)
+            occparameters{rr}.delay = occparameters{rr}.delay +1;
         end
         
-        
+        if(occparameters{rr}.delay >100)
+            occparameters{rr}.comunication = 0;
+            occparameters{rr}.delay = 0;
+        end
     end
-    
-    
-    
 end
 
 
-%% Animation
-% pre-allocating for speed
-body = cell.empty;
-label = cell.empty;
-rf  = cell.empty;
-rf_x= cell.empty;
-rf_y= cell.empty;
-rf_z= cell.empty;
-cl_point = cell.empty;
-cloudpoint = cell.empty;
-% setup figure
-figure(); hold on;
-map.plotMap();
-for n= 1:30:length(robot{1}.t)
-    title(['Time: ', num2str(robot{1}.t(n),5)])
-    hold on
- axis equal; grid on;
-    
-    for j = 1:1:length(robot)
-        plot(robot{j}.target(1), robot{j}.target(2), '*r')
-        plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
-        if n == 1
-            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
-        else
-            delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
-            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
-        end
-        drawnow;
-        %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-        %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-        %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-        %         end
-        %         if isempty(cl_point)
-        %             delete([cl_point]);
-        %         end
-    end
-    hold off
-end % animation
-hold off
+% %% Animation
+% % pre-allocating for speed
+% body = cell.empty;
+% label = cell.empty;
+% rf  = cell.empty;
+% rf_x= cell.empty;
+% rf_y= cell.empty;
+% rf_z= cell.empty;
+% cl_point = cell.empty;
+% cloudpoint = cell.empty;
+% % setup figure
+% figure(); hold on;
+% map.plotMap();
+% for n= 1:30:length(robot{1}.t)
+%     title(['Time: ', num2str(robot{1}.t(n),5)])
+%     hold on
+%     axis equal; grid on;
+%
+%     for j = 1:1:length(robot)
+%         plot(robot{j}.target(1), robot{j}.target(2), '*r')
+%         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
+%         if n == 1
+%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
+%         else
+%             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
+%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
+%         end
+%         drawnow;
+%         %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
+%         %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
+%         %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
+%         %         end
+%         %         if isempty(cl_point)
+%         %             delete([cl_point]);
+%         %         end
+%     end
+%     hold off
+% end % animation
+% hold off
