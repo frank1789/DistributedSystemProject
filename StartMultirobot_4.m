@@ -90,42 +90,42 @@ for ii = 1:1:nit
 end
 
 
-% %% Animation
-% % pre-allocating for speed
-% body = cell.empty;
-% label = cell.empty;
-% rf  = cell.empty;
-% rf_x= cell.empty;
-% rf_y= cell.empty;
-% rf_z= cell.empty;
-% cl_point = cell.empty;
-% cloudpoint = cell.empty;
-% % setup figure
-% figure(); hold on;
-% map.plotMap();
-% for n= 1:30:length(robot{1}.t)
-%     title(['Time: ', num2str(robot{1}.t(n),5)])
-%     hold on
-%     axis equal; grid on;
-%
-%     for j = 1:1:length(robot)
-%         plot(robot{j}.target(1), robot{j}.target(2), '*r')
-%         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
-%         if n == 1
-%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
-%         else
-%             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
-%             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
-%         end
-%         drawnow;
-%         %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-%         %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-%         %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-%         %         end
-%         %         if isempty(cl_point)
-%         %             delete([cl_point]);
-%         %         end
-%     end
-%     hold off
-% end % animation
-% hold off
+%% Animation
+% pre-allocating for speed
+body = cell.empty;
+label = cell.empty;
+rf  = cell.empty;
+rf_x= cell.empty;
+rf_y= cell.empty;
+rf_z= cell.empty;
+cl_point = cell.empty;
+cloudpoint = cell.empty;
+% setup figure
+figure(); hold on;
+map.plotMap();
+for n= 1:30:length(robot{1}.t)
+    title(['Time: ', num2str(robot{1}.t(n),5)])
+    hold on
+    axis equal; grid on;
+
+    for j = 1:1:length(robot)
+        plot(robot{j}.target(1), robot{j}.target(2), '*r')
+        plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
+        if n == 1
+            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.makerobot(n);
+        else
+            delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
+            [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
+        end
+        drawnow;
+        %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
+        %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
+        %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
+        %         end
+        %         if isempty(cl_point)
+        %             delete([cl_point]);
+        %         end
+    end
+    hold off
+end % animation
+hold off
