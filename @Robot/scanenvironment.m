@@ -16,26 +16,16 @@ initposition = [this.q(it,1), this.q(it,2) this.q(it,3)];
 % initialize laser beam
 laser = [initposition, pi, this.laserAngularResolution*pi/180,...
     this.laser_theta_sigma, this.laser_rho_sigma] ;
-
 % scan environment
 laserReadings = Sens_model_noise(ppoints, plines, laser(1,:));
 % remove the data that are too far away
 rhosOver4m = (laserReadings(2,:) < this.lasermaxdistance & laserReadings(2,:) > this.lasermindistance);
 laserReadings(2,:) = laserReadings(2,:).* rhosOver4m; % set zero value over max distance
-
+% remove outliers
 F = laserReadings(2,:); % instance a temporary F matrix
 F(rhosOver4m==0)=nan;   % substitute 0 with nan
 laserReadings(2,:)= F;  % update original matrix of scan
-
-% compute the laserscan
-alpha = this.q(it,3);
-
-% apply rotation matrix
-R = this.rotationMatrix(alpha);
-rotatescan = [laserReadings(2,:).*cos(this.laserTheta);...
-    laserReadings(2,:).*sin(this.laserTheta)]' / R + [this.q(it,1); this.q(it,2)]';
-this.laserScan_xy{it} = rotatescan';    % global frame
-% raw data scan
-this.laserScan_2_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);... 
-    laserReadings(2,:).*sin(this.laserTheta)]; % robot frame
+% store raw data scan - robot frame
+this.laserScan_xy{it} =[laserReadings(2,:).*cos(this.laserTheta);... 
+    laserReadings(2,:).*sin(this.laserTheta)];  
 end % method

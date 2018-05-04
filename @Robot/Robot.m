@@ -34,8 +34,7 @@ classdef Robot < handle
     %         lasermindistance - laser sensor parameters min FOV[m]
     %         laser_rho_sigma - variance length laser
     %         laser_theta_sigma -  variance angular resolution
-    %         laserScan_xy - contains scans at a certain location world reference
-    %         laserScan_2_xy - contains scans at a certain location robot reference
+    %         laserScan_xy - contains scans at a certain location robot reference
     %         mindistance - min distance to start move [m]
     %         laserTheta - theta's angle sector [rad]
     %         occgridglobal - store occupacy grid
@@ -100,7 +99,6 @@ classdef Robot < handle
     end
     properties (SetAccess = private, Hidden = false)
         laserScan_xy = cell.empty;   % contains scans at a certain location
-        laserScan_2_xy = cell.empty; % contains scans at a certain location
         mindistance = 4; % min distance to start move [m]
         laserTheta = []; % theta's angle sector [rad]
         occgridglobal; % store occupacy grid
@@ -134,7 +132,6 @@ classdef Robot < handle
             this.Dt = sampletime;     % Sampling time
             dimension = length(0:sampletime:time) - 1;  % Length of simulation
             this.laserScan_xy{1,dimension} = [];
-            this.laserScan_2_xy{1,dimension} = [];
             % set initial position
             this.q = initialposition;
             this.q(1,3) = wrapToPi(this.q(1,3));  % wraps angles in lambda, in radians, to the interval [-pi pi].
