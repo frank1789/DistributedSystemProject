@@ -18,6 +18,7 @@ if ~isempty(this.laserScan_xy{it})
         [this.steerangle] = potentialfield([xu yu thetau],this.target,this.laserScan_xy{it},this.laserTheta, this.speed);
         if abs(this.steerangle) < 1e-3
             this.steerangle = 0;
+            this.speed = 2;
         else
              this.speed = 0.5; % reduce speed
         end

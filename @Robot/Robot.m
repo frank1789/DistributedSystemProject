@@ -68,7 +68,7 @@ classdef Robot < handle
         Dt =[];
         target = [];
         steerangle =[];
-        speed = 0.5;
+        speed = 2;
     end
     % Virtual incremental encoder
     properties (Constant)
