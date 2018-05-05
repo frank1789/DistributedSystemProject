@@ -148,8 +148,7 @@ classdef Map < handle
         this = checkinput(str, varargin)
         this = setdimension(this, varargin)
         this = setFromFile(this)
-        [vsegment] = setverticalsegment(this, input)
-        [hsegment] = sethorizontalsegment(this, input)
+        
         this = setpoints(this, data)
         this = setAvailablePoints(this, input)
         this = generatelandamrk(this, varargin)
@@ -157,7 +156,9 @@ classdef Map < handle
     
     methods (Static, Access = 'private')
         [p] = plotLine(initialPoint, finalPoint, lineColor, lineWidth, lineStyle)
-        [data] = mapgen(width, height);
-        [ err ] = error();
+        [data] = mapgen(width, height)
+        [ err ] = error()
+        [vsegment] = setverticalsegment(input)
+        [hsegment] = sethorizontalsegment(input)
     end
 end % definition class

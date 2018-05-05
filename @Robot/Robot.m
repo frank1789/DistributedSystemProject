@@ -169,6 +169,7 @@ classdef Robot < handle
         % method to comupte laser scansion of the environment
         this = scanenvironment(this, ppoints, plines, it);
         [laserScan_xy] = getlaserscan(this, it);
+        [laserScan_xy] = getRawlaserScan(this, it)
         % setter & getter method for occupacy grid
         this = setOccupacygridglobal(this, occgrid)
         occupacygrid = getOccupacygridglobal(this);

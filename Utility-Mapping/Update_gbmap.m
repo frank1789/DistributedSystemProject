@@ -1,21 +1,21 @@
-function Update_gbmap(robot,ii,occparameters)
-
+function Update_gbmap(Robot, ii, occparameters)
 %UPDATE_GBMAP Summary of this function goes here
 %   Detailed explanation goes here
+
 ris     = occparameters.ris;
 wdt     = occparameters.wdth;
 lgth    = occparameters.lgth;
 
 % initialize local variable
-tempglobalmap = robot.getOccupacygridglobal();
-out = robot.laserScan_2_xy{ii}(:,all(~isnan(robot.laserScan_2_xy{ii})));
+tempglobalmap = Robot.getOccupacygridglobal(); 
+out = Robot.laserScan_2_xy{ii}(:,all(~isnan(Robot.laserScan_2_xy{ii}))); 
 occ_mat = Occ_Grid(occparameters, out);
 
 for i = 1:1:length(occ_mat(:,1))
     for j = 1:1:length(occ_mat(1,:))
         if(occ_mat(i,j)~=0)
-            A     = [cos(robot.q(ii,3)), -sin(robot.q(ii,3)), robot.q(ii,1)/ris;
-                     sin(robot.q(ii,3)),  cos(robot.q(ii,3)), robot.q(ii,2)/ris;
+            A     = [cos(Robot.q(ii,3)), -sin(Robot.q(ii,3)), Robot.q(ii,1)/ris;
+                     sin(Robot.q(ii,3)),  cos(Robot.q(ii,3)), Robot.q(ii,2)/ris;
                        0                 0             1]*[i ;(length(occ_mat(1,:)))/2+1-j; 1];
             A=floor(A);
             if(A(2)>wdt || A(2)==wdt)
@@ -46,8 +46,6 @@ for i = 1:1:length(occ_mat(:,1))
         end %if
     end % end for-cycle j
 end % for-cycle i
-% save the temp data
-robot.setOccupacygridglobal(tempglobalmap);
-%clear tempglobalmap
+Robot.setOccupacygridglobal(tempglobalmap); % save the temp data
 end % function
 

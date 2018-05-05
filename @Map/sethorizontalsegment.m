@@ -1,4 +1,4 @@
-function [hsegment] = sethorizontalsegment(this, input)
+function [hsegment] = sethorizontalsegment(input)
 % sethorizontalsegment connect point and make a horizontal segment.
 % The function maps the incoming matrix and extracts the indices, so the
 % adjacent ones are searched, saving the indices of the latter.
