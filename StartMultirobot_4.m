@@ -57,39 +57,42 @@ for ii = 1:1:nit
         else
             pf{i}.update(robot{i}, ii);
         end
-        
-        for rr = 1:1:length(robot)
-            % if lidar information is avaible update Global Map of each robot
-            if mod(ii,20) == 0   % update Global & Cost Map 1 Hz every 1s ii =20
-                %Update Global map
-                Update_gbmap(robot{rr},ii,occparameters{rr});
-                if (ii > occparameters{rr}.it_needed)   %  set target in base of visibility matrix
-                    [itneeded,target] = Reset_Main_Target(robot{rr},ii,occparameters{rr});
-                    fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
-                    fprintf('it needed: %5i\n', itneeded)
-                    occparameters{rr}.it_needed = itneeded +ii;
-                    robot{rr}.setpointtarget(target);
-                end
+    end
+    
+    for rr = 1:1:length(robot)
+        %If lidar information is avaible update Global Map of each robot
+        if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
+            
+            %Update Global map
+            Update_gbmap(robot{rr},ii,occparameters{rr});
+            
+            if (ii>  occparameters{rr}.it_needed)   %  set target in base of visibility matrix
                 
-                if mod(ii,40)==0  % ii = 40
-                    fprintf('aggiorno cost_map %5i\n', ii);
-                    %Update visibility Matrix
-                    occparameters{rr}.Cost_map(:,:)  = Update_vis(occparameters{rr},robot{rr},ii); %ToDo da rivedere
-                end
+                [itneeded,target] = Reset_Main_Target(robot{rr},ii,occparameters{rr});
+                fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
+                fprintf('it needed: %5i\n', itneeded)
+                occparameters{rr}.it_needed = itneeded +ii;
+                robot{rr}.setpointtarget(target);
             end
             
-            if (mod(ii,2) == 0 && ~occparameters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
-                [occparameters] = comunicate(robot,ii,rr,occparameters);
+            if mod(ii,40)==0  % ii = 40
+                fprintf('aggiorno cost_map %5i\n', ii);
+                %Update visibility Matrix
+                occparameters{rr}.Cost_map(:,:)  = Update_vis(occparameters{rr},robot{rr},ii); %ToDo da rivedere
             end
-            % Reset Comunication Parameter when a given temporal delay is overcame
-            if(occparameters{rr}.comunication)
-                occparameters{rr}.delay = occparameters{rr}.delay +1;
-            end
-            
-            if(occparameters{rr}.delay >100)
-                occparameters{rr}.comunication = 0;
-                occparameters{rr}.delay = 0;
-            end
+        end
+        
+        if (mod(ii,2) == 0 && ~occparameters{rr}.comunication)   %  dare un intervallo che non lo faccia ripetere subito dopo
+            [occparameters] = comunicate(robot,ii,rr,occparameters);
+        end
+        % Reset Comunication Parameter when a given temporal delay is overcame
+        if(occparameters{rr}.comunication)
+            occparameters{rr}.delay = occparameters{rr}.delay +1;
+        end
+        
+        if(occparameters{rr}.delay >100)
+            occparameters{rr}.comunication = 0;
+            occparameters{rr}.delay = 0;
         end
     end
     waitbar(ii/nit, w, sprintf('Please wait simulation in progress... %3.2f%%', ii/nit * 100))
