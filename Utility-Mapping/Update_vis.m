@@ -7,7 +7,7 @@ lgth     = occparameters.lgth;
 ris      = occparameters.ris;
 Cost_map = occparameters.Cost_map;
 
- out = robot.laserScan_xy{ii}(:,all(~isnan(robot.laserScan_xy{ii})));
+ out = robot.laserScan_2_xy{ii}(:,all(~isnan(robot.laserScan_2_xy{ii})));
 [ occ_mat(:,:)] = Occ_Grid(occparameters,out);
 
 muro = 0;

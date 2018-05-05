@@ -8,7 +8,7 @@ lgth    = occparameters.lgth;
 
 % initialize local variable
 tempglobalmap = Robot.getOccupacygridglobal();
-out = Robot.laserScan_xy{ii}(:,all(~isnan(Robot.laserScan_xy{ii})));
+out = Robot.laserScan_2_xy{ii}(:,all(~isnan(Robot.laserScan_2_xy{ii})));
 occ_mat = Occ_Grid(occparameters, out);
 
 for i = 1:1:length(occ_mat(:,1))

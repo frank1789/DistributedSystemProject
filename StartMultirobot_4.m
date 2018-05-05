@@ -1,6 +1,5 @@
 %% Main - Start multirobot
 close all
-clear class
 clear
 clc
 addpath('Utility-Mapping')
@@ -14,7 +13,7 @@ map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 2000;
+MdlInit.T = 200;
 
 %cost parameter
 beta=0.5;
@@ -50,11 +49,11 @@ for ii = 1:1:nit
         if ii == 1
             pf{i} = Particle_Filter(robot{i}, map.landmark, ii);
         else
-            pf{i}.update(robot{i}, nit, ii);
+            pf{i}.update(robot{i}, ii);
         end
-    end
-    
-    for rr = 1:1:length(robot)
+        
+        rr = i;
+        %     for rr = 1:1:length(robot)
         % if lidar information is avaible update Global Map of each robot
         if mod(ii,20) == 0   % update Global & Cost Map 1 Hz every 1s ii =20
             %Update Global map
@@ -89,7 +88,6 @@ for ii = 1:1:nit
     end
 end
 
-
 %% Animation
 % pre-allocating for speed
 body = cell.empty;
@@ -102,12 +100,11 @@ cl_point = cell.empty;
 cloudpoint = cell.empty;
 % setup figure
 figure(); hold on;
-map.plotMap();
-for n= 1:30:length(robot{1}.t)
+for n= 1:length(robot{1}.t)
     title(['Time: ', num2str(robot{1}.t(n),5)])
-    hold on
+    hold on;
     axis equal; grid on;
-
+    
     for j = 1:1:length(robot)
         plot(robot{j}.target(1), robot{j}.target(2), '*r')
         plot(robot{j}.q(:,1), robot{j}.q(:,2), 'g-.')
@@ -117,15 +114,21 @@ for n= 1:30:length(robot{1}.t)
             delete([body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}]);
             [body{j}, label{j}, rf_x{j}, rf_y{j}, rf_z{j}] = robot{j}.animate(n);
         end
-        drawnow;
-        %         cloudpoint{j} = (robot{j}.getlaserscan(n)); % local variable cluodpoint
-        %         if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
-        %             [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
-        %         end
-        %         if isempty(cl_point)
-        %             delete([cl_point]);
-        %         end
+        
+        cloudpoint{j} = drawscan(robot{j},pf{j}, n); % local variable cluodpoint
+        if ~isempty(cloudpoint{j}) % verify cloudpoint is nonvoid vector
+            [cl_point{j}] = plot(cloudpoint{j}(1,:),cloudpoint{j}(2,:),'.b'); % plot
+        end
     end
+    drawnow;
     hold off
 end % animation
 hold off
+%%
+for z = 1:length(robot)
+    figure(); hold on; axis equal;
+    plot(robot{z}.q(:,1),robot{z}.q(:,2))
+    plot(robot{z}.EKF_q_store(1,:),robot{z}.EKF_q_store(2,:))
+    plot(pf{z}.xEst(:,1),pf{z}.xEst(:,2))
+    hold off
+end
