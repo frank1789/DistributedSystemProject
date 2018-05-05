@@ -1,4 +1,4 @@
-function [z, iFeature] = GetObservation(this, it, lentime)
+function [z, iFeature] = GetObservation(this)
 %GETOBSERVATION  model of observator
 %
 %@param[in] lentime - length of time simulazion (length(start:sample:stop))
