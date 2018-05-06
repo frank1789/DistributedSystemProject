@@ -20,7 +20,7 @@ map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 200;
+MdlInit.T = 20;
 
 %cost parameter
 beta=0.5;
@@ -56,6 +56,7 @@ for ii = 1:1:nit
             pf{i} = Particle_Filter(robot{i}, map.landmark, ii);
         else
             pf{i}.update(robot{i}, ii);
+            robot{i}.setParticleFilterxEst(pf{i}.xEst);
         end
     end
     

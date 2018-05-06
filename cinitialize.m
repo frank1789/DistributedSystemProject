@@ -24,7 +24,7 @@ Max_com = 16;        %Maximum communication range
 %%Preallocation of usefull 
 theta = Robot.laserTheta;
 ris = resolution;
-r0= Robot.mindistance / ris;
+r0= Robot.lasermaxdistance / ris;
 
 y = r0 * sin(theta);
 x = r0 * cos(theta);

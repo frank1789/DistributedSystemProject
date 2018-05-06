@@ -88,6 +88,7 @@ classdef Robot < handle
         EKF_P;
         EKF_Q;
         EKF_q_store;    % position data stored
+        pf_xEst; % estimated position by particle filter
     end
     % definition laser sensor
     properties (Constant)
@@ -101,8 +102,7 @@ classdef Robot < handle
     properties (SetAccess = private, Hidden = false)
         laserScan_xy = cell.empty;   % contains scans at a certain location
         laserScan_2_xy = cell.empty; % contains scans at a certain location
-        mindistance = 4; % min distance to start move [m]
-        laserTheta = []; % theta's angle sector [rad]
+        laserTheta; % theta's angle sector [rad]
         occgridglobal; % store occupacy grid
     end
     
@@ -149,6 +149,7 @@ classdef Robot < handle
             this.EKF_P = eps * eye(3);
             this.EKF_Q = diag([this.enc_sigma^2, this.enc_sigma^2]);
             this.EKF_q_store = zeros(3, dimension);
+            this.pf_xEst = zeros(dimension, 3);
             % initialize sector of angle laser theta
             this.laserTheta = pi/180*(-90:this.laserAngularResolution:90);
             %initialize occupacygrid
@@ -168,8 +169,9 @@ classdef Robot < handle
         [body, label, rf_x, rf_y, rf_z] = animate(this, it);
         % method to comupte laser scansion of the environment
         this = scanenvironment(this, ppoints, plines, it);
-        [laserScan_xy] = getlaserscan(this, it);
-        [laserScan_xy] = getRawlaserScan(this, it)
+        laserScan_xy = getlaserscan(this, it);
+        laserScan_xy = getRawlaserScan(this, it);
+        this = setParticleFilterxEst(this, xEstimated);
         % setter & getter method for occupacy grid
         this = setOccupacygridglobal(this, occgrid)
         occupacygrid = getOccupacygridglobal(this);
