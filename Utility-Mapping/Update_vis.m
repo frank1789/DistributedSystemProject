@@ -27,8 +27,8 @@ for j = j0:1:length(occ_mat(1,:))
             break
         end
             if(~muro)
-            A     = [cos(robot.q(ii,3)), -sin(robot.q(ii,3)), robot.q(ii,1)/ris;
-                sin(robot.q(ii,3)),  cos(robot.q(ii,3)), robot.q(ii,2)/ris;
+            A     = [cos(robot.pf_xEst(ii,3)), -sin(robot.pf_xEst(ii,3)), robot.pf_xEst(ii,1)/ris;
+                sin(robot.pf_xEst(ii,3)),  cos(robot.pf_xEst(ii,3)), robot.pf_xEst(ii,2)/ris;
                 0                 0             1]*[i ;(length(occ_mat(1,:)))/2+1-j; 1];
             A=floor(A);
             if(A(2)>wdt || A(2)==wdt)
@@ -72,8 +72,8 @@ for j = j0:-1:1
             break
         end
             if(~muro)
-            A     = [cos(robot.q(ii,3)), -sin(robot.q(ii,3)), robot.q(ii,1)/ris;
-                sin(robot.q(ii,3)),  cos(robot.q(ii,3)), robot.q(ii,2)/ris;
+            A     = [cos(robot.pf_xEst(ii,3)), -sin(robot.pf_xEst(ii,3)), robot.pf_xEst(ii,1)/ris;
+                sin(robot.pf_xEst(ii,3)),  cos(robot.pf_xEst(ii,3)), robot.pf_xEst(ii,2)/ris;
                 0                 0             1]*[i ;(length(occ_mat(1,:)))/2+1-j; 1];
             A=floor(A);
             if(A(2)>wdt || A(2)==wdt)

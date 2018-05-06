@@ -22,7 +22,7 @@ for i = 1:1:length(front(1,:))
         [ P ] = Utilities_Function(robot, ss, robot{ss}.lasermaxdistance);  % 3 number of robot %4 max range
         Ct = 0; %cost inizialization
         for j = 1:1:length(robot) %number of robot
-            Ct = Ct + beta * norm(robot{j}.target(1:2)-robot{j}.q(ii-1,1:2));
+            Ct = Ct + beta * norm(robot{j}.target(1:2)-robot{j}.pf_xEst(ii-1,1:2));
         end
         P = P - Ct;
         if U < P

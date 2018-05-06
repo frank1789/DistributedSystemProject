@@ -14,8 +14,8 @@ occ_mat = Occ_Grid(occparameters, out);
 for i = 1:1:length(occ_mat(:,1))
     for j = 1:1:length(occ_mat(1,:))
         if(occ_mat(i,j)~=0)
-            A     = [cos(Robot.q(ii,3)), -sin(Robot.q(ii,3)), Robot.q(ii,1)/ris;
-                     sin(Robot.q(ii,3)),  cos(Robot.q(ii,3)), Robot.q(ii,2)/ris;
+            A     = [cos(robot.pf_xEst(ii,3)), -sin(robot.pf_xEst(ii,3)), robot.pf_xEst(ii,1)/ris;
+                     sin(robot.pf_xEst(ii,3)),  cos(robot.pf_xEst(ii,3)), robot.pf_xEst(ii,2)/ris;
                        0                 0             1]*[i ;(length(occ_mat(1,:)))/2+1-j; 1];
             A=floor(A);
             if(A(2)>wdt || A(2)==wdt)

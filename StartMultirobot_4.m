@@ -61,20 +61,29 @@ for ii = 1:1:nit
     end
     
     for rr = 1:1:length(robot)
+        occparameters{rr}.already_visit = 0;
         %If lidar information is avaible update Global Map of each robot
         if mod(ii,20) == 0   %Update Global & Cost Map 1 Hz every 1s ii =20
             
             %Update Global map
             Update_gbmap(robot{rr},ii,occparameters{rr});
-            
-            if (ii>  occparameters{rr}.it_needed)   %  set target in base of visibility matrix
+%                  
+                 if mod(ii,300) == 0
+                 [occparameters{rr}.already_visit] = AlreadyPass(robot{rr}.q(1:ii-1,1:2),robot{rr}.q(ii,1:2));
+                 end
+                 
+            if (occparameters{rr}.already_visit && ii>  occparameters{rr}.it_needed)    %  set target in base of visibility matrix
                 
                 [itneeded,target] = Reset_Main_Target(robot{rr},ii,occparameters{rr});
-                fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
-                fprintf('it needed: %5i\n', itneeded)
-                occparameters{rr}.it_needed = itneeded +ii;
-                robot{rr}.setpointtarget(target);
+                 fprintf('aggiorno il target sulla mappa iterazione: %5i\n', robot{rr}.target)
+                 fprintf('it needed: %5i\n', itneeded)
+                 occparameters{rr}.it_needed = itneeded +ii;
+                 robot{rr}.setpointtarget(target);
+                 
+            elseif (ii>  occparameters{rr}.it_needed)
+                robot{rr}.setpointtarget(Reset_Target_2(robot{rr},ii, occparameters{rr}));
             end
+
             
             if mod(ii,40)==0  % ii = 40
                 fprintf('aggiorno cost_map %5i\n', ii);
