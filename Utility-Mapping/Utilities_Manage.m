@@ -19,7 +19,7 @@ for i = 1:1:length(front(1,:))
     if(isnan(robot{ss}.laserScan_xy{1,ii}(1,i)) && front(1,i)>0 && front(2,i)>0)
         %     robot{ss}.setpointtarget([front(1,i) ,front(2,i) ,robot{ss}.q(ii,3)+0.0063*(251-i)]);
         robot{ss}.setpointtarget([front(1,i) ,front(2,i) , 0]);
-        [ P ] = Utilities_Function(robot, ss, robot{ss}.mindistance);  % 3 number of robot %4 max range
+        [ P ] = Utilities_Function(robot, ss, robot{ss}.lasermaxdistance);  % 3 number of robot %4 max range
         Ct = 0; %cost inizialization
         for j = 1:1:length(robot) %number of robot
             Ct = Ct + beta * norm(robot{j}.target(1:2)-robot{j}.q(ii-1,1:2));

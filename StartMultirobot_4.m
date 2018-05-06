@@ -20,7 +20,7 @@ map.plotMap();
 % time sample
 MdlInit.Ts = 0.05;
 % Length of simulation
-MdlInit.T = 20;
+MdlInit.T = 200;
 
 %cost parameter
 beta=0.5;
