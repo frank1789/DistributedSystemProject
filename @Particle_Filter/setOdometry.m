@@ -1,4 +1,4 @@
-function odometry = setOdometry(this, Robot, it)
+function [this, odometry] = setOdometry(this, Robot, it)
 %SETODOMETRY perfrom the odometry simulation from Robot's encoder.
 %
 %  compute the difference both encoder e return delta angle increment
@@ -17,5 +17,5 @@ B = [cos(this.qEst(3,it-1))*Robot.wheelradius/2, cos(this.qEst(3,it-1))*Robot.wh
     Robot.wheelradius/Robot.interaxle, -Robot.wheelradius/Robot.interaxle];
 
 this.qEst(:,it) = this.qEst(:,it-1) + B * DeltaEnc;
-odometry = this.qEst(:,it);
+odometry = this.qEst(:,it-1) + B * DeltaEnc;
 end

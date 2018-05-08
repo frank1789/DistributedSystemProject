@@ -16,11 +16,11 @@ function this = update(this, Robot, it)
 %             hPoints = plot(this.xP(1,:),this.xP(2,:), ' .' );
 
 % do world iteration and get also the new xTrue
-this.SimulateWorld(Robot, it);
+this = this.SimulateWorld(Robot, it);
 % all particles are equally important
 L = ones(this.nParticles, 1) / this.nParticles;
 % figure out control
-xOdomNow = this.setOdometry(Robot, it);
+[this, xOdomNow] = this.setOdometry(Robot, it);
 u = this.tcomp(this.tinv(this.xOdomLast(:,it-1)),xOdomNow);
 this.xOdomLast(:,it) = xOdomNow;
 % do prediction
