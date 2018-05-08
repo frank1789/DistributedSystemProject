@@ -1,4 +1,4 @@
-classdef Map < handle
+classdef Map
     % MAPCLASS  allows procedural creation of a map or loads an existing one
     % from a file stroed in 'presetmap'.
     %
@@ -64,33 +64,33 @@ classdef Map < handle
                     % parse varargin
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    this.checkinput(matchedStr);
-                    this.generatelandamrk();
+                    this = this.checkinput(matchedStr);
+                    this = this.generatelandamrk();
                 case 2
                     % parse varargin
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    this.checkinput(matchedStr);
+                    this = this.checkinput(matchedStr);
                     validateattributes(varargin{2},{'numeric'},{'>=',10,'<=',65});
                     numland = varargin{2};
-                    this.generatelandamrk(numland);
+                    this = this.generatelandamrk(numland);
                 case 3
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    if (matchedStr == 'Load' || matchedStr == 'load'|| matchedStr == 'LOAD')
-                        this.checkinput(matchedStr);
+                    if (matchedStr == "Load" || matchedStr == "load" || matchedStr == "LOAD")
+                        this = this.checkinput(matchedStr);
                         validateattributes(varargin{2},{'numeric'},{'>=',10,'<=',65});
                         numland = varargin{2};
                         mode = validatestring(varargin{3},this.mode);
-                        if mode == 'manual' && numland == 10
-                            this.generatelandamrk(numland, mode);
+                        if mode == "manual" && numland == 10
+                            this = this.generatelandamrk(numland, mode);
                         else
-                            this.generatelandamrk(numland);
+                            this = this.generatelandamrk(numland);
                         end
-                    elseif (matchedStr == 'New' || matchedStr == 'new'|| matchedStr == 'NEW') && ...
+                    elseif (matchedStr == "New" || matchedStr == "new" || matchedStr == "NEW") && ...
                             (isa(varargin{2}, 'double') && isa(varargin{3}, 'double'))
-                        this.checkinput(matchedStr, varargin{2:3});
-                        this.generatelandamrk();
+                        this = this.checkinput(matchedStr, varargin{2:3});
+                        this = this.generatelandamrk();
                     else
                         err  = this.error();
                         uiwait(err);
@@ -99,12 +99,12 @@ classdef Map < handle
                     % parse varargin
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    if (matchedStr == 'New' || matchedStr == 'new'|| matchedStr == 'NEW') && ...
+                    if (matchedStr == "New" || matchedStr == "new" || matchedStr == "NEW") && ...
                             (isa(varargin{2}, 'double') && isa(varargin{3}, 'double'))
-                        this.checkinput(matchedStr, varargin{2:3});
+                        this = this.checkinput(matchedStr, varargin{2:3});
                         validateattributes(varargin{4},{'numeric'},{'>=',10,'<=',65});
                         numland = varargin{4};
-                        this.generatelandamrk(numland);
+                        this = this.generatelandamrk(numland);
                     else
                         err  = this.error();
                         uiwait(err);
@@ -113,18 +113,18 @@ classdef Map < handle
                     % parse varargin
                     str = varargin{1};
                     matchedStr = validatestring(str,this.validStrings);
-                    if (matchedStr == 'New' || matchedStr == 'new'|| matchedStr == 'NEW') && ...
+                    if (matchedStr == "New" || matchedStr == "new" || matchedStr == "NEW") && ...
                             (isa(varargin{2}, 'double') && isa(varargin{3}, 'double'))
-                        this.checkinput(matchedStr, varargin{2:3});
+                        this = this.checkinput(matchedStr, varargin{2:3});
                         validateattributes(varargin{4},{'numeric'},{'>=',10,'<=',65});
                         numland = varargin{4};
                         validateattributes(numland,{'numeric'},{'>=',10,'<=',65});
                         mode = validatestring(varargin{5},this.mode);
-                        if mode == 'manual' && numland == 10
-                            this.generatelandamrk(numland, mode);
+                        if mode == "manual" && numland == 10
+                            this = this.generatelandamrk(numland, mode);
                         else
                             fprintf("if the number of landmarks is greater than 10, the manual positioning mode is ignored\n");
-                            this.generatelandamrk(numland);
+                            this = this.generatelandamrk(numland);
                         end
                     else
                         err  = this.error();
@@ -148,7 +148,6 @@ classdef Map < handle
         this = checkinput(str, varargin)
         this = setdimension(this, varargin)
         this = setFromFile(this)
-        
         this = setpoints(this, data)
         this = setAvailablePoints(this, input)
         this = generatelandamrk(this, varargin)
