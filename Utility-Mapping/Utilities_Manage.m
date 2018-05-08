@@ -18,7 +18,7 @@ for i = 1:1:length(front(1,:))
     %front >0 to avoid essor caused by transformation out from the map
     if(isnan(robot{ss}.laserScan_xy{1,ii}(1,i)) && front(1,i)>0 && front(2,i)>0)
         %     robot{ss}.setpointtarget([front(1,i) ,front(2,i) ,robot{ss}.q(ii,3)+0.0063*(251-i)]);
-        robot{ss}.setpointtarget([front(1,i) ,front(2,i) , 0]);
+        robot{ss} = robot{ss}.setpointtarget([front(1,i) ,front(2,i) , 0]);
         [ P ] = Utilities_Function(robot, ss, robot{ss}.lasermaxdistance);  % 3 number of robot %4 max range
         Ct = 0; %cost inizialization
         for j = 1:1:length(robot) %number of robot
@@ -33,8 +33,8 @@ for i = 1:1:length(front(1,:))
 end
 if(idx ~=0)
     %robot{ss}.setpointtarget([front(1,idx), front(2,idx), robot{ss}.q(ii,3)+0.0063*(251-idx)]);
-    robot{ss}.setpointtarget([front(1,idx), front(2,idx),0]);
+    robot{ss} = robot{ss}.setpointtarget([front(1,idx), front(2,idx),0]);
 else
-    robot{ss}.setpointtarget(Reset_Target(robot{ss},ii, occparameters));
+    robot{ss} = robot{ss}.setpointtarget(Reset_Target(robot{ss},ii, occparameters{ss}));
 end
 end
