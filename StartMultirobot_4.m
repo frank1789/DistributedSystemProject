@@ -38,7 +38,7 @@ pf = cell.empty;
 for jj = 1:3
     %initialize robot and destination
     robot{jj} = Robot(jj, MdlInit.T, MdlInit.Ts, map.getAvailablePoints(),map,0.15);
-    robot{jj}.setpointtarget(map.getAvailablePoints());
+    robot{jj} = robot{jj}.setpointtarget(map.getAvailablePoints());
     %initialize parameters for occupacy & cost function
     [ occparameters{jj} ] = cinitialize(robot{jj}, map, nit, 0.15);
 end
@@ -48,15 +48,15 @@ w = waitbar(0,'Please wait simulation in progress...');
 for ii = 1:1:nit
     for i = 1:1:length(robot)
         if mod(ii,2) == 0 % simualte laserscan @ 10Hz
-            robot{i}.scanenvironment(map.points, map.lines, ii);
+            robot{i} = robot{i}.scanenvironment(map.points, map.lines, ii);
         end
-        robot{i}.UnicycleKinematicMatlab(ii);
-        robot{i}.ekfslam(ii);
+        robot{i} = robot{i}.UnicycleKinematicMatlab(ii);
+        robot{i} = robot{i}.ekfslam(ii);
         if ii == 1
             pf{i} = Particle_Filter(robot{i}, map.landmark, ii);
         else
-            pf{i}.update(robot{i}, ii);
-            robot{i}.setParticleFilterxEst(pf{i}.xEst);
+            pf{i} = pf{i}.update(robot{i}, ii);
+            robot{i} = robot{i}.setParticleFilterxEst(pf{i}.xEst);
         end
     end
     

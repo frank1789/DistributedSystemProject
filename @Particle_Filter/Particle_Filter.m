@@ -1,4 +1,4 @@
-classdef Particle_Filter < handle
+classdef Particle_Filter
     %PARTICLE_FILTER  methods are a set of genetic, Monte Carlo algorithms used
     %to solve filtering problems arising in signal processing and Bayesian
     %statistical inference.
@@ -70,7 +70,7 @@ classdef Particle_Filter < handle
         angle = AngleWrapping(this, angle)
         z = DoObservationModel(this, xVeh, iFeature)
         [z, iFeature] = GetObservation(this, it, lentime)
-        xnow = GetOdometry(this, Robot, it)
+        [this, odometry] = setOdometry(this, Robot, it)
         this = update(this, Robot, lentime, it)
         u = GetRobotControl(this, Robot,it)
         this = SimulateWorld(this, Robot, it)
