@@ -59,11 +59,10 @@ namespace PFM {
          * @brief calculates the speed
          */
         double getSpeed(double *robotSpeed);
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        void repulsiveForce(std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
-        double repulsivex(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
-        double repulsivey(int i, std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
-        void setTotalPotential(std::vector<double> *distanceOstacle, std::vector<double> *laserRes);
+        /**
+         * @brief destructor
+         */
+        ~PathPlanner();
     private:
         double _distThreshold;  /*!< Obstacle beyond this limit are omitted in calcolus */
         int _k; /*!< Deegre of calculating potential */
@@ -71,16 +70,16 @@ namespace PFM {
         const double _repPotScaling = 30000; /*!< Scaling factor for repulsive potential. */
         const double _minAttPot = 0.5;       /*!< Minimum attractive potential at any point. */
         double  _XcurrentPostion,    /*!< Postion x robot, point coordinate in plane (x, y) */
-                _YcurrentPostion,    /*!< Postion y robot, point coordinate in plane (x, y)  */
-                _currentOrientation, /*!< Postion robot current orientation */
-                _XnewPostion,        /*!< Target point x coordinate in plane (x, y) */
-                _YnewPostion;        /*!< Target point y coordinate in plane (x, y) */
+        _YcurrentPostion,    /*!< Postion y robot, point coordinate in plane (x, y)  */
+        _currentOrientation, /*!< Postion robot current orientation */
+        _XnewPostion,        /*!< Target point x coordinate in plane (x, y) */
+        _YnewPostion;        /*!< Target point y coordinate in plane (x, y) */
         double _XrepulsiveForce, /*!< Component x repulsive force */
-               _YrepulsiveForce, /*!< Component y repulsive force */
-               _XattractiveForce, /*!< Component x attractive force */
-               _YattractiveForce; /*!< Component y attractive force */
+        _YrepulsiveForce, /*!< Component y repulsive force */
+        _XattractiveForce, /*!< Component x attractive force */
+        _YattractiveForce; /*!< Component y attractive force */
         double _XtotalPotential, /*!< Component x total force */
-               _YtotalPotential; /*!< Component y total force */
+        _YtotalPotential; /*!< Component y total force */
         double _steer; /*!< steering angle */
     };
 }
