@@ -5,8 +5,8 @@ function [front] = limitfov(robot, ris, it)
 % @param[in] it, position iteration
 % @param[out] front, limit of field of view
 
-y = ris * robot.lasermaxdistance * sin(robot.laserTheta +robot.q(it,3)) + robot.q(it,2);
-x = ris * robot.lasermaxdistance * cos(robot.laserTheta +robot.q(it,3)) + robot.q(it,1);
+y = ris * robot.lasermaxdistance * sin(robot.laserTheta +robot.pf_xEst(it,3)) + robot.pf_xEst(it,2);
+x = ris * robot.lasermaxdistance * cos(robot.laserTheta +robot.pf_xEst(it,3)) + robot.pf_xEst(it,1);
 front = [x;y];
 
 end
