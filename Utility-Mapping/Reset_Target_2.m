@@ -29,8 +29,8 @@ elseif (idx > 251 || idx == 251)
         end
     end
 %     
-elseif (ll == 501 || ll == 1 || front(1,ll)<0 || front(2,ll)<0)
-target = [0 0 pi/8];
+elseif (ll == 501 || ll == 1)
+target = [0 0 pi/30];
 end
 
 clear idx;

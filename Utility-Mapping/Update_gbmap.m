@@ -13,7 +13,7 @@ occ_mat = Occ_Grid(occparameters, out);
 
 for i = 1:1:length(occ_mat(:,1))
     for j = 1:1:length(occ_mat(1,:))
-        if(occ_mat(i,j)~=0)
+       % if(occ_mat(i,j)~=0)
             A     = [cos(Robot.pf_xEst(ii,3)), -sin(Robot.pf_xEst(ii,3)), Robot.pf_xEst(ii,1)/ris;
                      sin(Robot.pf_xEst(ii,3)),  cos(Robot.pf_xEst(ii,3)), Robot.pf_xEst(ii,2)/ris;
                        0                 0             1]*[i ;(length(occ_mat(1,:)))/2+1-j; 1];
@@ -43,7 +43,7 @@ for i = 1:1:length(occ_mat(:,1))
                 %Global(wdt-CC(1),CC(2))= (occ_mat(i,j) + Global(wdt-CC(1),CC(2)))/2;
                 end
             end % if
-        end %if
+   %     end %if
     end % end for-cycle j
 end % for-cycle i
 Robot.setOccupacygridglobal(tempglobalmap); % save the temp data
