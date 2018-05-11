@@ -58,9 +58,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     /* BOUT first pointer to the output variables for steering angle */
 #define B_OUT plhs[0]
     
-    /* BOUT1 second pointer to the output variables for speed */
-#define B_OUT1 plhs[1]
-    
     /*
      * assign actual target x coordinate position
      * assign actual target y coordinate position
@@ -84,7 +81,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
         long N = mxGetN(prhs[2]);
         if (N != 0)
         {
-            long length = N;
             // copy pointer matlab data in std:vector
             setvector2x2(laserScan, Xmeasure, Ymeasure, N, M);
         }
@@ -107,12 +103,15 @@ void mexFunction( int nlhs, mxArray *plhs[],
     pfm->setTotalPotential(Xmeasure, Ymeasure, laser);
     /* return mex function output */
     B_OUT = mxCreateDoubleScalar(pfm->getSteerangle(velocity));
-    B_OUT1 = mxCreateDoubleScalar(pfm->getSpeed(velocity));
     
+    Xmeasure->clear();
+    Ymeasure->clear();
+    laser->clear();
     /* garbage collector */
     delete pfm;
     delete robot;
     delete target;
     delete Xmeasure;
     delete Ymeasure;
+    delete laser;
 }

@@ -32,10 +32,11 @@ classdef Map
     properties (SetAccess = 'private')
         width;  % max width of map
         height; % max height of map
-        points = []; % store points of plant
-        lines  = []; % store lines of plant
-        available = []; % explorable points
-        landmark = []; % set the refernce point in map (aka Landmark) for particle filter
+        points; % store points of plant
+        lines;  % store lines of plant
+        available;  % explorable points
+        landmark;   % set the refernce point in map (aka Landmark) for particle filter
+        data;
     end
     
     properties (Constant, Access = 'private')

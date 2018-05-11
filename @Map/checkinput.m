@@ -10,6 +10,7 @@ switch char(matchedStr)
             fprintf("Start to create new map...\n")
             fprintf("Take a while...");
             [data] = this.mapgen(this.width, this.height);
+            this.data = uint8(data);
             this = this.setpoints(data);
             this = this.setAvailablePoints(data);
             vert = this.setverticalsegment(data);
