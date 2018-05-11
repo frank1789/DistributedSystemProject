@@ -1,4 +1,4 @@
-\section{Allocazione destinazioni}
+\subsection{Allocazione destinazioni ed Utility}
 L'obiettivo di un processo di esplorazione è quello di coprire l'intero ambiente nel minor tempo possibile. Pertanto, è essenziale che i robot tengono traccia di quali aree dell'ambiente sono già state esplorate. Inoltre, i robot devono costruire una mappa globale per pianificare i loro percorsi e coordinare le loro azioni.
 
 Quando esploriamo un ambiente sconosciuto, siamo particolarmente interessato alle "celle di frontiera". 
@@ -21,10 +21,10 @@ P(d) = \begin{cases}
    \end{cases}
 \end{equation}
 
-%\begin{equation}	
-%\label{eq:componet}
-%(i,t) = argmax_{i^',t^'} (U_{t^'}  -\beta V^{i^'}_{t^'} ) 
-%\end{equation}
+\begin{equation}	
+\label{eq:componet}
+(i,t) = argmax_{i^{\iota},t^{\iota}} (U_{t^{\iota}}  -\beta V^{i^{\iota}}_{t^{\iota}} ) 
+\end{equation}
 
 La prime due equazioni rappresenta come viene calcolata la l'utility per il robot n-esimo mentre l'ultima equazione rappresenta il caso allargato all'integrazione di più robot che comunichino tra loro. Maxrange rappresenta la massima visibilità fornita dal lidar, d rappresenta la distanza dei target assegnati ai vari robot la U la funzione di utility e la V la funzione di costo che tiene conto della distanza di ogni robot dal suo target. Le i e t risultanti dall'ultima equazione forniscono per ogni robot il suo target i-esimo ottimo per avere l'ottimo globale della funzione tra le parentesi. 
 Il modo in cui questi target da parte di ogni robot vengono raggiunti è lasciato alla funzione potenziale che verrà descritta in seguito.

@@ -1,0 +1,9 @@
+\section{Introduzione}
+L'esplorazione efficiente di ambienti sconosciuti è un problema fondamentale nella robotica mobile. 
+L'estensione alla esplorazione di più robot pone diverse nuove sfide, tra cui: coordinamento di robot , integrazione delle informazioni raccolte dai robot in una mappa coerente; e comunicazione limitata.
+Il coordinamento di un sistema di più robot è la base per un'efficiente implementazione di una esplorazione distribuita. Difficoltà maggiore nel campo del coordinamento vengono dalle conoscenze che si assumono avere i robot sul comportamento degli altri robot. Se i robot conoscono le loro posizioni relative e condividono una mappa della zona che hanno esplorato finora, si può raggiungere un coordinamento efficace, guidando i robot in zone inesplorate dell'ambiente.
+Questo può essere fatto assegnando ai robot il compito di raggiungere un loro punto di arrivo preso dalla frontiera fornita dalla scansione del lidar(paper).Per un assegnamento efficace è importante che i robot quando vadano a condividere dei punti comuni all'interno delle loro frontiere che non cerchino di raggiungere lo stesso punto.
+Per la stima della posizione viene adottato un filtro particellare, i robot comunicando con delle ancore wi-fi riescono a conoscere con un dato errore la loro posizione ricoperta in quell'istante. Per il raggiungimento della zona target prefissata viene invece adottata la funzione potenziale.
+I robot contengono al loro interno memoria delle zone già esplorate e non, ipotizzando di conoscere in anticipo le dimensioni massime della mappa che andranno ad eslporare quest'ultimi costruiscono attraverso l'integrazione di successive matrici di occupazione locale una matrice di occupazione globale che rappresenta la mappatura dell'ambiente.
+Saranno successivamente presentati la modellazione del sistema e i successivi risultati ottenuti
+
