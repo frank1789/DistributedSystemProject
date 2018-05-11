@@ -1,11 +1,11 @@
-\subsection{Modello occupacy grid}
+\subsection{Modello del sensore ed Occupacy grid}
 
 Gli approcci basati sulle occupacy grid tendono a non ragionare sulla geometria delle caratteristiche  dell'ambiente, ma ad assumere una visione più sensoriale. Una rete di celle (una griglia) è posta sopra il
 (inizialmente sconosciuto) mondo. Ogni cella c (i; j) ha un numero associato ad essa corrispondente
 a una probabilità di occupazione - po (i; j) e una probabilità di essere vuoto pe. Non facciamo affermazioni in merito ciò che sta occupando solo che qualcosa o parte di qualcosa è alle coordinate coperte
 per cella (40,20).
 
-\subsubsection{occupacy grid locale}
+\subsubsection{Occupacy grid locale}
 Per un determinato sensore di rilevamento della distanza, come uno scanner per linee laser, con portata massima R e mezza larghezza del raggio del sensore $\beta$, il modello può essere scomposto in un numero di settori etichettati I-IV, come illustrato nella Figura. .
 
 \begin{figure}
@@ -31,7 +31,7 @@ affidabile.
 A causa dell'occlusione, assumiamo che la probabilità di occupazione nella regione III sia del 50%
 occupato e il 50 $\%$ non occupato.
 
-\subsubsection{occupacy grid globale}
+\subsubsection{Occupacy grid globale}
 Ogni robot presenta al suo interno un memoria interna che tiene conto di una possibile mappatura globale dell'intero ambiente. Questa è definita occupacy grid globale e viene ricostruita rototraslando le varie occupacy grid locali fornite in diversi istanti dal robot.
 
 Un problema con i metodi basati sulla griglia è l'utilizzo della memoria: diventa costoso per il 3D
