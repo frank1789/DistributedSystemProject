@@ -13,7 +13,7 @@ Depending on the machine you are using:
 
 First delete files with extensions \*.mex*architecturename*, for example, for Mac the file will have extension: ***.mexmaci64**
 you need to compile some mex files before starting: 
-- **sens\_model\_.c**
+- **sens\_model\_noise.c**
 - **potentialfiled.cpp** 
 - **mapgen.cpp**
 
