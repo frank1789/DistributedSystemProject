@@ -3,8 +3,8 @@ close all
 clear
 clc
 addpath('Utility-Mapping')
-
-%% Generating map
+compilemexlibrary
+%% Generate Map
 % build a new map with:
 % map = Map("New", width, heigth);
 % map = Map("New", width, heigth, #landmark, "auto");

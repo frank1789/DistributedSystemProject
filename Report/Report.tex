@@ -241,15 +241,12 @@
 \normalsize Università di Trento \\ % Second author's institution
 \normalsize \href{mailto:giacomo.mazzaglia@studenti.unitn.it}{giacomo.mazzaglia@studenti.unitn.it}%
 }
-%\date{} % Leave empty to omit a date
-\renewcommand{\maketitlehookd}{\input{abstract}} %TODO modificare abstract nel file
+\date{} % Leave empty to omit a date
+\renewcommand{\maketitlehookd}{\input{abstract}} 
 %----------------------------------------------------------------------------------------
 \begin{document}
 	% Print the title
-	\maketitle	
-	%Other chapter
-	\clearpage
-	\newpage
+	\maketitle
 % Sommario Introduzione
 	\input{introduzione}
 
@@ -262,24 +259,18 @@
 	
 %Soluzione Proposta
 \section{Soluzione Proposta}
-
 	\input{utility}
 	\input{potentialfield}
 	\input{algoritmidisitima}
-
-	
+%
 \section{Implementazione}
 	\input{implementazione}	
-
+%
 \section{Risultati}
 \newpage
 
 \section{Conclusioni}
 \input{conclusioni}	
-
-
-	
-%	\input{Result}
 \newpage
 %----------------------------------------------------------------------------------------
 %	Bibliography

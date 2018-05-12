@@ -34,7 +34,7 @@ Il modello cinematico dell'uniciclo è descritto dall'equazioni (\ref{eq:modelci
 \end{tabular}
 \end{table}
 Il robot ha le dimensioni riportate in tabella \ref{tab:dimensrobot}.
-Questo è equipaggiato con un sensore virtuale \emph{lidar}, basato sul modello Hokuyo URG-04LX, collocato al centro della struttura in modo tale da evitare errori di offset, di seguito se ne riportano le caratteristiche, di cui adattate ad hoc per la simulazione. Come sensori propriocettivi presenta due encoder incrementali virtuali calettati sull'asse delle ruote, le caratteristiche di entrambi sono riportate in tabella \ref{tab:sensordata}. Una rappresentazione del robot è osservabile in figura \ref{fig:model}.
+Questo è equipaggiato con un sensore virtuale \emph{\textsc{lidar}}, basato sul modello Hokuyo URG-04LX, collocato al centro della struttura in modo tale da evitare errori di offset, di seguito se ne riportano le caratteristiche, di cui adattate ad hoc per la simulazione. Come sensori propriocettivi presenta due encoder incrementali virtuali calettati sull'asse delle ruote, le caratteristiche di entrambi sono riportate in tabella \ref{tab:sensordata}. Una rappresentazione del robot è osservabile in figura \ref{fig:model}.
 \begin{table}[htb]
 	\centering
 	\caption{Specifiche sensori}
@@ -48,27 +48,17 @@ Questo è equipaggiato con un sensore virtuale \emph{lidar}, basato sul modello 
  		massima distanza		 & [\si{\metre}]		& 4.00	\\ % [m] laser sensor parameters Max FOV
  		minima distanza 		 & [\si{\metre}]		& 0.02	\\ % [m] laser sensor parameters min FOV
  		risoluzione 			 & [\si{\milli\metre}]& 1.00\\
-%        % noise
-%        laser_rho_sigma     = 0.02;             % variance
-%        laser_theta_sigma   = 0.1 * (pi / 180); % variance
 	\bottomrule
 	\multicolumn{3}{c}{specifiche encoder virtuale}\\
 	\midrule
 	 risoluzione &  $2 \cdot (\frac{\pi}{2600})$\\   % encoder quantization
-        % encoder noise
-        %enc_mu = 0;                           % mean
-        %enc_sigma = 2 * (2 * pi / 2600) / 3;  % variance
 	\bottomrule
 	\end{tabular}
 \end{table}
-%\clearpage
-%\onecolumn
+
 \begin{figure}[!h]
 \centering
     \resizebox{.8\linewidth}{!}{\input{robotmodel.tex}}
 \caption{modello cinematico}
 \label{fig:model}
 \end{figure}
-%\twocolumn
-%nuova sezione
-

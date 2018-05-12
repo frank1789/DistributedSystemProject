@@ -43,7 +43,7 @@ U(q) = U_{\text{att}}(q) + U_{\text{rep}}(q)
 \noindent dove $U(q)$ potenziale artificiale; $U_{\text{att}}(q)$ campo 
 attrattivo; $U_{\text{rep}}(q)$ campo repulsivo.
 La pianificazione avviene in modo incrementale: a ogni configurazione 
-$\mathbf{q}$, la forza artificiale viene generata come (\ref{eq:attractive})
+$\mathbf{q}$, la forza artificiale viene generata come nell'equazione (\ref{eq:attractive}):
 \begin{equation}
 \label{eq:attractive}
 \begin{split}
@@ -99,11 +99,12 @@ U_{\text{rep}}(q) =
 0 & \mbox{se } d(q) > d_0
 \end{cases} 
 \end{equation}
-%TODO immagine campi potenziali
-
-\begin{figure}[!h]
+\begin{figure*}[htb]
 \centering
-    \resizebox{.8\linewidth}{!}{\input{draw_potential.tex}}
-\caption{Modello cinematico}
-\label{fig:model}
-\end{figure}
+\subfloat[][\emph{Campo attrattivo - repulsivo}.]
+   {\includegraphics[width=.35\textwidth]{image008}} \quad
+\subfloat[][\emph{Pianificazione traiettoria}.]
+   {\includegraphics[width=.35\textwidth]{image010}} 
+\caption{Potenziali artificiali}
+\label{fig:potentialfield}
+\end{figure*}

@@ -38,8 +38,6 @@ end
 clc
 end
 
-
-
 function compile()
 %COMPILE launches the compilation of the mex functions
 
@@ -47,7 +45,6 @@ mex -v -output Sens_model_noise sens_model_noise.c
 mex -v COMPFLAGS='$COMPFLAGS -std=c++14' -output @Map/mapgen ./src/DungeonGenerator/*.cpp
 mex -v COMPFLAGS='$COMPFLAGS -std=c++14' -output potentialfield ./src/*.cpp
 end
-
 
 function checkfile(extmex)
 %CHECKFILE check and delete files that do not match the architecture
