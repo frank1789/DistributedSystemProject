@@ -2,7 +2,7 @@ function compilemexlibrary()
 %COMPILEMEXLIBRARY compile file mex for architcture
 archstr = computer('arch');
 switch archstr
-    case {'PCWIN64', lower('PCWIN64')}
+    case {'win64'}
         fprintf('system architecture:\t %s\n', archstr)
         extmex = ["mexa64"; "mexmaci64"];
         checkfile(extmex)
@@ -12,7 +12,7 @@ switch archstr
             compile();
         end
         
-    case {'GLNXA64', lower('GLNXA64')}
+    case {'glnxa64'}
         fprintf('system architecture:\t %s\n', archstr)
         extmex = ["mexmaci64"; "mexw64"];
         checkfile(extmex)
@@ -22,7 +22,7 @@ switch archstr
             compile();
         end
         
-    case {'MACI64', lower('MACI64')}
+    case {'maci64'}
         fprintf('system architecture:\t %s\n', archstr)
         extmex = ["mexa64"; "mexw64"];
         checkfile(extmex)
