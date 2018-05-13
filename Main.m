@@ -27,5 +27,5 @@ for i=1
     end
 end
 
-% analyzze result
+% analysis result
 Result
