@@ -18,7 +18,13 @@ map = Map('new',40,40);
 %0figure(801); axis equal
 %map.plotMap();
 
-for n=1:4
 
-multirobot(n,100,map)
+for i=1
+    for n=4
+        for k=3
+         multirobot(n,600+k*300,map,i)
+        end
+    end
 end
+
+    loadFile = sprintf('n_robot_%i_Sim_time_%i_attempt_num_%i.mat',n_robot(j),Simulation_time(i),i)

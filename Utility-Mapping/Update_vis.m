@@ -9,7 +9,7 @@ Cost_map = occparameters.Cost_map;
 
  out = robot.laserScan_2_xy{ii}(:,all(~isnan(robot.laserScan_2_xy{ii})));
 [ occ_mat(:,:)] = Occ_Grid(occparameters,out);
-
+tempglobalmap = robot.getOccupacygridglobal(); 
 muro = 0;
 j0 = length(occ_mat(1,:))/2;
 [row, column] = find(occ_mat<0);
@@ -45,8 +45,9 @@ for j = j0:1:length(occ_mat(1,:))
             end
            
             CC=[A(2),A(1)];
+            if(tempglobalmap(wdt-CC(1),CC(2))==0)
             Cost_map(wdt-CC(1),CC(2))= 2;
-            
+            end
             end
     end
 muro = 0;
@@ -88,9 +89,10 @@ for j = j0:-1:1
             if(A(1)>lgth|| A(1)==lgth)
                 A(1) = lgth-1;
             end
-           
             CC=[A(2),A(1)];
+            if(tempglobalmap(wdt-CC(1),CC(2))==0)
             Cost_map(wdt-CC(1),CC(2))= 2;
+            end
             
             end
     end

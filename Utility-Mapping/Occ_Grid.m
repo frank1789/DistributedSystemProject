@@ -13,7 +13,7 @@ function [ occ_mat] = Occ_Grid(occparameters,a )
  ris     = occparameters.ris;
  R       = occparameters.r0;
  
-beta     =  occparameters.beta;
+beta     =  occparameters.beta*(pi/180);
 Max_Occ  =  occparameters.Max_Occ;
 
 %Robot position rispect matrix indices
@@ -28,18 +28,18 @@ for i=1:1:length(a(1,:))
    lid_mat(b(1,i),b(2,i))=1;
 end
 
-
 %Calculute the local occupation matrix for the robot at iteration ii 
 
 %Primo Quadrante
 for i = x_0 : 1 : length(occ_mat(:,1))
     for j = y_0 : 1 : length(occ_mat(1,:))
         
+        if(lid_mat(i,j)~=0)
         alpha = atan((y_0-j)/i);
         r     = sqrt(i^2+(y_0-j)^2);
    
-        occ_mat(i,j) =  -(((R-r)/(R)+(beta-alpha))/2)*Max_Occ*lid_mat(i,j);
-    
+        occ_mat(i,j) =  -(((R-r)/(R)+(beta- abs(alpha)))/2)*Max_Occ*lid_mat(i,j);
+        end
     end
 end
 
@@ -47,11 +47,12 @@ end
 for i = x_0 : 1 : length(occ_mat(:,1))
     for j = y_0 : -1 : 1
 
+        if(lid_mat(i,j)~=0)
         alpha = atan((y_0-j)/i);
         r     = sqrt(i^2+(y_0-j)^2);
    
-        occ_mat(i,j) =  -(((R-r)/(R)+(beta-alpha))/2)*Max_Occ*lid_mat(i,j);
-        
+        occ_mat(i,j) =  -(((R-r)/(R)+(beta-abs(alpha)))/2)*Max_Occ*lid_mat(i,j);
+        end
      end
 end
 

@@ -1,4 +1,4 @@
-function multirobot(n_robot,Simulation_Time, map)
+function multirobot(n_robot,Simulation_Time, map,attempt_number)
 %% Main - Start multirobot
 % close all
 % clear 
@@ -108,8 +108,8 @@ for ii = 1:1:nit
 end
 close(w); clear w;
 
-
-namefile = ['n_robot_',num2str(n_robot),'_Sim_time_',num2str(Simulation_Time),'.mat'];
+attempt_number
+namefile = ['n_robot_',num2str(n_robot),'_Sim_time_',num2str(Simulation_Time),'_attempt_num_',num2str(attempt_number),'.mat'];
 save(namefile,'robot','occparameters','pf','map')
 end
 

@@ -12,16 +12,15 @@ validateattributes(Map,{'Map'},{'nonempty'})
 validateattributes(time,{'numeric'},{'nonnegative'})
 validateattributes(resolution,{'numeric'},{'nonnegative'})
 
-%%Simulation parameters initialization
+%Simulation parameters initialization
 
-beta       = 90;     %half of the lidar span angle
-beta_cost  = 1;      %constant of cost function
-Max_Occ    = 0.8;    %Maximum probability of occupied cell due to occlusion
-Min_Occ    = 0.2;    %Minimum probability of free cell less that this value the cell is free
+beta       = 90;     % half of the lidar span angle
+beta_cost  = 1;      % constant of cost function
+Max_Occ    = 0.8;    % Maximum probability of occupied cell due to occlusion
+Min_Occ    = 0;      % Minimum probability of free cell less that this value the cell is free
+Max_com = 16;        % Maximum communication range
 
-Max_com = 16;        %Maximum communication range
-
-%%Preallocation of usefull 
+%Preallocation of usefull
 theta = Robot.laserTheta;
 ris = resolution;
 r0= Robot.lasermaxdistance / ris;
@@ -56,12 +55,7 @@ Cost_map = zeros(lgth, wdth) + 0.5;
 center_x = floor(lgth / 2);
 center_y = floor(wdth / 2);
 
-
-
-
-
-
-%return data initiliazized for occupacy grid
+% return data initiliazized for occupacy grid
 initializedata = struct('theta', theta, ...
     'ris', resolution, ...
     'beta',beta,...
