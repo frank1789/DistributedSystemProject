@@ -4,26 +4,25 @@ ambiente nel minor tempo possibile. Pertanto, è essenziale che i robot
 tengono traccia di quali aree dell'ambiente sono già state esplorate. 
 Inoltre, i robot devono costruire una mappa globale per pianificare i loro 
 percorsi e coordinare le loro azioni.
-%
 Quando esploriamo un ambiente sconosciuto, siamo particolarmente 
-interessato alle ``celle di frontiera". 
+interessati alle ``celle di frontiera". 
 Con cella di frontiera, denotiamo ciascuna cella già esplorata che è un vicino
 immediato di un cella sconosciuta, inesplorata. 
 Se indirizziamo un robot a una tale cella, ci si può aspettare che ottenga 
 informazioni sull'area inesplorata quando arriva alla sua posizione di 
 destinazione.
 Il fatto che una mappa in generale contiene diverse aree inesplorate solleva 
-il problema di come assegnare compiti di esplorazione rappresentati da celle
-di frontiera ai robot.
+il problema di come assegnare in modo efficiente l'assegnazione delle 
+destinazioni a più robot.
 Se sono coinvolti più robot, vogliamo evitare che molti di loro si spostino 
 nella stessa posizione. Per affrontare questi problemi e determinare i luoghi 
-di destinazione appropriati per il i singoli robot il nostro sistema utilizza il 
+di destinazione appropriati per i singoli robot, il nostro sistema utilizza il 
 seguente approccio: consideriamo contemporaneamente il costo del 
-raggiungimento di una cella di frontiera e l'utilità di quella cella.
-Per ogni robot, il costo di una cella è proporzionale alla distanza tra il robot 
-e quella cella e l'utilità di una cella di frontiera dipende invece dal numero di
-robot che si stanno spostando in quella cella o in un posto vicino a quella 
-cella.
+raggiungimento di una cella di frontiera e l'utilità di questa.
+Per ogni robot, il costo per raggiungere la cella è proporzionale alla distanza 
+tra se stesso e quest'ultima, d'altra parte l'utilità di una cella di frontiera dipende 
+invece dal numero di robot che si stanno spostando in quella direzione o in 
+posizioni limitrofe.
 Di seguito vengono riportate le equazioni implementate:
 \begin{equation}	
 \label{eq:componet1}
@@ -40,17 +39,16 @@ P(d) = \begin{cases}
 
 \begin{equation}	
 \label{eq:componet3}
-(i,t) = argmax_{i^{\iota},t^{\iota}} (U_{t^{\iota}}  -\beta V^{i^{\iota}}_{t^{\iota}} ) 
+(i,t) = \text{argmax}_{i^{\iota},t^{\iota}} (U_{t^{\iota}}  -\beta V^{i^{\iota}}_{t^{\iota}} ) 
 \end{equation}
 %
 La prime due equazioni (\ref{eq:componet1}--\ref{eq:componet2}), calcolano 
 l'utility per il robot n-esimo mentre l'ultima equazione rappresenta il caso 
-allargato all'integrazione di più robot che comunichino tra loro. 
+esteso all'integrazione di più robot che comunichino tra loro. 
 \emph{Maxrange} rappresenta la massima visibilità fornita dal lidar, $d$ 
-rappresenta la distanza dei target assegnati ai vari robot la U la funzione di 
-utility e la V la funzione di costo che tiene conto della distanza di ogni 
+rappresenta la distanza dei target assegnati ai vari robot, $U$ la funzione di 
+utility e $V$ la funzione di costo quest'ultima tiene conto della distanza di ogni 
 robot dal suo target. Le $i$ e $t$, nell'eq.(\ref{eq:componet3}),  forniscono 
-per ogni robot il suo target i-esimo ottimo per avere l'ottimo globale della 
-funzione tra le parentesi. 
+per ogni robot il suo target i-esimo ottimale.
 Il modo in cui questi target da parte di ogni robot vengono raggiunti è 
 lasciato alla funzione potenziale che verrà descritta in seguito.

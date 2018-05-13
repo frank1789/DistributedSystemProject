@@ -1,12 +1,12 @@
 \section{Comunicazione}
-Esistono due tipi di comunicazione all'interno del nostro sistema. Un primo tipo 
-di comunicazione è quella disponibile tra robot e che serve per l'assegnazione
-e coordinazione efficiente del sistema composto da più robot, la comunicazione
-tra robot che verrà considerata è una comunicazione ideale senza perdita di 
-informazione nel quale i robot possono comunicarsi le loro posizioni stimate 
-tramite \emph{particle filter} e la mappa esplorata fino a quel momento dal 
-robot. Un altro tipo di comunicazione è quello disponibile tra robot ed 
-ancore \textsc{wi-fi} disposte casualmente o tramite input dell'utente all'interno 
-della mappa e che permettono la stima della posizione coperta dal robot in 
-quel dato istante, anche questa viene assunta essere una comunicazione 
-ideale senza perdita di informazioni.
+All'interno del sistema realizzato i robot sono in comunicazione tramite rete 
+\textsc{Wi-Fi} ideale senza degradazione di segnale e conseguente perdita di 
+informazione.
+Il primo tipo di comunicazione è quella disponibile tra robot che permette in 
+un range limitato l'assegnazione e la coordinazione efficiente della 
+destinazione per lo svolgimento della missione.
+La seconda tipologia di comunicazione riguarda la stima della posizione dei 
+robot mediante \emph{particle filter} per la localizzazione rispetto hotspot 
+\textsc{Wi-Fi} intesi, in questo caso, come punti di riferimento virtuali.
+Generati casualmente o tramite input dell'utente all'interno 
+della mappa.

@@ -2,10 +2,15 @@
 Il sistema robotico preso in esame presenta degli errori all'ingresso degli 
 encoder, tale errore porta il sistema a manifestare nel lungo periodo il noto 
 comportamento di \emph{drift}. Nasce allora il problema di correggere e stimare
-la posizione in base ad un dato modello dello stato presentato già 
+la posizione in base ad un dato modello.
+Per stimare la posizione del robot utilizzando la ricostruzione 
+odometrica si ottiene un risultato affetto da incertezza crescente all'aumentare 
+dello spostamento.
+È necessario quindi correggere tale stima attraverso particle filter analizzato di seguito.
+ dello stato presentato già 
 precedentemente il modello odometrico e un modello di sensore esterno al 
-robot che fornisca una misura approssimata della sua posizione. I metodi 
-presentati saranno 2 , un primo di semplice applicazione ipotizza il 
+robot che fornisca una misura approssimata della sua posizione. 
+I metodi presentati saranno 2 , un primo di semplice applicazione ipotizza il 
 ricevimento da parte del robot di un segnale GPS che viene integrato e 
 sfruttato tramite il filtro di Kalman, un'altro modello e caso di studio sarà 
 l'utilizzo di torrette Wi-fi integrate all'interno dell'ambiente che si vuole 
@@ -13,15 +18,6 @@ esplorare , in questo caso sarà invece implementato il particle filter.
 Una breve ricapitolazione del filtro di kalman sarà presentata mentre per il 
 particle filter un'analisi più approfondita sarà condotta in quanto non 
 argomento del corso.
-%
-\subsubsection{Filtro di Kalman}
-Un filtro di Kalman è uno stimatore ottimale, ovvero deduce i parametri di 
-interesse da osservazioni indirette, imprecise e incerte. È ricorsivo, così 
-nuove misure possono essere elaborate al loro arrivo. 
-Se il rumore è gaussiano, il filtro di Kalman minimizza l'errore quadratico 
-medio dei parametri stimati.
-Dato solo la media e la deviazione standard del rumore, il filtro di Kalman è 
-il miglior stimatore lineare. Gli stimatori non lineari possono essere migliori.
 %
 \subsubsection{Filtro Particellare}
 %
