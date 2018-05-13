@@ -3,28 +3,28 @@ La pianificazione del percorso per i robot è uno dei criteri importanti da
 prendere in considerazione per migliorare il livello di autonomia del robot.
 Nella pianificazione del percorso, la sicurezza è un problema importante che 
 dovrebbe essere preso in considerazione al fine di garantire che un robot 
-raggiunga la posizione target senza collisione con gli ostacoli circostanti.
+raggiunga la posizione target senza collisioni con gli ostacoli circostanti.
 Inoltre, ci sono aspetti importanti che devono essere affrontati nella 
 pianificazione del percorso; tempo computazionale, percorso ottimale e 
 completezza. 
 Uno dei metodi più diffusi per la pianificazione dei percorsi è il metodo 
 \emph{Campi Potenziali Artificiali}. 
 Il metodo del potenziale è in grado di superare uno scenario sconosciuto, 
-tenendo conto della realtà dell'ambiente corrente del movimento del robot. 
-Due tipi di forze coinvolte nel potenziale metodo del campo; forza attrattiva 
+tenendo conto della realtà dell'ambiente corrente e del movimento del robot. 
+Due tipi di forze sono coinvolte nel metodo del campo potenziale; forza attrattiva 
 generata da obiettivi e forza repulsiva generata da ostacoli, di conseguenza, 
 il robot deve riprogrammare un nuovo percorso\cite{apotetianfield}.
 Utilizzando informazioni parziali sullo spazio di lavoro raccolte attraverso i 
-sensori quindi le informazioni sensoriali integrate in una mappa secondo un 
+sensori quindi le informazioni sensoriali sono integrate in una mappa secondo un 
 paradigma \emph{sense---plan---move}.
 Oppure utilizzare le informazioni sensoriali impiegate per pianificare moti 
 secondo un paradigma \emph{stimulus---response} (navigazione reattiva).
 Il robot è considerato come un punto sotto l'influenza dei campi prodotti da 
 obiettivi e ostacoli nello spazio di ricerca. Le forze repulsive sono generate 
-da ostacoli mentre la forza attrattiva è generata dagli obiettivi.Le forze 
-risultanti (la somma di tutte le forze) dei campi sul robot vengono utilizzate 
-per determinare la direzione del movimento del robot e la velocità di 
-spostamento evitando collisioni\cite{5498220}.
+da ostacoli mentre la forza attrattiva è generata dagli obiettivi. La forza 
+risultante (la somma di tutte le forze) dei campi sul robot viene utilizzato 
+per determinare la direzione del movimento e la velocità di spostamento evitando 
+collisioni\cite{5498220}.
 Tuttavia esistono svantaggi quali:
 \begin{enumerate*}[label={\alph*)},font={\bfseries}]
 \item situazione di stallo dovuta ai minimi locali; 
@@ -42,7 +42,7 @@ U(q) = U_{\text{att}}(q) + U_{\text{rep}}(q)
 %
 \noindent dove $U(q)$ potenziale artificiale; $U_{\text{att}}(q)$ campo 
 attrattivo; $U_{\text{rep}}(q)$ campo repulsivo.
-La pianificazione avviene in modo incrementale: a ogni configurazione 
+La pianificazione avviene in modo incrementale: ad ogni configurazione 
 $\mathbf{q}$, la forza artificiale viene generata come nell'equazione (\ref{eq:attractive}):
 \begin{equation}
 \label{eq:attractive}

@@ -1,18 +1,18 @@
 \subsection{Modello del sensore ed Occupacy grid}
 
-Gli approcci basati sulle occupacy grid tendono a non ragionare sulla geometria 
-delle caratteristiche  dell'ambiente, ma ad assumere una visione più sensoriale.
-Una rete di celle (una griglia) è posta sopra il (inizialmente sconosciuto) 
-mondo. Ogni cella c (i; j) ha un numero associato ad essa corrispondente
-a una probabilità di occupazione - po (i; j) e una probabilità di essere vuoto
-pe. Non facciamo affermazioni in merito ciò che sta occupando solo che qualcosa
-o parte di qualcosa è alle coordinate coperte per cella (40,20).
+Gli approcci basati sulle occupacy grid tendono a non tener conto della geometria 
+dell'ambiente, ma ad assumere una visione più sensoriale.
+L'ambiente viene discretizzato tramite una griglia di celle quadrate; ogni 
+cella $c(i; j)$ ha un numero associato ad essa corrispondente a una probabilità 
+di occupazione $p_{\text{occ}}(i; j)$ e una probabilità di essere 
+vuoto $p_{\text{emp}}(i;j)$.\\
+Celle parzialmente occupate non verranno prese in considerazione.
 
 \subsection{Occupacy grid locale}
 Per un determinato sensore di rilevamento della distanza, come uno scanner per 
 linee laser, con portata massima R e mezza larghezza del raggio del sensore
 $\beta$, il modello può essere scomposto in un numero di settori etichettati 
-I-IV, come illustrato nella Figura \ref{fig:scan scheme}.\linebreak
+I-IV\cite{ardhaoui2011implementation}, come illustrato nella Figura \ref{fig:scan scheme}.
 %
 \begin{figure}[htb]
   \includegraphics[scale = 0.35]{occ_grid_model.jpeg}
@@ -21,39 +21,38 @@ I-IV, come illustrato nella Figura \ref{fig:scan scheme}.\linebreak
 \end{figure}
 
 \noindent La regione I è la regione associata alla lettura effettiva del laser, la
-regione II rappresenta un'area vuota in cui nulla viene rilevato,la regione III
-è l'area coperta dal raggio laser, ma rimane sconosciuto se è occupata o meno a
-causa dell'occlusione,e la regione IV è al di fuori del campo di visibilità del \textsc{lidar}.
-Parametri rilevanti per il ragionamento sulla cella evidenziata (contorno nero)
-includere r, che è la distanza dell'elemento di griglia dalla posizione del 
-sensore, e $\alpha$, l'angolo dell'elemento di griglia relativo al raggio 
-centrale del sensore.
-Per una misurazione s che ricade nella regione I, la probabilità che la misura
-fosse dovuta a un ostacolo effettivo presente a tale intervallo e il suo 
-complemento può essere calcolato da:
+regione II rappresenta un'area vuota in cui nulla viene rilevato, la regione III
+è l'area coperta dal raggio laser, ma rimane sconosciuta se occupata o meno a
+causa dell'occlusione, e la regione IV è al di fuori del campo di visibilità del \textsc{lidar}.
+Parametri rilevanti della cella evidenziata (contorno nero) includono: $r$ che 
+è la distanza dell'elemento di griglia dalla posizione del sensore; 
+$\alpha$ l'angolo dell'elemento di griglia relativo al raggio centrale del sensore.
+Per una misurazione $s$ che rientri nella regione I, la probabilità che la
+misura sia effettivamente dovuta alla presenza di  un ostacolo in tale 
+intervallo può essere calcolata dall'equazione (\ref{eq:lidargrid}):
 %
 \begin{equation}	
 \label{eq:lidargrid}
 P(s|Occupied) = \frac{\frac{R-r}{R} + \frac{ \beta- \alpha}{\beta} \beta}{2} 
-\cdot Max_{occupied}
+\cdot Max_{\text{occupied}}
 \end{equation}
 %
-dove $Max_{occupied}$, nell'eq.(\ref{eq:lidargrid}), è dovuto all'assunzione 
+dove $Max_{\text{occupied}}$, nell'eq.(\ref{eq:lidargrid}), è dovuto all'assunzione 
 che una lettura di ``Occupato" non è mai completamente affidabile.
-A causa dell'occlusione, si assume che stato di occupazione nella regione III
-abbia il $50 \, \%$ di probabilità di essere occupato e/o il $50\,\%$
-di non essere occupato.
+%A causa dell'occlusione, si assume che stato di occupazione nella regione III
+%abbia il $50 \, \%$ di probabilità di essere occupato e/o il $50\,\%$
+%di non essere occupato.
 %
 \subsection{Occupacy grid globale}
-Ogni robot presenta al suo interno un memoria interna che tiene conto di una 
-possibile mappatura globale dell'intero ambiente. Questa è definita occupacy 
-grid globale e viene ricostruita rototraslando le varie occupacy grid locali 
+Ogni robot è dotato di memoria dove viene salvata la mappatura globale 
+dell'intero ambiente. Questa, è definita occupacy grid globale, ed è ricostruita 
+mediante rototraslazione e sovrapposizione delle occupacy grid locali 
 fornite in diversi istanti dal robot.
-%
-Un problema con i metodi basati sulla griglia è l'utilizzo della memoria: 
-diventa costoso per il 3D mappe. Un secondo problema è quello della griglia 
-allineamento - è arbitrario e in quanto tale è probabile che le celle coprano 
-aree che sono difficili da raggiungere parzialmente pieno come tale non è 
-possibile catturare le acute discontinuità ai bordi di oggetti. 
-Forse il più grande problema dei metodi basati sulla griglia deriva dalle 
-difficoltà in localizzazione rispetto a una griglia.
+Alla fine della simulazione le varie occupacy grid globali di ogni robot vengono
+fuse in un'unica mappa.
+Un problema per i metodi basati sulla griglia di occupazione è l'utilizzo della
+memoria eccessivo, infatti diventa oneroso per la ricostruzione di mappe 3D. 
+Un secondo problema è legato all'allineamento della griglia, assunto ideale, in
+quanto è probabile che le celle: coprano aree difficili da raggiungere e zone 
+parzialmente piene dove non è possibile catturare le acute discontinuità ai 
+bordi degli oggetti. 
