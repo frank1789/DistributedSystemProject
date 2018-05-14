@@ -6,35 +6,33 @@ la posizione in base ad un dato modello.
 Per stimare la posizione del robot utilizzando la ricostruzione 
 odometrica si ottiene un risultato affetto da incertezza crescente all'aumentare 
 dello spostamento.
-È necessario quindi correggere tale stima attraverso particle filter analizzato di seguito.
- dello stato presentato già 
-precedentemente il modello odometrico e un modello di sensore esterno al 
-robot che fornisca una misura approssimata della sua posizione. 
-I metodi presentati saranno 2 , un primo di semplice applicazione ipotizza il 
-ricevimento da parte del robot di un segnale GPS che viene integrato e 
-sfruttato tramite il filtro di Kalman, un'altro modello e caso di studio sarà 
-l'utilizzo di torrette Wi-fi integrate all'interno dell'ambiente che si vuole 
-esplorare , in questo caso sarà invece implementato il particle filter. 
-Una breve ricapitolazione del filtro di kalman sarà presentata mentre per il 
-particle filter un'analisi più approfondita sarà condotta in quanto non 
-argomento del corso.
+È necessario quindi correggere tale stima attraverso il particle filter analizzato di seguito.
+Ciò su cui ci appoggeremo per avere una stima della posizione assunta dal robot,saranno
+dei sensori esterni ad esso , nel nostro caso delle ancore wi-fi virtualmente simulate nel
+nostro codice.
 %
 \subsubsection{Filtro Particellare}
 %
-L'algoritmo di localizzazione PF procede come segue: si inizializzano $n$ 
+L'algoritmo di localizzazione PF procede come segue figura \ref{fig:particle filter}.: si inizializzano $n$ 
 particelle in una mappa.
-Ogni particella è un vettore di stato 3 per 1 del veicolo ad ognuna di queste 
-si applica il modello di plant e se ne aggiunge un rumore al vettore di controllo $u$. 
-Successivamente per ogni particella se ne prevede l'osservazione e si confronta 
-questo con il valore misurato, tale confronto porterà al calcolo 
+Ogni particella è un vettore di stato 3 per 1 del veicolo ed ad ognuna di queste 
+si applica il modello descritto dal sistema (\ref{eq:modelcinematico}): e se ne aggiunge un rumore al vettore di
+controllo $u$. 
+Successivamente per ogni particella si prevede la possibile misura ottenibile e si confronta 
+con l'osservazione realmente effettuata dalla ancora wi-fi, tale confronto porterà al calcolo 
 dell'innovazione o di ciò che definiremo peso della particella.
 Si selezionano le particelle che meglio spiegano l'osservazione, un modo per 
 farlo è quello di costruire una pdf che descriva i campioni e i loro pesi, e 
 poi riselezionare un nuovo set di particelle da questa pdf.
-La stima della posizione del robot fornita dal filtro e la media di questo 
-nuovo ricampionamento. %TODO completare? 
-%
+La stima della posizione del robot fornita dal filtro è la media di questo 
+nuovo ricampionamento. 
 Il punto cruciale è che non richiede alcuna ipotesi di linearizzazione (non ci 
 sono jacobiani coinvolti) e non ci sono ipotesi Gaussiane. È particolarmente 
 adatto ai problemi con piccoli spazi di stato mentre in caso di vettori di 
 stato grandi diventa computazionalmente pesante.
+
+\begin{figure}[!htb]
+  \includegraphics[scale = 0.4]{particle_filter.jpeg}
+  \caption{Filtro Particellare}
+  \label{fig:particle filter}
+\end{figure}
