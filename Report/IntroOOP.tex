@@ -1,0 +1,52 @@
+La programmazione orientata agli oggetti è un paradigma di
+programmazione che permette di definire oggetti software in grado di interagire
+gli uni con gli altri attraverso lo scambio di messaggi. È particolarmente
+adatta nei contesti in cui si possono definire delle relazioni di interdipendenza
+tra i concetti da modellare.
+Tra gli altri vantaggi della programmazione orientata agli oggetti:
+\begin{enumerate*}[label={\alph*)},font={\bfseries}]
+\item fornisce un supporto naturale alla modellazione software degli oggetti del
+mondo reale o del modello astratto da riprodurre;
+\item permette una più facile gestione e manutenzione di progetti di grandi
+dimensioni;
+\item l'organizzazione del codice sotto forma di classi favorisce la modularità
+e il riuso di codice.
+\end{enumerate*}
+% Le classi sono uno strumento per costruire strutture dati che contengano non
+% solo dati ma anche il codice per gestirli.
+% Come tutti i costrutti che permettono di definire le strutture dati, una classe
+% definisce un nuovo tipo di dato.
+% I membri di una classe sono dati, chiamati attributi, e metodi, ovvero
+% procedure, che operano su un oggetto.
+% Dal punto di vista matematico, una classe definisce un insieme in modo
+% intensivo, ovvero definendone le caratteristiche invece che elencandone gli
+% elementi.
+% Se l'accesso agli attributi è ristretto ai soli membri della classe,
+% le caratteristiche dell'insieme possono includere vincoli sui possibili valori
+% che la tupla degli attributi può o non può assumere, e anche sulle possibili
+% transizioni tra questi stati. Un oggetto può quindi essere visto come una
+% macchina a stati finiti.
+% Una classe può dichiarare riservate una parte delle sue proprietà e/o dei suoi
+% metodi, e riservarne l'uso a sé stesso e/o a particolari tipi di oggetti a lui
+% correlati.
+% Un oggetto è una istanza di una classe. Un oggetto occupa memoria, la sua classe
+% definisce come sono organizzati i dati in questa memoria.
+% Ogni oggetto possiede tutti gli attributi definiti nella classe, ed essi hanno
+% un valore, che può mutare durante l'esecuzione del programma come quello di
+% qualsiasi variabile.
+Il paradigma OOP suggerisce un principio noto come \emph{information hiding} che
+indica che si debba accedere agli attributi dell'istanza solo tramite metodi
+invocati su quello stesso oggetto.
+% Sintatticamente, i metodi di una classe vengono invocati ``su" un particolare
+% oggetto, e ricevono come parametro implicito l'oggetto su cui sono stati
+% invocati.
+L'incapsulamento è la proprietà per cui i dati che definiscono lo stato interno
+di un oggetto e i metodi che ne definiscono la logica sono accessibili ai metodi
+dell'oggetto stesso, mentre non sono visibili ai client. Per alterare lo stato
+interno dell'oggetto, è necessario invocarne i metodi pubblici, ed è questo lo
+scopo principale dell'incapsulamento. Infatti, se gestito opportunamente, esso
+permette di vedere l'oggetto come una black-box, cioè una ``scatola nera" con la
+quale l'interazione avviene solo e solamente tramite i metodi definiti
+dall'interfaccia.
+Il punto è dare delle funzionalità agli utenti nascondendo i dettagli legati
+alla loro implementazione.\cite{cox1991object}
