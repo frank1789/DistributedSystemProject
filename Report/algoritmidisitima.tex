@@ -3,10 +3,10 @@ Il sistema robotico preso in esame presenta degli errori all'ingresso degli
 encoder, tale errore porta il sistema a manifestare nel lungo periodo il noto 
 comportamento di \emph{drift}. Nasce allora il problema di correggere e stimare
 la posizione in base ad un dato modello.
-Per stimare la posizione del robot utilizzando la ricostruzione 
+Stimando la posizione del robot utilizzando la ricostruzione 
 odometrica si ottiene un risultato affetto da incertezza crescente all'aumentare 
 dello spostamento.
-È necessario quindi correggere tale stima attraverso il particle filter analizzato di seguito.
+È necessario quindi correggere tale stima attraverso il particle filter\cite{newman2003} analizzato di seguito.
 Ciò su cui ci appoggeremo per avere una stima della posizione assunta dal robot,saranno
 dei sensori esterni ad esso , nel nostro caso delle ancore wi-fi virtualmente simulate nel
 nostro codice.
@@ -17,7 +17,7 @@ L'algoritmo di localizzazione PF procede come segue figura \ref{fig:particle fil
 particelle in una mappa.
 Ogni particella è un vettore di stato 3 per 1 del veicolo ed ad ognuna di queste 
 si applica il modello descritto dal sistema (\ref{eq:modelcinematico}): e se ne aggiunge un rumore al vettore di
-controllo $u$. 
+controllo $u = [v \, \omega]^{T}$. 
 Successivamente per ogni particella si prevede la possibile misura ottenibile e si confronta 
 con l'osservazione realmente effettuata dalla ancora wi-fi, tale confronto porterà al calcolo 
 dell'innovazione o di ciò che definiremo peso della particella.
