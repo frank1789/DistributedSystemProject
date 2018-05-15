@@ -20,13 +20,11 @@ switch length(Robot)
         if (dist < MAX && (occparameters{c{1,1}.ID}.comunication ==0 || occparameters{c{1,2}.ID}.comunication ==0))
             fprintf("one or more robots are in the communication area\n");
             fprintf("establish link\t robot: %i <---> robot: %i\n",c{1,1}.ID,c{1,2}.ID);
-            %exchange laserscan and odometry
             Utilities_Manage(Robot,rr,occparameters,it);
-            occparameters{c{1,1}.ID}.comunication =1;
-            occparameters{c{1,2}.ID}.comunication =1;
-            
-            occparameters{c{1,1}.ID}.Cost_map(occparameters{c{1,2}.ID}.Cost_map) = 2;
-            occparameters{c{1,2}.ID}.Cost_map(occparameters{c{1,1}.ID}.Cost_map) = 2;
+            occparameters{c{1,1}.ID}.comunication = 1;
+            occparameters{c{1,2}.ID}.comunication = 1;
+            occparameters{c{1,1}.ID}.Cost_map(occparameters{c{1,2}.ID}.Cost_map == 2) = 2;
+            occparameters{c{1,2}.ID}.Cost_map(occparameters{c{1,1}.ID}.Cost_map == 2) = 2;
         end
         
     otherwise
@@ -35,13 +33,12 @@ switch length(Robot)
             if (dist < MAX && (occparameters{c{n,1}.ID}.comunication ==0 || occparameters{c{n,2}.ID}.comunication ==0))
                 fprintf("one or more robots are in the communication area\n");
                 fprintf("establish link\t robot: %i <---> robot: %i\n",c{n,1}.ID,c{n,2}.ID);
-                %exchange laserscan and odometry
                 Utilities_Manage(Robot,rr,occparameters,it);
-                occparameters{c{n,1}.ID}.comunication =1;
-                occparameters{c{n,2}.ID}.comunication =1;
-                
-            occparameters{c{1,1}.ID}.Cost_map(occparameters{c{1,2}.ID}.Cost_map) = 2;
-            occparameters{c{1,2}.ID}.Cost_map(occparameters{c{1,1}.ID}.Cost_map) = 2;  end % if
+                occparameters{c{n,1}.ID}.comunication = 1;
+                occparameters{c{n,2}.ID}.comunication = 1;
+                occparameters{c{1,1}.ID}.Cost_map(occparameters{c{1,2}.ID}.Cost_map == 2) = 2;
+                occparameters{c{1,2}.ID}.Cost_map(occparameters{c{1,1}.ID}.Cost_map == 2) = 2;
+            end % if
         end % for
 end
 clear c dist % free memory
