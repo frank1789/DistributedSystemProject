@@ -17,8 +17,8 @@ virtualmente simulate.
 L'algoritmo di localizzazione PF procede come segue in figura
 \ref{fig:particle filter}. Si inizializzano $n$ particelle in una mappa.
 Ogni particella è un vettore di stato $q\,=\,[x \, y \, \theta]^{T}$ del veicolo
-ed ad ognuna di queste si applica il modello descritto dal sistema di eq.
-(\ref{eq:modelcinematico}): e se ne aggiunge un rumore al vettore di
+ed ad ognuna di queste si applica il modello descritto dal sistema di 
+eq.(\ref{eq:modelcinematico}): e se ne aggiunge un rumore al vettore di
 controllo $u\,=\,[v \, \omega]^{T}$.
 Successivamente per ogni particella si prevede la possibile misura ottenibile e
 si confronta con l'osservazione realmente effettuata dalla ancora
@@ -35,7 +35,8 @@ adatto ai problemi con piccoli spazi di stato mentre in caso di vettori di
 stato grandi diventa computazionalmente pesante.
 
 \begin{figure}[!htb]
-  \includegraphics[scale = 0.4]{particle_filter}
+ \centering
+  \includegraphics[width=.4\textwidth]{particle_filter}
   \caption{Filtro Particellare}
   \label{fig:particle filter}
 \end{figure}

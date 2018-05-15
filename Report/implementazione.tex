@@ -1,24 +1,39 @@
-Per la creazione delle matrici di occupazione locali vengono utilizzate le misure 
-fornite dal lidar, tali misure vengono riproiettate nel sistema di riferimento del robot 
+\section{Implementazione}
+\label{sec:implementazione}
+Per la realizzazione del progetto si è optato per un simulazione con la suite
+\textsc{matlab}, realizzando un software basato su un'architettura a oggetti
+e funzionale per i motivi indicati di seguito.
+
+
+\subsection{Esecuzione}
+Una volta generato lo scenario la simulazione inizia con il posizionamento di
+uno o più robot all'interno della mappa come condizione iniziale e assegnato un
+obiettivo da raggiungere.
+Questi non conosco l'ambiente in cui si trovano e quindi tentano di raggiungere
+l'obiettivo nella maniera più rapida impostando un traiettoria rettilinea
+determinata come norma tra due punti.
+La pianificazione della traiettoria viene modificata in base alle rilevazioni
+effettuate dal \textsc{lidar} in tal modo essi evitano l'ostacolo perché repulsi.
+Per la creazione delle matrici di occupazione locali vengono utilizzate le misure
+fornite dal lidar, tali misure vengono riproiettate nel sistema di riferimento del robot
 e registrate all'interno di una matrice utilizzando come peso per ogni misura l'equazione
 fornita da (\ref{eq:lidargrid}.
 Queste verranno integrate in una matrice globale che sarà aggiornata ogni secondo. Il
 passaggio da matrice locale a matrice globale avviene rototraslando rispetto la posizione
-stimata del robot fornita dal particle filter e registrata all'interno del robot.La matrice 
+stimata del robot fornita dal particle filter e registrata all'interno del robot.La matrice
 globale del robot si assume essere già dimensionata in base alla mappa da esplorare.
-
-Il robot durante la sua esplorazione è programmato per affiancare il primo muro visibile e 
+Il robot durante la sua esplorazione è programmato per affiancare il primo muro visibile e
 percorrerlo,nel caso in cui durante questa operazione si dovessero presentare zone già visitate,
 esso cercherà di raggiungere punti non ancora esplorati all'interno della stanza, questa operazione
 viene condotta registrando le zone già esplorate dal robot all'interno di una seconda matrice assunta
 anch'essa di una dimensione tale da permettere di contenere la stanza con la risoluzione voluta.
-
-
 Il robot quando risulterà essere nel raggio di comunicazione con altri robot avvierà il meccanismo di Utility,
-in base al quale sarà assegnato ad ogni robot comunicante un nuovo target da raggiungere che massimizzi 
-l'utilità, calcolata con la equazione (\ref{eq:componet3}). Per evitare la ricomunicazione tra robot è stato 
-inserito un delay che deve trascorrere tra una comunicazione e l'altra prima che i 2 robot possano ricomunicare 
+in base al quale sarà assegnato ad ogni robot comunicante un nuovo target da raggiungere che massimizzi
+l'utilità, calcolata con la equazione (\ref{eq:componet3}). Per evitare la ricomunicazione tra robot è stato
+inserito un delay che deve trascorrere tra una comunicazione e l'altra prima che i 2 robot possano ricomunicare
 tra loro.La comunicazione come già detto risulta essere ideale senza degradazione di segnale.
-
 Durante la comunicazione i robot condivideranno la mappa contenente le zone già visitate in modo da
 non permettere il passaggio in zone già viste da altri robot.
+%
+\input{introOOP}
+\input{DefinizioneClass}

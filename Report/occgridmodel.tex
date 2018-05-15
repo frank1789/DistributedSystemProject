@@ -1,5 +1,5 @@
 \subsection{Modello del sensore ed Occupacy grid}
-
+\label{sec:occupacygrid}
 Gli approcci basati sulle occupacy grid tendono a non tener conto della geometria 
 dell'ambiente, ma ad assumere una visione più sensoriale.
 L'ambiente viene discretizzato tramite una griglia di celle quadrate; ogni 
@@ -8,7 +8,8 @@ di occupazione $p_{\text{occ}}(i; j)$ e una probabilità di essere
 vuoto $p_{\text{emp}}(i;j)$.\\
 Celle parzialmente occupate non verranno prese in considerazione.
 
-\subsection{Occupacy grid locale}
+\subsubsection{Occupacy grid locale}
+\label{ssec:localoccgrid}
 Per un determinato sensore di rilevamento della distanza, come uno scanner per 
 linee laser, con portata massima R e mezza larghezza del raggio del sensore
 $\beta$, il modello può essere scomposto in un numero di settori etichettati 
@@ -43,7 +44,8 @@ che una lettura di ``Occupato" non è mai completamente affidabile.
 %abbia il $50 \, \%$ di probabilità di essere occupato e/o il $50\,\%$
 %di non essere occupato.
 %
-\subsection{Occupacy grid globale}
+\subsubsection{Occupacy grid globale}
+\label{ssec:globaloccgrid}
 Ogni robot è dotato di memoria dove viene salvata la mappatura globale 
 dell'intero ambiente. Questa, è definita occupacy grid globale, ed è ricostruita 
 mediante rototraslazione e sovrapposizione delle occupacy grid locali 
