@@ -206,10 +206,12 @@
 \renewcommand\thesection{\Roman{section}} 
 % roman numerals for subsections
 \renewcommand\thesubsection{\roman{subsection}} 
+\renewcommand\thesubsubsection{\alph{subsubsection}} 
 % Change the look of the section titles
-\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} 
+\titleformat{\section}[block]{\Large\scshape\centering}{\thesection.}{1em}{} 
 % Change the look of the section titles
-\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} 
+\titleformat{\subsection}[block]{\Large}{\thesubsection.}{1em}{}
+\titleformat{\subsubsection}[block]{\large}{\thesubsubsection.}{1em}{} 
 \usepackage{titling} % Customizing the title section
 
 %----------------------------------------------------------------------------------------
@@ -247,33 +249,22 @@
 \begin{document}
 	% Print the title
 	\maketitle
-% Sommario Introduzione
+	% Sommario Introduzione
 	\input{introduzione}
-
-% Comunicazione
-    \input{comunicazione}
-    
-% Modello sistema	
+	% Comunicazione
+	 \input{comunicazione}
+	% Modello sistema	
 	\input{modellosistema}
 	\input{occgridmodel}
-	
-%Soluzione Proposta
-\section{Soluzione Proposta}
-	\input{mappe}	
-	\input{utility}
-	\input{potentialfield}
-	\input{algoritmidisitima}
-%
-\section{Implementazione}
-\input{implementazione}	
-%
-\section{Risultati}
+	% Soluzione Proposta
+	\input{soluzione}
+	% Implementazione
+	\input{implementazione}
+	% Risultati
 	\input{risultati}	
-
-
-\section{Conclusioni}
-\input{conclusioni}	
-\newpage
+	% Conclusioni	
+	\input{conclusioni}	
+	\newpage
 %----------------------------------------------------------------------------------------
 %	Bibliography
 %----------------------------------------------------------------------------------------

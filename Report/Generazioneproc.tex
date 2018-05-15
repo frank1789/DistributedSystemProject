@@ -1,8 +1,8 @@
-\subsection{Genarazione Procedurale}
-\label{ssec:generazioneproc}
-Si è realizzato un ambiente virtuale 2D atto a ricostruire
-la pianta di un edificio come, ad esempio, uffici, capannoni, aule. Allo scopo
-è stata usata una generazione procedurale.
+\section{Generazione Procedurale}
+\label{ssec:procedure}
+Si è cosi realizzato un ambiente virtuale 2D atto a ricostruire
+la pianta di un edificio come, ad esempio, uffici, capannoni, aule.
+Allo scopo è stata usata una generazione procedurale.
 Il vantaggio più evidente dei livelli generati proceduralmente è la loro varietà
 che portano ad ogni esecuzione, un ambiente diverso dal precedente.
 Ciò significa che i robot non possono apprendere le posizioni di oggetti e
@@ -27,22 +27,23 @@ dimensioni che deve essere generata. Tuttavia, mappe di più larga scala, avrann
 un costo computazionale che diventa più significativo e deve essere preso in
 considerazione.\cite{green2016procedural}
 
-\subsubsection{Binary Space Partitioning}
-\label{sssec:binaryspace}
+\subsection{Binary Space Partitioning}
+\label{ssec:k-d}
 Il partizionamento dello spazio binario è un processo generico di divisione
 ricorsiva di una scena in due finché il partizionamento soddisfa uno o più
 requisiti.
 Può essere visto come una generalizzazione di altre strutture ad albero spaziale,
 uno in cui gli iperpiani che suddividono lo spazio possono avere qualsiasi
-orientamento, piuttosto che essere allineati con gli assi delle coordinate.\cite{wiki:bsp}
+orientamento, piuttosto che essere allineati con gli assi delle
+coordinate.\cite{wiki:bsp}
 L'albero \textbf{\emph{k-d}} è un albero binario in cui ogni nodo è un punto
 k-dimensionale. Ogni nodo non foglia può essere pensato come generare
 implicitamente un iperpiano scisso che divide lo spazio in due parti, note come
 semispazi. I punti a sinistra di questo iperpiano sono rappresentati dal
 sotto-albero sinistro di quel nodo e i punti a destra dell'iperpiano sono
 rappresentati dal sotto-albero destro. La direzione dell'iperpiano viene scelta
-nel modo seguente: ogni nodo dell'albero è associato a una delle dimensioni \emph{k},
-con l'iperpiano perpendicolare all'asse di quella dimensione.\cite{wiki:kdtree}
+nel modo seguente: ogni nodo dell'albero è associato a una delle dimensioni
+\emph{k}, con l'iperpiano perpendicolare all'asse di quella dimensione.\cite{wiki:kdtree}
 
 \begin{figure}[!htb]
   \centering
@@ -51,9 +52,19 @@ con l'iperpiano perpendicolare all'asse di quella dimensione.\cite{wiki:kdtree}
   \label{fig:decomposizione}
 \end{figure}
 
+\subsection{Esecuzione}
+Una volta generato lo scenario la simulazione inizia con il posizionamento di
+uno o più robot all'interno della mappa come condizione iniziale e assegnato un
+obiettivo da raggiungere.
+Questi non conosco l'ambiente in cui si trovano e quindi tentano di raggiungere
+l'obiettivo nella maniera più rapida impostando un traiettoria rettilinea
+determinata come norma tra due punti.
+La pianificazione della traiettoria viene modificata in base alle rilevazioni
+effettuate dal \textsc{lidar} in tal modo essi evitano l'ostacolo perché repulsi.
+
 \begin{figure}[!htb]
-	\centering
-	\includegraphics[width=\linewidth]{dungeon}
-	\caption{esempio di scenario procedurale $100\times100$}
- 	\label{fig:dungeon}
+  \centering
+  \includegraphics[width=\linewidth]{dungeon}
+  \caption{esempio di scenario procedurale $100\times100$}
+  \label{fig:dungeon}
 \end{figure}
