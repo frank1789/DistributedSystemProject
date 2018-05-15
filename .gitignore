@@ -3,6 +3,8 @@
 
 ## Matlab file
 *.m~
+*.mat
+*.mex*
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
