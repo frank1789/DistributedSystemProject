@@ -14,18 +14,18 @@ compilemexlibrary
 % map = Map("Load", #landamark);
 % map = Map("Load", #landamark, "auto");
 % map = Map("Load", #landamark, "manual");
-map = Map('new',40,40);
-%0figure(801); axis equal
-%map.plotMap();
-
-
-for i=1
-    for n = 1:3
-        for k = 1:2
-         multirobot(n,k*200,map,i)
-        end
+map = Map('new', 100, 100);
+figure('units','normalized','outerposition',[0 0 1 1]); axis equal
+axis([0, 100, 0, 100])
+map.plotMap();
+print('map100x100','-depsc','-r0')
+%%
+parfor (k = 1:7, 4)
+    for n = 1:5
+        multirobot(n, k * 150, map, 1)
     end
 end
 
-% analysis result
+
+%% analysis result
 Result
