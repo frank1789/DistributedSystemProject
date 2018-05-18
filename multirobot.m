@@ -51,7 +51,7 @@ for ii = 1:1:nit
                 occparameters{rr}.it_needed = itneeded + ii;
                 robot{rr}.setpointtarget(target);
             elseif (ii > occparameters{rr}.it_needed)
-                robot{rr}.setpointtarget(Reset_Target_2(robot{rr}, ii,...
+                robot{rr} = robot{rr}.setpointtarget(Reset_Target_2(robot{rr}, ii,...
                     occparameters{rr}));
             end
             
