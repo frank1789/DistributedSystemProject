@@ -1,24 +1,24 @@
 \section{Modello del sistema}
 \label{sec:Modellosistema}
 \subsection{Modello cinematico}
-Il robot è basato sul modello dell'uniciclo a trazione differenziale, la 
-configurazione è completamente descritta da 
-$\mathbf{q} = [x \, y \, \theta]^T$, dove $(x,y)$ sono le coordinate cartesiane 
-del punto di contatto con il suolo e $\theta$ è l'orientamento della ruota 
-rispetto l'asse $x$.\cite{siciliano2008robotica}
-Il modello cinematico dell'uniciclo è descritto dall'equazioni (\ref{eq:modelcinematico}):
+Il robot è basato sul modello dell'uniciclo a trazione differenziale, la
+configurazione è completamente descritta da
+$\mathbf{q} = [x \, y \, \theta]^T$, dove $(x,y)$ sono le coordinate cartesiane
+del punto di contatto con il suolo e $\theta$ è l'orientamento della ruota
+rispetto all'asse $x$.\cite{siciliano2008robotica}
+Il modello cinematico dell'uniciclo è descritto dalle equazioni \eqref{eq:modelcinematico}:
 \begin{equation}
 \label{eq:modelcinematico}
 	\begin{bmatrix}
-		\dot{x} \\ 
-		\dot{y} \\ 
+		\dot{x} \\
+		\dot{y} \\
 		\dot{\theta}
-	\end{bmatrix} = 
+	\end{bmatrix} =
 	\begin{bmatrix}
 		\cos \theta \\
 		\sin \theta \\
 		0
-	\end{bmatrix} \, v + 
+	\end{bmatrix} \, v +
 	\begin{bmatrix}
 		0 \\
 		0 \\
@@ -39,7 +39,14 @@ Il modello cinematico dell'uniciclo è descritto dall'equazioni (\ref{eq:modelci
 \end{tabular}
 \end{table}
 Il robot ha le dimensioni riportate in tabella \ref{tab:dimensrobot}.
-Questo è equipaggiato con un sensore virtuale \emph{\textsc{lidar}}, basato sul modello Hokuyo URG-04LX, collocato al centro della struttura in modo tale da evitare errori di offset, di seguito se ne riportano le caratteristiche, di cui adattate ad hoc per la simulazione. Come sensori propriocettivi presenta due encoder incrementali virtuali calettati sull'asse delle ruote, le caratteristiche di entrambi sono riportate in tabella \ref{tab:sensordata}. Una rappresentazione del robot è osservabile in figura \ref{fig:model}.
+Questo è equipaggiato con un sensore virtuale \emph{\textsc{lidar}}, basato sul
+modello Hokuyo URG-04LX, collocato al centro della struttura in modo tale da
+evitare errori di offset, di seguito se ne riportano le caratteristiche, di cui
+adattate ad hoc per la simulazione.
+Come sensori propriocettivi presenta due encoder incrementali virtuali calettati
+sull'asse delle ruote, le caratteristiche di entrambi sono riportate in
+tabella \ref{tab:sensordata}.
+Una rappresentazione del robot è osservabile in figura \ref{fig:model}.
 \begin{table}[htb]
 	\centering
 	\caption{Specifiche sensori}

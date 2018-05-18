@@ -1,35 +1,34 @@
 \section{Introduzione}
-\lettrine[lines=3]{L'}{esplorazione} efficiente di ambienti sconosciuti è un 
-problema fondamentale nella robotica mobile. 
-L'estensione alla esplorazione di più robot pone diverse nuove sfide, tra cui: 
+\lettrine[lines=3]{L'}{esplorazione} efficiente di ambienti sconosciuti è un
+problema fondamentale nella robotica mobile.
+L'estensione alla esplorazione di più robot pone diverse nuove sfide, tra cui:
 coordinamento di robot, integrazione delle informazioni raccolte dai robot in
-una mappa coerente; e comunicazione limitata.
-Il coordinamento di un sistema di più robot è la base per un'efficiente 
-implementazione dell'esplorazione distribuita. 
-Difficoltà maggiori nel campo del coordinamento vengono dalla conoscenza 
-assunta dal robot sul comportamento degli altri robot. 
-Se i robot conoscono le loro posizioni relative e condividono una mappa della 
+una mappa coerente e comunicazione limitata.
+Il coordinamento di un sistema di più robot è la base per un'efficiente
+implementazione dell'esplorazione distribuita.
+Difficoltà maggiori nel campo del coordinamento vengono dalla conoscenza
+assunta dal robot sul comportamento degli altri robot.
+Se i robot conoscono le loro posizioni relative e condividono una mappa della
 zone che hanno esplorato finora, si può raggiungere un coordinamento efficace,
 guidando questi in zone inesplorate dell'ambiente.
-Questo può essere fatto assegnando ai robot il compito di raggiungere un punto 
-di arrivo preso dalla frontiera fornita dalla scansione del 
-\emph{\textsc{lidar}}\footnote{LIDAR (acronimo dall'inglese Light Detection and 
-Ranging o Laser Imaging Detection and Ranging) è una tecnica di 
-telerilevamento che permette di determinare la distanza di un oggetto o di una 
+Questo può essere fatto assegnando ai robot il compito di raggiungere un punto
+di arrivo preso dalla frontiera fornita dalla scansione del
+\emph{\textsc{lidar}}\footnote{LIDAR (acronimo dall'inglese Light Detection and
+Ranging o Laser Imaging Detection and Ranging) è una tecnica di
+telerilevamento che permette di determinare la distanza di un oggetto o di una
 superficie utilizzando un impulso laser, ma è anche in grado di determinare la
 concentrazione di specie chimiche nell'atmosfera e nelle distese d'acqua.}.\cite{yamauchi1998frontier}
-%TODO da rivedere e e corregere da qui
-Per un assegnamento efficace è importante che i robot vadano a condividere i 
-punti comuni all'interno delle loro frontiere che non cerchino di raggiungere 
-lo stesso punto.
-Per la stima della posizione viene adottato un filtro particellare, i robot 
-comunicando con delle ancore \textsc{Wi-Fi} riescono a conoscere con un dato 
-errore la loro posizione ricoperta in quell'istante. Per il raggiungimento 
+Per avere un assegnamento efficace è importante che i robot vadano a condividere
+i punti comuni all'interno delle loro frontiere e che non cerchino di
+raggiungere lo stesso punto.
+Per la stima della posizione viene adottato un filtro particellare, i robot
+comunicando con delle ancore \textsc{Wi-Fi} riescono a conoscere, con un dato
+errore, la loro posizione ricoperta in quell'istante. Per il raggiungimento
 della zona target prefissata viene invece adottata la funzione potenziale.
-I robot contengono al loro interno memoria delle zone già esplorate e non, 
-ipotizzando di conoscere in anticipo le dimensioni massime della mappa che 
-andranno ad esplorare, quest'ultimi costruiscono attraverso l'integrazione di 
-successive matrici di occupazione locale una matrice di occupazione globale 
+I robot contengono al loro interno memoria delle zone già esplorate e non,
+ipotizzando di conoscere in anticipo le dimensioni massime della mappa che
+andranno ad esplorare, questi ultimi costruiscono, attraverso l'integrazione di
+successive matrici di occupazione locale, una matrice di occupazione globale
 che rappresenta la mappa dell'ambiente.
-Saranno successivamente presentati la modellazione del sistema e i successivi 
+Saranno successivamente presentati la modellazione del sistema e i successivi
 risultati ottenuti.
