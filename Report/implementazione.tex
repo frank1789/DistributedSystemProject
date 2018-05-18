@@ -3,8 +3,6 @@
 Per la realizzazione del progetto si è optato per un simulazione con la suite
 \textsc{matlab}, realizzando un software basato su un'architettura a oggetti
 e funzionale per i motivi indicati di seguito.
-
-
 \subsection{Esecuzione}
 Una volta generato lo scenario la simulazione inizia con il posizionamento di
 uno o più robot all'interno della mappa come condizione iniziale e assegnato un
@@ -17,7 +15,7 @@ effettuate dal \textsc{lidar} in tal modo essi evitano l'ostacolo perché repuls
 Per la creazione delle matrici di occupazione locali vengono utilizzate le misure
 fornite dal lidar, tali misure vengono riproiettate nel sistema di riferimento del robot
 e registrate all'interno di una matrice utilizzando come peso per ogni misura l'equazione
-fornita da (\ref{eq:lidargrid}.
+fornita da \eqref{eq:lidargrid}.
 Queste verranno integrate in una matrice globale che sarà aggiornata ogni secondo. Il
 passaggio da matrice locale a matrice globale avviene rototraslando rispetto la posizione
 stimata del robot fornita dal particle filter e registrata all'interno del robot.La matrice
@@ -29,7 +27,7 @@ viene condotta registrando le zone già esplorate dal robot all'interno di una s
 anch'essa di una dimensione tale da permettere di contenere la stanza con la risoluzione voluta.
 Il robot quando risulterà essere nel raggio di comunicazione con altri robot avvierà il meccanismo di Utility,
 in base al quale sarà assegnato ad ogni robot comunicante un nuovo target da raggiungere che massimizzi
-l'utilità, calcolata con la equazione (\ref{eq:componet3}). Per evitare la ricomunicazione tra robot è stato
+l'utilità, calcolata con la equazione \eqref{eq:componet3}. Per evitare la ricomunicazione tra robot è stato
 inserito un delay che deve trascorrere tra una comunicazione e l'altra prima che i 2 robot possano ricomunicare
 tra loro.La comunicazione come già detto risulta essere ideale senza degradazione di segnale.
 Durante la comunicazione i robot condivideranno la mappa contenente le zone già visitate in modo da
