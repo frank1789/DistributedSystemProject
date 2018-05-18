@@ -4,7 +4,7 @@ encoder, tale errore porta il sistema a manifestare nel lungo periodo il noto
 comportamento di \emph{drift}.
 Nasce allora il problema di correggere e stimare la posizione in base ad un dato
 modello.
-Stimando la posizione del robot utilizzando la ricostruzione odometrica si
+Per stimare la posizione del robot utilizzando la ricostruzione odometrica si
 ottiene un risultato affetto da incertezza crescente all'aumentare dello
 spostamento.
 È necessario quindi correggere tale stima attraverso il particle
@@ -16,14 +16,14 @@ virtualmente simulate.
 \subsubsection{Filtro Particellare}
 L'algoritmo di localizzazione PF procede come segue in figura
 \ref{fig:particle filter}. Si inizializzano $n$ particelle in una mappa.
-Ogni particella è un vettore di stato $q\,=\,[x \, y \, \theta]^{T}$ del veicolo
-ed ad ognuna di queste si applica il modello descritto dal sistema di 
-eq.(\ref{eq:modelcinematico}): e se ne aggiunge un rumore al vettore di
+Ogni particella è un vettore di stato $q\,=\,[x \, y \, \theta]^{T}$ del veicolo,
+ad ognuna di queste si applica il modello descritto dal sistema di
+eq.\eqref{eq:modelcinematico}: e si aggiunge un rumore al vettore di
 controllo $u\,=\,[v \, \omega]^{T}$.
-Successivamente per ogni particella si prevede la possibile misura ottenibile e
-si confronta con l'osservazione realmente effettuata dalla ancora
-\textsc{Wi-Fi}, tale confronto porterà al calcolo dell'innovazione o di ciò che
-definiremo peso della particella.
+Successivamente per ogni particella si prevede la possibile misura di posizione ottenuta e
+si confronta con l'osservazione reale rispetto all'ancora \textsc{Wi-Fi}, tale
+confronto porterà al calcolo dell'innovazione o di ciò che definiremo peso della
+particella.
 Si selezionano le particelle che meglio spiegano l'osservazione, un modo per
 farlo è quello di costruire una pdf che descriva i campioni e i loro pesi, e
 poi riselezionare un nuovo set di particelle da questa pdf.
