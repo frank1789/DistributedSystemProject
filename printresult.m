@@ -23,7 +23,7 @@ for idx = 1:length(occparameters)
         gamma * time_needed + tilde * explored_map;
 end
 
-tc = strtrim(sprintf('%5.5f     ',Total_Cost));
+tc = strtrim(sprintf('%10.5f     ',Total_Cost));
 fileID = fopen('Report/result.txt','a');
-fprintf(fileID,'%7i\t %10i\t %7i\t %5.5f\t %10i\t %s\n', attempt_number, length(Robot), Simulation_Time, tot_dist, Map.width, tc);
+fprintf(fileID,'%7i\t %10i\t %7i\t %10.5f\t %10i\t %s\n', attempt_number, length(Robot), Simulation_Time, tot_dist, Map.width, tc);
 fclose(fileID);
