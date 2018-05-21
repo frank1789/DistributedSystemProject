@@ -32,7 +32,7 @@ for ii = 1:1:nit
             robot{i} = robot{i}.setParticleFilterxEst(pf{i}.xEst);
         end
     end
-    
+
     for rr = 1:1:length(robot)
         occparameters{rr}.already_visit = 0;
         % If lidar information is avaible update Global Map of each robot
@@ -41,7 +41,7 @@ for ii = 1:1:nit
                 %Update Global map
                 Update_gbmap(robot{rr},ii,occparameters{rr});
             end
-            
+
             if mod(ii,300) == 0
                 [occparameters{rr}.already_visit] = AlreadyPass(robot{rr}.q(1:ii-1,1:2),robot{rr}.q(ii,1:2));
             end
@@ -54,13 +54,13 @@ for ii = 1:1:nit
                 robot{rr} = robot{rr}.setpointtarget(Reset_Target_2(robot{rr}, ii,...
                     occparameters{rr}));
             end
-            
+
             if mod(ii,40) == 0  % ii = 40
                 % Update visibility Matrix
                 occparameters{rr}.Cost_map(:,:) = Update_vis(occparameters{rr},robot{rr},ii);
             end
         end
-        
+
         if (mod(ii,2) == 0 && ~occparameters{rr}.comunication)
             [occparameters] = comunicate(robot,ii,rr,occparameters);
         end
@@ -68,7 +68,7 @@ for ii = 1:1:nit
         if(occparameters{rr}.comunication)
             occparameters{rr}.delay = occparameters{rr}.delay +1;
         end
-        
+
         if(occparameters{rr}.delay >100)
             occparameters{rr}.comunication = 0;
             occparameters{rr}.delay = 0;
@@ -79,7 +79,8 @@ end
 close(w); clear w;
 namefile = ['n_robot_',num2str(n_robot),...
     '_Sim_time_',num2str(Simulation_Time),...
-    '_attempt_num_',num2str(attempt_number),'.mat'];
+    '_attempt_num_',num2str(attempt_number),...
+    'map',num2str(map.width),'.mat'];
 % export data and store
 datatoexport = cell.empty;
 for z = 1:length(robot)
