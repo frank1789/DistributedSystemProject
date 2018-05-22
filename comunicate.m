@@ -36,8 +36,8 @@ switch length(Robot)
                 Utilities_Manage(Robot,rr,occparameters,it);
                 occparameters{c{n,1}.ID}.comunication = 1;
                 occparameters{c{n,2}.ID}.comunication = 1;
-                occparameters{c{1,1}.ID}.Cost_map(occparameters{c{1,2}.ID}.Cost_map == 2) = 2;
-                occparameters{c{1,2}.ID}.Cost_map(occparameters{c{1,1}.ID}.Cost_map == 2) = 2;
+                occparameters{c{n,1}.ID}.Cost_map(occparameters{c{n,2}.ID}.Cost_map == 2) = 2;
+                occparameters{c{n,2}.ID}.Cost_map(occparameters{c{n,1}.ID}.Cost_map == 2) = 2;
             end % if
         end % for
 end
