@@ -40,6 +40,7 @@ for ii = 1:1:nit
             if ii > 300
                 %Update Global map
                 Update_gbmap(robot{rr},ii,occparameters{rr});
+                occparameters{rr}.Global_map = Update_gbmap_ideal(robot{rr}, ii, occparameters{rr});
             end
 
             if mod(ii,300) == 0
@@ -86,6 +87,7 @@ datatoexport = cell.empty;
 for z = 1:length(robot)
 datatoexport{z} = struct('q', robot{z}.q,...
     'costmap', occparameters{z}.Cost_map, ...
+    'Globalmap', occparameters{z}.Global_map, ...
     'occgridglobal', robot{z}.occgridglobal,...
     'pfxEst', pf{z}.xEst);
 end
