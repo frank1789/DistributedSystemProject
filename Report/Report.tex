@@ -210,8 +210,8 @@
 % Change the look of the section titles
 \titleformat{\section}[block]{\Large\scshape\centering}{\thesection.}{1em}{} 
 % Change the look of the section titles
-\titleformat{\subsection}[block]{\Large}{\thesubsection.}{1em}{}
-\titleformat{\subsubsection}[block]{\large}{\thesubsubsection.}{1em}{} 
+\titleformat{\subsection}[block]{\Large}{\thesubsection.}{.5em}{}
+\titleformat{\subsubsection}[block]{\large}{\thesubsubsection.}{.5em}{} 
 \usepackage{titling} % Customizing the title section
 
 %----------------------------------------------------------------------------------------
@@ -231,17 +231,17 @@
 \setlength{\droptitle}{-4\baselineskip} % Move the title up
 \pretitle{\begin{center}\Huge\bfseries} % Article title formatting
 \posttitle{\end{center}} % Article title closing formatting
-\title{TITOLO DA INSERIRE} % Article title %TODO scegliere e inserire titolo
+\title{Esplorazione multirobot} % Article title 
 \author{%
 	\textsc{Francesco Argentieri}\thanks{ID: 183892}\\[1ex] % Your name
 	\normalsize Università di Trento \\ % Your institution
 	% Your email address
 	\normalsize \href{mailto:francesco.argentieri@studenti.unitn.it}{francesco.argentieri@studenti.unitn.it}%
-%% Uncomment if 2 authors are required, duplicate these 4 lines if more
-\and 
-\textsc{Giacomo Mazzaglia}\thanks{ID: 183382} \\[1ex] % Second author's name 
-\normalsize Università di Trento \\ % Second author's institution
-\normalsize \href{mailto:giacomo.mazzaglia@studenti.unitn.it}{giacomo.mazzaglia@studenti.unitn.it}%
+	%% Uncomment if 2 authors are required, duplicate these 4 lines if more
+	\and 
+	\textsc{Giacomo Mazzaglia}\thanks{ID: 183382} \\[1ex] % Second author's name 
+	\normalsize Università di Trento \\ % Second author's institution
+	\normalsize \href{mailto:giacomo.mazzaglia@studenti.unitn.it}{giacomo.mazzaglia@studenti.unitn.it}%
 }
 \date{} % Leave empty to omit a date
 \renewcommand{\maketitlehookd}{\input{abstract}} 
@@ -264,11 +264,9 @@
 	\input{risultati}	
 	% Conclusioni	
 	\input{conclusioni}	
-	\newpage
 %----------------------------------------------------------------------------------------
 %	Bibliography
 %----------------------------------------------------------------------------------------
-	\clearpage
 	\bibliographystyle{IEEEtran}
 	\bibliography{bibliografia.bib}
 \end{document}
