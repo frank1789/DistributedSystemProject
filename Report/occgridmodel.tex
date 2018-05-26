@@ -5,7 +5,7 @@ geometria dell'ambiente, ma ad assumere una visione più sensoriale.
 L'ambiente viene discretizzato tramite una griglia di celle quadrate; ogni
 cella $c(i; j)$ ha un numero associato ad essa corrisponde a una probabilità
 di occupazione $p_{\text{occ}}(i; j)$ e una probabilità di essere
-vuoto $p_{\text{emp}}(i;j)$.\\
+vuoto $p_{\text{emp}}(i;j)$.
 Celle parzialmente occupate non verranno prese in considerazione.
 
 \subsubsection{Occupacy grid locale}
@@ -37,10 +37,10 @@ intervallo può essere calcolata dall'equazione (\ref{eq:lidargrid}):
 \begin{equation}
 \label{eq:lidargrid}
 P(s|Occupied) = \frac{\frac{R-r}{R} + \frac{ \beta- \alpha}{\beta} \beta}{2}
-\cdot Max_{\text{occupied}}
+\cdot \text{Max}_{\text{occupied}}
 \end{equation}
 %
-dove $Max_{\text{occupied}}$, nell'eq.(\ref{eq:lidargrid}), è dovuto
+dove $\text{Max}_{\text{occupied}}$, nell'eq.(\ref{eq:lidargrid}), è dovuto
 all'assunzione che una lettura di ``Occupato" non è mai completamente
 affidabile.
 %A causa dell'occlusione, si assume che stato di occupazione nella regione III
@@ -61,4 +61,5 @@ eccessivo della memoria, infatti diventa oneroso per la ricostruzione di mappe
 Un secondo problema è legato all'allineamento della griglia, assunto ideale, in
 quanto è probabile che le celle: coprano aree difficili da raggiungere e zone
 parzialmente piene dove non è possibile catturare le acute discontinuità ai
-bordi degli oggetti a causa di una risuluzione non sufficiente.
+bordi degli oggetti a causa di una risoluzione non sufficiente.
+%
