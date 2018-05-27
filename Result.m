@@ -134,3 +134,13 @@ print('ParticleFilter','-depsc','-r0')
 
 
 fit = goodnessOfFit(result{sim_numb_2}.datatoexport{z}.pfxEst(:,1:2),result{sim_numb_2}.datatoexport{z}.q(1:end-1,1:2),'NRMSE');
+
+
+%% Root mean square error
+
+somma=0;
+for i=1:length(result{sim_numb_2}.datatoexport{z}.pfxEst(i,1:2))
+ somma= norm(result{sim_numb_2}.datatoexport{z}.pfxEst(i,1:2) - result{sim_numb_2}.datatoexport{z}.q(i,1:2))^2;
+end
+
+root_error = sqrt(somma/length(result{sim_numb_2}.datatoexport{z}.pfxEst(i,1:2)));
