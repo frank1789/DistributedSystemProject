@@ -12,7 +12,8 @@ di tempo (da 200 \si{\second} a 1800 \si{\second}) e numero di robot
 	\label{fig:maptest}
 \end{figure}
 All'interno della mappa di figura \ref{fig:maptest} sono riportate in blu le
-traiettorie compiute dai robot nel caso ideale mentre in rosso le traiettorie stimate.
+traiettorie compiute dai robot nel caso ideale mentre in rosso le traiettorie
+stimate.
 Le traiettorie riportate sono quelle ottenute da una simulazione di 1800
 secondi e tramite l'utilizzo di tre robot che contemporaneamente la esplorano.
 La scelta di tale numero di robot e tempo di simulazione è stata compiuta per
@@ -62,16 +63,16 @@ Mappa Esplorata = \frac{\text{Celle}_{\text{Libere}}}{\text{Celle}_{\text{Visita
 				&	[\#]			&		[\si{\second}]\\
 	\midrule
 								$\vdots$ & 	$\vdots$ & 	$\vdots$\\
-      								33    &		1	 	& 1800\\
-		 							34	& 		2 		& 1800\\
-	\rowcolor[gray]{.9} 	35	& 		3 		& 1800\\
+      								9     	&		1	 	& 1800\\
+		 							18 	& 		2 		& 1800\\
+	\rowcolor[gray]{.9} 	27     & 		3 		& 1800\\
 									36 	& 		4 		& 1800\\
      \bottomrule
 \end{tabular}
 \end{table}
 %
-\noindent 
-Si evidenzia nella tabella \ref{tab:optimalresults}, il numero ottimo di robot 
+\noindent
+Si evidenzia nella tabella \ref{tab:optimalresults}, il numero ottimo di robot
 e tempo di simulazione che permettono di ottenere le mappe analizzate di seguito.
 In figura \ref{fig:IdealMap} viene riportata la mappa fornita dai tre robot in
 caso di esplorazione ideale dove il drift non è considerato da parte dei sistemi
@@ -92,14 +93,18 @@ particle filter.
 	\caption{Mappa fornita dai robot con risoluzione di 0.15 [m] nel caso di utilizzo del particle filter }
 \label{fig:RealMap}
 \end{figure}
-
-Si è deciso di riportare entrambe le mappe per comprendere quali sono gli effettivi 
-limiti forniti dal particle filter o della creazione della occupacy grid globale.
+%
+\noindent Si è deciso di riportare entrambe le mappe per comprendere quali sono 
+gli effettivi limiti forniti dal particle filter o della creazione della 
+occupacy grid globale.
 Un'altro metodo valutativo per il particle filter risulta essere quello del
-calcolo dell'errore quadratico medio fornito dal confronto tra le due traiettorie quelle
-stimate(rosse) rispetto a quelle ideali (blu) in figura \ref{fig:maptest}. L'equazione \ref{eq:RMSE} riporta il risultato che considereremo accettabile per la nostra simulazione.
-
+calcolo dell'errore quadratico medio fornito dal confronto tra le due
+traiettorie quelle stimate (in rosso) rispetto a quelle ideali (in blu) in
+figura \ref{fig:maptest}.
+L'equazione \ref{eq:RMSE} riporta il risultato che considereremo accettabile per
+la nostra simulazione.
+%
 \begin{equation}
-RMSE = \sqrt{ \frac{\sum_{k=1}^{k=N}(\hat(x_{k}) - x_{k})^2 }{N}} = 0.442 \si{\metre}
+RMSE = \sqrt{ \frac{\sum_{k=1}^{k=N}(\hat{x}_{k} - x_{k})^2 }{N}} = 0.442 \si{\metre}
 \label{eq:RMSE}
 \end{equation}
