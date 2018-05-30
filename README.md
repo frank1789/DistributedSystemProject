@@ -43,14 +43,14 @@ Now you can run the script.
 If you encounter problems in compiling using the mex command, update Matlab to the latest available release or refer to the [official site](https://mathworks.com/).
 
 ## Run
-To launch the script, open the *Main.m* and press "Run", you can customize the simulation by acting on the parameters as below
+To launch the script, open the *Main.m* and press "Run", you can customize the simulation by acting on the parameters as below (used in last simulation):
 ```Matlab
 % define number of robots to use
-numrobot = ;
+numrobot = 4;
 % define base time
-basetime = ;
+basetime = 200;
 % increment of time
-k = ;
+k = 9;
 ```
 For a longer simulation we recommend running the ruby script and following the instructions on the screen
 ```bash
@@ -90,11 +90,11 @@ map.plotMap();
 print('map100x100','-depsc','-r0')
 %% Set-up paramaters simulation
 % define number of robots to use
-numrobot = ;
+numrobot = 4;
 % define base time
-basetime = ;
+basetime = 200;
 % increment of time
-k = ;
+k = 9;
 
 parfor (k = 1:7, 4)
     for n = 1:5

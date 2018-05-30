@@ -21,11 +21,11 @@ map.plotMap();
 print('map100x100','-depsc','-r0')
 %% Set-up paramaters simulation
 % define number of robots to use
-numrobot = ;
+numrobot = 4;
 % define base time
-basetime = ;
+basetime = 200;
 % increment of time
-k = ;
+k = 9;
 
 parfor (k = 1:7, 4)
     for n = 1:5
