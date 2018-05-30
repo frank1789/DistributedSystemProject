@@ -1,0 +1,272 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\documentclass[11pt,a4paper,italian,twoside,twocolumn]{article}
+\pagenumbering{arabic}
+\usepackage{setspace}
+%\onehalfspace
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[section]{placeins}
+%--Text and Style------------------------------------------------------------------------
+\usepackage{microtype} 			% Slightly tweak font spacing for aesthetics
+\usepackage[italian]{babel} 		% Language hyphenation and typographical rules
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{ae}
+\usepackage{relsize}
+\usepackage{csquotes} 
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathdots}
+\usepackage{mathtools}
+\usepackage[colorlinks=true]{hyperref}
+\hypersetup{
+	bookmarksnumbered=true,
+	linkcolor=black,
+	citecolor=black,
+	%pagecolor=black,
+	urlcolor=black,
+}
+\usepackage{verbatim}
+\usepackage{alltt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\RealNumber}{\rm I\!R}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norma}{\lVert}{\rVert}
+\usepackage{lipsum}
+\usepackage{siunitx}
+\usepackage[inline]{enumitem}
+\usepackage{lettrine}
+
+%---Figure------------------------------------------------------------------------------
+
+\usepackage{graphicx}
+\graphicspath{{./imgs/}}
+\renewcommand{\figurename}{Fig.}
+\usepackage{subfig}
+
+%---------------------------------------------------------------------------------------
+\usepackage{algorithmicx}
+\usepackage[ruled]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{halfgray}{gray}{0.55}
+\definecolor{ipython_frame}{RGB}{207, 207, 207}
+\definecolor{ipython_bg}{RGB}{247, 247, 247}
+\definecolor{ipython_red}{RGB}{186, 33, 33}
+\definecolor{ipython_green}{RGB}{0, 128, 0}
+\definecolor{ipython_cyan}{RGB}{64, 128, 128}
+\definecolor{ipython_purple}{RGB}{170, 34, 255}
+\lstset{
+    breaklines=true,
+    %
+    extendedchars=true,
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+    {€}{{\EUR}}1 {£}{{\pounds}}1
+}
+
+%%
+%% Python definition (c) 1998 Michael Weber
+%% Additional definitions (2013) Alexis Dimitriadis
+%% modified by me (should not have empty lines)
+%%
+\lstdefinelanguage{iPython}{
+    morekeywords={access,and,break,class,continue,def,del,elif,else,except,exec,finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,return,try,while},%
+    %
+    % Built-ins
+    morekeywords=[2]{abs,all,any,basestring,bin,bool,bytearray,callable,chr,classmethod,cmp,compile,complex,delattr,dict,dir,divmod,enumerate,eval,execfile,file,filter,float,format,frozenset,getattr,globals,hasattr,hash,help,hex,id,input,int,isinstance,issubclass,iter,len,list,locals,long,map,max,memoryview,min,next,object,oct,open,ord,pow,property,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,vars,xrange,zip,apply,buffer,coerce,intern},%
+    %
+    sensitive=true,%
+    morecomment=[l]\#,%
+    morestring=[b]',%
+    morestring=[b]",%
+    %
+    morestring=[s]{'''}{'''},% used for documentation text (mulitiline strings)
+    morestring=[s]{"""}{"""},% added by Philipp Matthias Hahn
+    %
+    morestring=[s]{r'}{'},% `raw' strings
+    morestring=[s]{r"}{"},%
+    morestring=[s]{r'''}{'''},%
+    morestring=[s]{r"""}{"""},%
+    morestring=[s]{u'}{'},% unicode strings
+    morestring=[s]{u"}{"},%
+    morestring=[s]{u'''}{'''},%
+    morestring=[s]{u"""}{"""},%
+    %
+    % {replace}{replacement}{lenght of replace}
+    % *{-}{-}{1} will not replace in comments and so on
+    literate=
+    *{+}{{{\color{ipython_purple}+}}}1
+    {-}{{{\color{ipython_purple}-}}}1
+    {*}{{{\color{ipython_purple}$^\ast$}}}1
+    {/}{{{\color{ipython_purple}/}}}1
+    {^}{{{\color{ipython_purple}\^{}}}}1
+    {?}{{{\color{ipython_purple}?}}}1
+    {!}{{{\color{ipython_purple}!}}}1
+    {\%}{{{\color{ipython_purple}\%}}}1
+    {<}{{{\color{ipython_purple}<}}}1
+    {>}{{{\color{ipython_purple}>}}}1
+    {|}{{{\color{ipython_purple}|}}}1
+    {\&}{{{\color{ipython_purple}\&}}}1
+    {~}{{{\color{ipython_purple}~}}}1
+    %
+    {==}{{{\color{ipython_purple}==}}}2
+    {<=}{{{\color{ipython_purple}<=}}}2
+    {>=}{{{\color{ipython_purple}>=}}}2
+    %
+    {+=}{{{+=}}}2
+    {-=}{{{-=}}}2
+    {*=}{{{$^\ast$=}}}2
+    {/=}{{{/=}}}2,
+    %
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+    {€}{{\EUR}}1 {£}{{\pounds}}1,
+    %
+%   identifierstyle=\color{red}\ttfamily,
+    commentstyle=\color{ipython_cyan}\ttfamily,
+    stringstyle=\color{ipython_red}\ttfamily,
+    keepspaces=true,
+    showspaces=false,
+    showstringspaces=false,
+    %
+    rulecolor=\color{ipython_frame},
+    frame=single,
+    frameround={t}{t}{t}{t},
+    framexleftmargin=6mm,
+    numbers=left,
+    numberstyle=\tiny\color{halfgray},
+    %
+    %
+    backgroundcolor=\color{ipython_bg},
+    %   extendedchars=true,
+    basicstyle=\scriptsize\ttfamily,
+    keywordstyle=\color{ipython_green}\ttfamily,
+}
+
+%------Matlab scheme color-code----------------------------------
+\usepackage{matlab-prettifier}
+\lstset{
+	style = Matlab-editor,
+	basicstyle=\mlttfamily,
+    %Style frame and number
+    rulecolor = \color{ipython_frame},
+    frame	=single,
+    frameround={t}{t}{t}{t},
+    framexleftmargin=6mm,
+    numbers=left,
+    numberstyle=\tiny\color{halfgray},
+	%background color frame
+    backgroundcolor=\color{ipython_bg}   
+}
+
+%---Table------------------------------------------------------------
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{color}
+\usepackage{adjustbox}
+\usepackage{colortbl}
+\usepackage{pgfplotstable}
+\usepackage{makecell}
+\usepackage{booktabs}
+
+%--------------------------------------------------------------------
+% Allows abstract customization
+\usepackage{abstract}
+% Set the "Abstract" text to bold
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} 
+% Set the abstract itself to small italic text
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} 
+% Allows customization of titles
+\usepackage{titlesec} 
+% Roman numerals for the sections
+\renewcommand\thesection{\Roman{section}} 
+% roman numerals for subsections
+\renewcommand\thesubsection{\roman{subsection}} 
+\renewcommand\thesubsubsection{\alph{subsubsection}} 
+% Change the look of the section titles
+\titleformat{\section}[block]{\Large\scshape\centering}{\thesection.}{1em}{} 
+% Change the look of the section titles
+\titleformat{\subsection}[block]{\Large}{\thesubsection.}{.5em}{}
+\titleformat{\subsubsection}[block]{\large}{\thesubsubsection.}{.5em}{} 
+\usepackage{titling} % Customizing the title section
+
+%----------------------------------------------------------------------------------------
+\usepackage{tikz,fp,ifthen,fullpage}
+\usepackage{pgfmath, pgfplots, xparse}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{backgrounds, arrows}
+\usetikzlibrary{decorations.pathmorphing,fit,through}
+\usetikzlibrary{shapes,decorations,shadows}
+\usetikzlibrary{fadings,patterns,mindmap}
+\usepackage{tikz-dimline, calc}
+\pgfplotsset{compat=newest}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+\pretitle{\begin{center}\Huge\bfseries} % Article title formatting
+\posttitle{\end{center}} % Article title closing formatting
+\title{Esplorazione multirobot} % Article title 
+\author{%
+	\textsc{Francesco Argentieri}\thanks{ID: 183892}\\[1ex] % Your name
+	\normalsize Università di Trento \\ % Your institution
+	% Your email address
+	\normalsize \href{mailto:francesco.argentieri@studenti.unitn.it}{francesco.argentieri@studenti.unitn.it}%
+	%% Uncomment if 2 authors are required, duplicate these 4 lines if more
+	\and 
+	\textsc{Giacomo Mazzaglia}\thanks{ID: 183382} \\[1ex] % Second author's name 
+	\normalsize Università di Trento \\ % Second author's institution
+	\normalsize \href{mailto:giacomo.mazzaglia@studenti.unitn.it}{giacomo.mazzaglia@studenti.unitn.it}%
+}
+\date{} % Leave empty to omit a date
+\renewcommand{\maketitlehookd}{\input{abstract}} 
+%----------------------------------------------------------------------------------------
+\begin{document}
+	% Print the title
+	\maketitle
+	% Sommario Introduzione
+	\input{introduzione}
+	% Comunicazione
+	 \input{comunicazione}
+	% Modello sistema	
+	\input{modellosistema}
+	\input{occgridmodel}
+	% Soluzione Proposta
+	\input{soluzione}
+	% Implementazione
+	\input{implementazione}
+	% Risultati
+	\input{risultati}	
+	% Conclusioni	
+	\input{conclusioni}	
+%----------------------------------------------------------------------------------------
+%	Bibliography
+%----------------------------------------------------------------------------------------
+	\bibliographystyle{IEEEtran}
+	\bibliography{bibliografia.bib}
+\end{document}
