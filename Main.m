@@ -19,7 +19,14 @@ figure('units','normalized','outerposition',[0 0 1 1]); axis equal
 axis([0, 100, 0, 100])
 map.plotMap();
 print('map100x100','-depsc','-r0')
-%%
+%% Set-up paramaters simulation
+% define number of robots to use
+numrobot = ;
+% define base time
+basetime = ;
+% increment of time
+k = ;
+
 parfor (k = 1:7, 4)
     for n = 1:5
         multirobot(n, k * 150, map, 1)
