@@ -1,0 +1,55 @@
+\subsection{Allocazione destinazioni ed Utility}
+\label{ssec:utilty}
+L'obiettivo di un processo di esplorazione è quello di coprire l'intero
+ambiente nel minor tempo possibile. Pertanto, è essenziale che i robot
+tengano traccia di quali aree dell'ambiente sono già state esplorate.
+Inoltre, i robot devono costruire una mappa globale per pianificare i loro
+percorsi e coordinare le loro azioni.
+Quando esploriamo un ambiente sconosciuto, siamo particolarmente
+interessati alle ``celle di frontiera".
+Con cella di frontiera, denotiamo ciascuna cella già esplorata che è un vicino
+immediato di un cella sconosciuta, inesplorata.
+Se indirizziamo un robot a una tale cella, ci si può aspettare che ottenga
+informazioni sull'area inesplorata quando arriva alla sua posizione di
+destinazione.
+Il fatto che una mappa in generale contiene diverse aree inesplorate solleva
+il problema di come assegnare in modo efficiente le destinazioni a più robot.
+Se sono coinvolti più robot, vogliamo evitare che molti di loro si spostino
+nella stessa posizione. Per affrontare questi problemi e determinare i luoghi
+di destinazione appropriati per i singoli robot, il nostro sistema utilizza il
+seguente approccio: considera contemporaneamente il costo del raggiungimento di
+una cella di frontiera e l'utilità di questa.
+Per ogni robot, il costo per raggiungere la cella è proporzionale alla distanza
+tra se stesso e quest'ultima, d'altra parte l'utilità di una cella di frontiera
+dipende invece dal numero di robot che si stanno spostando in quella direzione o
+in posizioni limitrofe.\cite{burgard2005coordinated}
+Di seguito vengono riportate le equazioni implementate:
+\begin{equation}
+\label{eq:componet1}
+U(t_n|t_1,\dots,t_{n-1} ) = U_{t_n} -  \sum_{i=1}^{n-1} P(||t_n - t_i ||)
+\end{equation}
+
+\begin{equation}
+\label{eq:componet2}
+P(d) = \begin{cases}
+   1 - \frac{d}{maxrange}  	&  	\mbox{se } d < \text{maxrange} \\
+   0 									& 		\text{altrimenti}
+   \end{cases}
+\end{equation}
+
+\begin{equation}
+\label{eq:componet3}
+(i,t) = \text{argmax}_{i^{\iota},t^{\iota}} (U_{t^{\iota}}  -\beta V^{i^{\iota}}_{t^{\iota}} )
+\end{equation}
+%
+La prime due equazioni (\ref{eq:componet1}--\ref{eq:componet2}), calcolano
+l'utility per il robot n-esimo mentre l'ultima equazione rappresenta il caso
+esteso all'integrazione di più robot che comunicano tra loro.
+\emph{Maxrange} rappresenta la massima visibilità fornita dal \textsc{lidar},
+$d$ rappresenta la distanza dei target assegnati ai vari robot, $U$ la funzione
+di utility e $V$ la funzione di costo, quest'ultima tiene conto della distanza
+di ogni robot dal suo target. 
+Le $i$ e $t$, nell'eq. \eqref{eq:componet3}, forniscono per ogni robot il suo
+target i-esimo ottimale.
+Il modo in cui questi target da parte di ogni robot vengono raggiunti è
+lasciato alla funzione potenziale che verrà descritta in seguito.

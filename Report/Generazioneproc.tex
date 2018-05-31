@@ -1,0 +1,70 @@
+\section{Generazione Procedurale}
+\label{ssec:procedure}
+Si è cosi realizzato un ambiente virtuale 2D atto a ricostruire
+la pianta di un edificio come, ad esempio, uffici, capannoni, aule.
+Allo scopo è stata usata una generazione procedurale.
+Il vantaggio più evidente dei livelli generati proceduralmente è la loro varietà
+che portano ad ogni esecuzione, un ambiente diverso dal precedente.
+Ciò significa che i robot non possono apprendere le posizioni di oggetti e
+questo permette di testare l'affidabilità in casi sempre differenti.
+Un altro vantaggio comune a tutte le implementazioni della generazione
+procedurale è il tempo che si risparmia nello sviluppo.
+%Nel nostro progetto, avremo un numero infinito di livelli unici. Se stessimo
+%creando i nostri livelli manualmente, ciò sarebbe semplicemente impossibile.
+%Saremmo limitati a forse una decina di livelli al massimo.
+%L'utilizzo di una generazione procedurale come questa elimina questo carico di
+%lavoro agli sviluppatori, aumenta la portata di ciò che è possibile.
+Tra gli svantaggi, si ricorda, che la generazione procedurale di per sé non è
+in alcun modo casuale.
+L'assenza di controllo è una mancanza comune della generazione procedurale in
+generale, ma forse non è più prevalente rispetto alla generazione di ambienti.
+Dato che, di solito gli ambienti sono realizzati a mano da designer.
+Lasciare questo lavoro a un algoritmo si traduce in una significativa perdita di
+controllo.
+Un'altra considerazione che deve essere presa in considerazione è la potenza di
+calcolo che è richiesta, nel nostro caso, si ha solo una matrice 2D di piccole
+dimensioni che deve essere generata. Tuttavia, mappe di più larga scala, avranno
+un costo computazionale che diventa più significativo e deve essere preso in
+considerazione.\cite{green2016procedural}
+
+\subsection{Binary Space Partitioning}
+\label{ssec:k-d}
+Il partizionamento dello spazio binario è un processo generico di divisione
+ricorsiva di una scena in due finché il partizionamento soddisfa uno o più
+requisiti.
+Può essere visto come una generalizzazione di altre strutture ad albero spaziale,
+uno in cui gli iperpiani che suddividono lo spazio possono avere qualsiasi
+orientamento, piuttosto che essere allineati con gli assi delle
+coordinate.\cite{wiki:bsp}
+L'albero \textbf{\emph{k-d}} è un albero binario in cui ogni nodo è un punto
+k-dimensionale. Ogni nodo non foglia può essere pensato come generare
+implicitamente un iperpiano scisso che divide lo spazio in due parti, note come
+semispazi. I punti a sinistra di questo iperpiano sono rappresentati dal
+sotto-albero sinistro di quel nodo e i punti a destra dell'iperpiano sono
+rappresentati dal sotto-albero destro. La direzione dell'iperpiano viene scelta
+nel modo seguente: ogni nodo dell'albero è associato a una delle dimensioni
+\emph{k}, con l'iperpiano perpendicolare all'asse di quella dimensione.\cite{wiki:kdtree}
+
+\begin{figure}[!htb]
+  \centering
+  \resizebox{0.7\linewidth}{!}{\input{draw_kdtree}}
+  \caption{decomposizione per il set di punti.}
+  \label{fig:decomposizione}
+\end{figure}
+
+\subsection{Esecuzione}
+Una volta generato lo scenario la simulazione inizia con il posizionamento di
+uno o più robot all'interno della mappa come condizione iniziale e assegnato un
+obiettivo da raggiungere.
+Questi non conosco l'ambiente in cui si trovano e quindi tentano di raggiungere
+l'obiettivo nella maniera più rapida impostando un traiettoria rettilinea
+determinata come norma tra due punti.
+La pianificazione della traiettoria viene modificata in base alle rilevazioni
+effettuate dal \textsc{lidar} in tal modo essi evitano l'ostacolo perché repulsi.
+
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=\linewidth]{dungeon}
+  \caption{esempio di scenario procedurale $100\times100$}
+  \label{fig:dungeon}
+\end{figure}
