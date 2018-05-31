@@ -14,7 +14,7 @@ compilemexlibrary
 % map = Map("Load", #landamark);
 % map = Map("Load", #landamark, "auto");
 % map = Map("Load", #landamark, "manual");
-map = Map('new', 100, 100);
+map = Map('new', 60, 60);
 figure('units','normalized','outerposition',[0 0 1 1]); axis equal
 axis([0, 100, 0, 100])
 map.plotMap();
@@ -25,11 +25,11 @@ numrobot = 4;
 % define base time
 basetime = 200;
 % increment of time
-k = 9;
+step = 9;
 
-parfor (k = 1:7, 4)
-    for n = 1:5
-        multirobot(n, k * 150, map, 1)
+parfor (k = 1:step, 4)
+    for n = 1:numrobot
+        multirobot(n, k * basetime, map, 1)
     end
 end
 
